@@ -1,51 +1,95 @@
--- Fish It GUI White + Minimize
+-- Fish It GUI White Semi Transparent | Joey
+
 local gui = Instance.new("ScreenGui")
 local main = Instance.new("Frame")
 local mini = Instance.new("TextButton")
-local auto = Instance.new("TextButton")
+local title = Instance.new("TextLabel")
+local credit = Instance.new("TextLabel")
 local minBtn = Instance.new("TextButton")
 local UICorner = Instance.new("UICorner")
 
+local autoFish = Instance.new("TextButton")
+local teleport = Instance.new("TextButton")
+local quest = Instance.new("TextButton")
+
 gui.Parent = game.CoreGui
 
--- MAIN GUI
+-- MAIN FRAME
 main.Parent = gui
-main.Size = UDim2.new(0,180,0,100)
-main.Position = UDim2.new(0.4,0,0.4,0)
+main.Size = UDim2.new(0,270,0,210)
+main.Position = UDim2.new(0.33,0,0.28,0)
 main.BackgroundColor3 = Color3.fromRGB(255,255,255)
+main.BackgroundTransparency = 0.15 -- OPASITAS
 main.Active = true
 main.Draggable = true
 
 UICorner.Parent = main
-UICorner.CornerRadius = UDim.new(0,12)
+UICorner.CornerRadius = UDim.new(0,14)
+
+-- TITLE
+title.Parent = main
+title.Size = UDim2.new(1,-40,0,35)
+title.Position = UDim2.new(0,10,0,0)
+title.BackgroundTransparency = 1
+title.Text = "FISH IT GUI"
+title.TextColor3 = Color3.fromRGB(0,0,0)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 18
+title.TextXAlignment = Left
+
+-- CREDIT
+credit.Parent = main
+credit.Size = UDim2.new(1,-20,0,20)
+credit.Position = UDim2.new(0,10,1,-22)
+credit.BackgroundTransparency = 1
+credit.Text = "by Joey"
+credit.TextColor3 = Color3.fromRGB(80,80,80)
+credit.Font = Enum.Font.Gotham
+credit.TextSize = 13
+credit.TextXAlignment = Right
 
 -- MINIMIZE BUTTON
 minBtn.Parent = main
-minBtn.Size = UDim2.new(0,25,0,25)
-minBtn.Position = UDim2.new(1,-30,0,5)
-minBtn.Text = "-"
-minBtn.BackgroundColor3 = Color3.fromRGB(220,220,220)
+minBtn.Size = UDim2.new(0,28,0,28)
+minBtn.Position = UDim2.new(1,-35,0,4)
+minBtn.Text = "—"
+minBtn.Font = Enum.Font.GothamBold
+minBtn.TextSize = 18
+minBtn.BackgroundColor3 = Color3.fromRGB(230,230,230)
+minBtn.BackgroundTransparency = 0.2
 minBtn.TextColor3 = Color3.fromRGB(0,0,0)
 
--- AUTO FISH BUTTON
-auto.Parent = main
-auto.Size = UDim2.new(0,150,0,40)
-auto.Position = UDim2.new(0.08,0,0.4,0)
-auto.Text = "AUTO FISH"
-auto.BackgroundColor3 = Color3.fromRGB(235,235,235)
-auto.TextColor3 = Color3.fromRGB(0,0,0)
+-- BUTTON STYLE FUNC
+local function style(btn, text, y)
+	btn.Parent = main
+	btn.Size = UDim2.new(0,230,0,40)
+	btn.Position = UDim2.new(0.07,0,y,0)
+	btn.Text = text
+	btn.Font = Enum.Font.Gotham
+	btn.TextSize = 16
+	btn.TextColor3 = Color3.fromRGB(0,0,0)
+	btn.BackgroundColor3 = Color3.fromRGB(240,240,240)
+	btn.BackgroundTransparency = 0.2
+end
 
--- MINI BUTTON (SAAT DI MINIMIZE)
+style(autoFish,"AUTO FISH",0.23)
+style(teleport,"TELEPORT",0.43)
+style(quest,"QUEST",0.63)
+
+-- MINI ICON
 mini.Parent = gui
-mini.Size = UDim2.new(0,45,0,45)
+mini.Size = UDim2.new(0,48,0,48)
 mini.Position = UDim2.new(0.02,0,0.5,0)
 mini.Text = "🎣"
-mini.Visible = false
+mini.Font = Enum.Font.GothamBold
+mini.TextSize = 22
 mini.BackgroundColor3 = Color3.fromRGB(255,255,255)
+mini.BackgroundTransparency = 0.2
+mini.Visible = false
 mini.Active = true
 mini.Draggable = true
 
--- FUNCTIONS
+-- MINIMIZE FUNCTION
 minBtn.MouseButton1Click:Connect(function()
 	main.Visible = false
 	mini.Visible = true
@@ -56,6 +100,15 @@ mini.MouseButton1Click:Connect(function()
 	mini.Visible = false
 end)
 
-auto.MouseButton1Click:Connect(function()
-	print("Auto Fish ON (isi logic sendiri)")
+-- BUTTON ACTION (DUMMY)
+autoFish.MouseButton1Click:Connect(function()
+	print("Auto Fish ON")
+end)
+
+teleport.MouseButton1Click:Connect(function()
+	print("Teleport Menu")
+end)
+
+quest.MouseButton1Click:Connect(function()
+	print("Quest Menu")
 end)
