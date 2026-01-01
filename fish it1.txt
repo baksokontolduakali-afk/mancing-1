@@ -1,132 +1,102 @@
 -- JoeyTesting GUI
--- FULL BORDER + DIVIDER + DRAG + ICON
+-- FINAL ALL BORDER (MAIN + TITLE + MENU + BUTTON)
 
 local UIS = game:GetService("UserInputService")
 local plr = game.Players.LocalPlayer
 
-local gui = Instance.new("ScreenGui")
+local gui = Instance.new("ScreenGui", plr:WaitForChild("PlayerGui"))
 gui.Name = "JoeyTestingGUI"
-gui.ResetOnSpawn = false
 gui.IgnoreGuiInset = true
-gui.Parent = plr:WaitForChild("PlayerGui")
+gui.ResetOnSpawn = false
 
--- MAIN FRAME
-local main = Instance.new("Frame")
-main.Parent = gui
-main.Size = UDim2.new(0, 420, 0, 260)
-main.Position = UDim2.new(0.5, -210, 0.5, -130)
+-- MAIN
+local main = Instance.new("Frame", gui)
+main.Size = UDim2.new(0,420,0,260)
+main.Position = UDim2.new(0.5,-210,0.5,-130)
 main.BackgroundColor3 = Color3.fromRGB(25,25,25)
-main.BackgroundTransparency = 0.5
+main.BackgroundTransparency = 0.45
 main.BorderSizePixel = 0
-main.ZIndex = 2
 
--- BORDER MAIN
 local mainStroke = Instance.new("UIStroke", main)
 mainStroke.Color = Color3.fromRGB(255,255,255)
-mainStroke.Thickness = 1
-mainStroke.Transparency = 0.6
+mainStroke.Thickness = 2
+mainStroke.Transparency = 0.3
 
--- TITLE BAR (DRAG HANDLE)
-local title = Instance.new("TextLabel")
-title.Parent = main
-title.Size = UDim2.new(1, 0, 0, 36)
+-- TITLE BAR
+local title = Instance.new("TextLabel", main)
+title.Size = UDim2.new(1,0,0,36)
 title.BackgroundColor3 = Color3.fromRGB(30,30,30)
-title.BackgroundTransparency = 0.5
+title.BackgroundTransparency = 0.4
 title.Text = "JoeyTesting"
 title.TextColor3 = Color3.fromRGB(0,255,200)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 title.Active = true
-title.ZIndex = 3
 
--- BORDER TITLE
 local titleStroke = Instance.new("UIStroke", title)
 titleStroke.Color = Color3.fromRGB(255,255,255)
-titleStroke.Thickness = 1
-titleStroke.Transparency = 0.8
+titleStroke.Thickness = 2
+titleStroke.Transparency = 0.4
 
--- DRAG LOGIC
-local dragging = false
-local dragStart, startPos
-
-title.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+-- DRAG
+local dragging, dragStart, startPos
+title.InputBegan:Connect(function(i)
+	if i.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = true
-		dragStart = input.Position
+		dragStart = i.Position
 		startPos = main.Position
 	end
 end)
-
-UIS.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = input.Position - dragStart
-		main.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
+UIS.InputChanged:Connect(function(i)
+	if dragging and i.UserInputType == Enum.UserInputType.MouseMovement then
+		local d = i.Position - dragStart
+		main.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset+d.X,startPos.Y.Scale,startPos.Y.Offset+d.Y)
 	end
 end)
-
-UIS.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = false
-	end
+UIS.InputEnded:Connect(function(i)
+	if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
 end)
 
--- GARIS BAWAH TITLE
-local titleLine = Instance.new("Frame", title)
-titleLine.Size = UDim2.new(1,0,0,1)
-titleLine.Position = UDim2.new(0,0,1,-1)
-titleLine.BackgroundColor3 = Color3.fromRGB(255,255,255)
-titleLine.BackgroundTransparency = 0.7
-titleLine.BorderSizePixel = 0
-
--- SIDEBAR
+-- SIDEBAR MENU
 local side = Instance.new("Frame", main)
 side.Position = UDim2.new(0,0,0,36)
 side.Size = UDim2.new(0,120,1,-36)
 side.BackgroundColor3 = Color3.fromRGB(20,20,20)
-side.BackgroundTransparency = 0.5
+side.BackgroundTransparency = 0.45
 side.BorderSizePixel = 0
 
--- BORDER SIDEBAR
 local sideStroke = Instance.new("UIStroke", side)
 sideStroke.Color = Color3.fromRGB(255,255,255)
-sideStroke.Thickness = 1
-sideStroke.Transparency = 0.8
+sideStroke.Thickness = 2
+sideStroke.Transparency = 0.4
 
 -- CONTENT
 local content = Instance.new("Frame", main)
 content.Position = UDim2.new(0,120,0,36)
 content.Size = UDim2.new(1,-120,1,-36)
 content.BackgroundColor3 = Color3.fromRGB(18,18,18)
-content.BackgroundTransparency = 0.5
+content.BackgroundTransparency = 0.45
 content.BorderSizePixel = 0
 
--- BORDER CONTENT
 local contentStroke = Instance.new("UIStroke", content)
 contentStroke.Color = Color3.fromRGB(255,255,255)
-contentStroke.Thickness = 1
-contentStroke.Transparency = 0.8
+contentStroke.Thickness = 2
+contentStroke.Transparency = 0.4
 
 -- CONTENT TITLE
 local ctitle = Instance.new("TextLabel", content)
 ctitle.Size = UDim2.new(1,0,0,32)
-ctitle.BackgroundTransparency = 1
+ctitle.BackgroundColor3 = Color3.fromRGB(22,22,22)
+ctitle.BackgroundTransparency = 0.3
 ctitle.Text = "Menu"
 ctitle.TextColor3 = Color3.fromRGB(255,255,255)
 ctitle.Font = Enum.Font.GothamBold
 ctitle.TextSize = 14
 
--- GARIS BAWAH CONTENT TITLE
-local contentLine = Instance.new("Frame", ctitle)
-contentLine.Size = UDim2.new(1,0,0,1)
-contentLine.Position = UDim2.new(0,0,1,-1)
-contentLine.BackgroundColor3 = Color3.fromRGB(255,255,255)
-contentLine.BackgroundTransparency = 0.75
-contentLine.BorderSizePixel = 0
+local ctitleStroke = Instance.new("UIStroke", ctitle)
+ctitleStroke.Color = Color3.fromRGB(255,255,255)
+ctitleStroke.Thickness = 2
+ctitleStroke.Transparency = 0.4
 
 -- MENU BUTTON
 local function createButton(text, order)
@@ -134,19 +104,17 @@ local function createButton(text, order)
 	btn.Size = UDim2.new(1,0,0,34)
 	btn.Position = UDim2.new(0,0,0,(order-1)*36)
 	btn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-	btn.BackgroundTransparency = 0.5
+	btn.BackgroundTransparency = 0.45
 	btn.Text = text
-	btn.TextColor3 = Color3.fromRGB(200,200,200)
+	btn.TextColor3 = Color3.fromRGB(220,220,220)
 	btn.Font = Enum.Font.Gotham
 	btn.TextSize = 13
 	btn.BorderSizePixel = 0
 
-	local line = Instance.new("Frame", btn)
-	line.Size = UDim2.new(1,0,0,1)
-	line.Position = UDim2.new(0,0,1,-1)
-	line.BackgroundColor3 = Color3.fromRGB(255,255,255)
-	line.BackgroundTransparency = 0.85
-	line.BorderSizePixel = 0
+	local stroke = Instance.new("UIStroke", btn)
+	stroke.Color = Color3.fromRGB(255,255,255)
+	stroke.Thickness = 2
+	stroke.Transparency = 0.55
 
 	btn.MouseButton1Click:Connect(function()
 		ctitle.Text = text
@@ -169,12 +137,9 @@ close.BackgroundTransparency = 1
 close.TextColor3 = Color3.fromRGB(255,80,80)
 close.Font = Enum.Font.GothamBold
 close.TextSize = 14
+close.MouseButton1Click:Connect(function() gui:Destroy() end)
 
-close.MouseButton1Click:Connect(function()
-	gui:Destroy()
-end)
-
--- MINIMIZE
+-- MINIMIZE ICON
 local minimize = Instance.new("TextButton", title)
 minimize.Size = UDim2.new(0,36,0,36)
 minimize.Position = UDim2.new(1,-72,0,0)
@@ -184,29 +149,22 @@ minimize.TextColor3 = Color3.fromRGB(255,255,255)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
 
--- ICON
 local icon = Instance.new("ImageButton", gui)
 icon.Size = UDim2.new(0,46,0,46)
 icon.Position = UDim2.new(0,16,0.5,-23)
 icon.BackgroundColor3 = Color3.fromRGB(25,25,25)
-icon.BackgroundTransparency = 0.2
+icon.BackgroundTransparency = 0.25
 icon.Image = "rbxassetid://7072719337"
-icon.ScaleType = Enum.ScaleType.Fit
 icon.Visible = false
 icon.BorderSizePixel = 0
 icon.Active = true
 icon.Draggable = true
-icon.ZIndex = 10
-
-local iconCorner = Instance.new("UICorner", icon)
-iconCorner.CornerRadius = UDim.new(1,0)
 
 local iconStroke = Instance.new("UIStroke", icon)
 iconStroke.Color = Color3.fromRGB(255,255,255)
-iconStroke.Thickness = 1
-iconStroke.Transparency = 0.6
+iconStroke.Thickness = 2
+iconStroke.Transparency = 0.3
 
--- LOGIC
 minimize.MouseButton1Click:Connect(function()
 	main.Visible = false
 	icon.Visible = true
