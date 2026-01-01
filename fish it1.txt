@@ -1,4 +1,4 @@
--- JoeyHub UI Script
+-- JoeyHub UI Script (Light Blue Theme)
 
 local player = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -11,7 +11,7 @@ local main = Instance.new("Frame")
 main.Parent = gui
 main.Size = UDim2.new(0, 420, 0, 260)
 main.Position = UDim2.new(0.5, -210, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(18, 40, 70)
+main.BackgroundColor3 = Color3.fromRGB(170, 210, 255) -- biru muda
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
@@ -25,7 +25,7 @@ corner.Parent = main
 local topBar = Instance.new("Frame")
 topBar.Parent = main
 topBar.Size = UDim2.new(1, 0, 0, 40)
-topBar.BackgroundColor3 = Color3.fromRGB(12, 30, 55)
+topBar.BackgroundColor3 = Color3.fromRGB(120, 180, 255) -- biru muda lebih gelap
 topBar.BorderSizePixel = 0
 
 local topCorner = Instance.new("UICorner")
@@ -50,7 +50,7 @@ minimize.Parent = topBar
 minimize.Size = UDim2.new(0, 30, 0, 25)
 minimize.Position = UDim2.new(1, -65, 0.5, -12)
 minimize.Text = "-"
-minimize.BackgroundColor3 = Color3.fromRGB(25, 60, 110)
+minimize.BackgroundColor3 = Color3.fromRGB(90, 150, 230)
 minimize.TextColor3 = Color3.new(1,1,1)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
@@ -61,19 +61,19 @@ close.Parent = topBar
 close.Size = UDim2.new(0, 30, 0, 25)
 close.Position = UDim2.new(1, -30, 0.5, -12)
 close.Text = "X"
-close.BackgroundColor3 = Color3.fromRGB(120, 40, 40)
+close.BackgroundColor3 = Color3.fromRGB(255, 120, 120)
 close.TextColor3 = Color3.new(1,1,1)
 close.Font = Enum.Font.GothamBold
 close.TextSize = 14
 
--- Content Text
+-- Content
 local content = Instance.new("TextLabel")
 content.Parent = main
 content.Size = UDim2.new(1, 0, 1, -40)
 content.Position = UDim2.new(0, 0, 0, 40)
 content.BackgroundTransparency = 1
-content.Text = "JoeyHub\n\n• Mobile UI\n• Blue Theme\n• Mini Animated"
-content.TextColor3 = Color3.fromRGB(220, 220, 220)
+content.Text = "JoeyHub\n\n• Mobile UI\n• Light Blue Theme\n• Mini Animated"
+content.TextColor3 = Color3.fromRGB(40, 40, 40)
 content.Font = Enum.Font.Gotham
 content.TextSize = 14
 content.TextWrapped = true
