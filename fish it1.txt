@@ -1,5 +1,5 @@
 -- JoeyTesting GUI
--- COMPACT SIZE + Minimize ICON
+-- COMPACT + ICON + WHITE OUTLINE
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -8,7 +8,7 @@ gui.ResetOnSpawn = false
 gui.IgnoreGuiInset = true
 gui.Parent = plr:WaitForChild("PlayerGui")
 
--- MAIN FRAME (DIPERKECIL)
+-- MAIN FRAME
 local main = Instance.new("Frame")
 main.Parent = gui
 main.Size = UDim2.new(0, 420, 0, 260)
@@ -19,6 +19,13 @@ main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
 main.ZIndex = 2
+
+-- OUTLINE MAIN
+local mainStroke = Instance.new("UIStroke")
+mainStroke.Parent = main
+mainStroke.Color = Color3.fromRGB(255,255,255)
+mainStroke.Thickness = 1
+mainStroke.Transparency = 0.6
 
 -- TITLE BAR
 local title = Instance.new("TextLabel")
@@ -33,7 +40,7 @@ title.TextSize = 16
 title.Active = true
 title.ZIndex = 3
 
--- SIDEBAR (KECIL)
+-- SIDEBAR
 local side = Instance.new("Frame")
 side.Parent = main
 side.Position = UDim2.new(0, 0, 0, 36)
@@ -119,7 +126,7 @@ minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
 minimize.ZIndex = 4
 
--- ICON (IMAGE)
+-- ICON IMAGE
 local icon = Instance.new("ImageButton")
 icon.Parent = gui
 icon.Size = UDim2.new(0, 46, 0, 46)
@@ -137,6 +144,13 @@ icon.ZIndex = 10
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(1,0)
 corner.Parent = icon
+
+-- ICON OUTLINE
+local iconStroke = Instance.new("UIStroke")
+iconStroke.Parent = icon
+iconStroke.Color = Color3.fromRGB(255,255,255)
+iconStroke.Thickness = 1
+iconStroke.Transparency = 0.5
 
 -- LOGIC
 minimize.MouseButton1Click:Connect(function()
