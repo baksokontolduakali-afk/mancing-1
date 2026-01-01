@@ -1,129 +1,95 @@
--- Fish It GUI FINAL FIX | Joey
+-- JoeyTesting GUI
+-- Menu only (no feature yet)
 
+local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
-gui.Parent = game.CoreGui
-gui.IgnoreGuiInset = true
+gui.Name = "JoeyTestingGUI"
 gui.ResetOnSpawn = false
-gui.DisplayOrder = 999999
-
-local function zi(obj, z)
-	obj.ZIndex = z
-end
+gui.Parent = plr:WaitForChild("PlayerGui")
 
 -- MAIN FRAME
-local main = Instance.new("Frame", gui)
-main.Size = UDim2.fromOffset(260, 240)
-main.Position = UDim2.fromScale(0.5, 0.5)
-main.AnchorPoint = Vector2.new(0.5, 0.5)
-main.BackgroundColor3 = Color3.fromRGB(255,255,255)
-main.BackgroundTransparency = 0.15
+local main = Instance.new("Frame")
+main.Parent = gui
+main.Size = UDim2.new(0, 520, 0, 320)
+main.Position = UDim2.new(0.5, -260, 0.5, -160)
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
-zi(main, 10)
 
-Instance.new("UICorner", main).CornerRadius = UDim.new(0,16)
-
--- TITLE
-local title = Instance.new("TextLabel", main)
-title.Size = UDim2.new(1, -80, 0, 30)
-title.Position = UDim2.fromOffset(12, 6)
-title.BackgroundTransparency = 1
-title.Text = "FISH IT GUI"
+-- TITLE BAR
+local title = Instance.new("TextLabel")
+title.Parent = main
+title.Size = UDim2.new(1, 0, 0, 40)
+title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+title.Text = "JoeyTesting"
+title.TextColor3 = Color3.fromRGB(0, 255, 200)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 18
-title.TextXAlignment = Left
-title.TextColor3 = Color3.new(0,0,0)
-zi(title, 11)
 
--- CREDIT
-local credit = Instance.new("TextLabel", main)
-credit.Size = UDim2.new(1, -20, 0, 18)
-credit.Position = UDim2.fromOffset(12, 34)
-credit.BackgroundTransparency = 1
-credit.Text = "by Joey"
-credit.Font = Enum.Font.Gotham
-credit.TextSize = 13
-credit.TextXAlignment = Left
-credit.TextColor3 = Color3.fromRGB(90,90,90)
-zi(credit, 11)
+-- SIDEBAR
+local side = Instance.new("Frame")
+side.Parent = main
+side.Position = UDim2.new(0, 0, 0, 40)
+side.Size = UDim2.new(0, 140, 1, -40)
+side.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+side.BorderSizePixel = 0
 
--- MINIMIZE
-local minBtn = Instance.new("TextButton", main)
-minBtn.Size = UDim2.fromOffset(26,26)
-minBtn.Position = UDim2.new(1,-62,0,6)
-minBtn.Text = "—"
-minBtn.Font = Enum.Font.GothamBold
-minBtn.TextSize = 18
-minBtn.BackgroundColor3 = Color3.fromRGB(220,220,220)
-zi(minBtn, 12)
+-- CONTENT
+local content = Instance.new("Frame")
+content.Parent = main
+content.Position = UDim2.new(0, 140, 0, 40)
+content.Size = UDim2.new(1, -140, 1, -40)
+content.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+content.BorderSizePixel = 0
 
--- CLOSE
-local closeBtn = Instance.new("TextButton", main)
-closeBtn.Size = UDim2.fromOffset(26,26)
-closeBtn.Position = UDim2.new(1,-32,0,6)
-closeBtn.Text = "X"
-closeBtn.Font = Enum.Font.GothamBold
-closeBtn.TextSize = 14
-closeBtn.BackgroundColor3 = Color3.fromRGB(255,80,80)
-closeBtn.TextColor3 = Color3.new(1,1,1)
-zi(closeBtn, 12)
+-- CONTENT TITLE
+local ctitle = Instance.new("TextLabel")
+ctitle.Parent = content
+ctitle.Size = UDim2.new(1, 0, 0, 40)
+ctitle.BackgroundTransparency = 1
+ctitle.Text = "Menu"
+ctitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+ctitle.Font = Enum.Font.GothamBold
+ctitle.TextSize = 16
 
--- BUTTON MAKER
-local function makeButton(text, y)
-	local b = Instance.new("TextButton", main)
-	b.Size = UDim2.fromOffset(220,40)
-	b.Position = UDim2.fromOffset(20,y)
-	b.Text = text
-	b.Font = Enum.Font.Gotham
-	b.TextSize = 15
-	b.BackgroundColor3 = Color3.fromRGB(240,240,240)
-	b.BackgroundTransparency = 0.1
-	b.TextColor3 = Color3.new(0,0,0)
-	zi(b, 11)
-	return b
+-- MENU BUTTON FUNCTION
+local function createButton(text, order)
+	local btn = Instance.new("TextButton")
+	btn.Parent = side
+	btn.Size = UDim2.new(1, 0, 0, 40)
+	btn.Position = UDim2.new(0, 0, 0, (order - 1) * 42)
+	btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	btn.Text = text
+	btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+	btn.Font = Enum.Font.Gotham
+	btn.TextSize = 14
+	btn.BorderSizePixel = 0
+
+	btn.MouseButton1Click:Connect(function()
+		ctitle.Text = text
+	end)
 end
 
-local automatic = makeButton("AUTOMATIC", 80)
-local info = makeButton("INFO", 130)
-local teleport = makeButton("TELEPORT", 180)
+-- MENU LIST (sesuai gambar)
+createButton("Fishing", 1)
+createButton("Automatically", 2)
+createButton("Teleport", 3)
+createButton("Quest", 4)
+createButton("Trading", 5)
+createButton("Menu", 6)
 
--- MINI ICON
-local mini = Instance.new("TextButton", gui)
-mini.Size = UDim2.fromOffset(48,48)
-mini.Position = UDim2.fromOffset(20,300)
-mini.Text = "🎣"
-mini.Font = Enum.Font.GothamBold
-mini.TextSize = 22
-mini.BackgroundColor3 = Color3.fromRGB(255,255,255)
-mini.BackgroundTransparency = 0.2
-mini.Visible = false
-mini.Active = true
-mini.Draggable = true
-zi(mini, 999999)
+-- CLOSE BUTTON
+local close = Instance.new("TextButton")
+close.Parent = title
+close.Size = UDim2.new(0, 40, 0, 40)
+close.Position = UDim2.new(1, -40, 0, 0)
+close.Text = "X"
+close.BackgroundTransparency = 1
+close.TextColor3 = Color3.fromRGB(255, 80, 80)
+close.Font = Enum.Font.GothamBold
+close.TextSize = 16
 
--- FUNCTIONS
-minBtn.MouseButton1Click:Connect(function()
-	main.Visible = false
-	mini.Visible = true
-end)
-
-mini.MouseButton1Click:Connect(function()
-	main.Visible = true
-	mini.Visible = false
-end)
-
-closeBtn.MouseButton1Click:Connect(function()
+close.MouseButton1Click:Connect(function()
 	gui:Destroy()
-end)
-
-automatic.MouseButton1Click:Connect(function()
-	print("AUTOMATIC CLICKED")
-end)
-
-info.MouseButton1Click:Connect(function()
-	print("INFO CLICKED")
-end)
-
-teleport.MouseButton1Click:Connect(function()
-	print("TELEPORT CLICKED")
 end)
