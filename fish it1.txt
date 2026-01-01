@@ -1,8 +1,8 @@
--- JoeyHub UI Script (PINK FIXED)
+-- JoeyHub UI Script (Pink + 50% Opacity)
 
 local player = game.Players.LocalPlayer
 
--- 🔥 HAPUS GUI LAMA JIKA ADA
+-- Hapus GUI lama
 if player:WaitForChild("PlayerGui"):FindFirstChild("JoeyHubGui") then
 	player.PlayerGui.JoeyHubGui:Destroy()
 end
@@ -17,7 +17,8 @@ local main = Instance.new("Frame")
 main.Parent = gui
 main.Size = UDim2.new(0, 420, 0, 260)
 main.Position = UDim2.new(0.5, -210, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(255, 105, 180) -- 💗 HOT PINK
+main.BackgroundColor3 = Color3.fromRGB(255, 105, 180)
+main.BackgroundTransparency = 0.5 -- 🔥 50% OPACITY
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
@@ -31,7 +32,8 @@ corner.Parent = main
 local topBar = Instance.new("Frame")
 topBar.Parent = main
 topBar.Size = UDim2.new(1, 0, 0, 40)
-topBar.BackgroundColor3 = Color3.fromRGB(255, 20, 147) -- 💗 DEEP PINK
+topBar.BackgroundColor3 = Color3.fromRGB(255, 20, 147)
+topBar.BackgroundTransparency = 0.5 -- 🔥 50%
 topBar.BorderSizePixel = 0
 
 local topCorner = Instance.new("UICorner")
@@ -57,6 +59,7 @@ minimize.Size = UDim2.new(0, 30, 0, 25)
 minimize.Position = UDim2.new(1, -65, 0.5, -12)
 minimize.Text = "-"
 minimize.BackgroundColor3 = Color3.fromRGB(255, 120, 200)
+minimize.BackgroundTransparency = 0.5 -- 🔥
 minimize.TextColor3 = Color3.new(1,1,1)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
@@ -68,6 +71,7 @@ close.Size = UDim2.new(0, 30, 0, 25)
 close.Position = UDim2.new(1, -30, 0.5, -12)
 close.Text = "X"
 close.BackgroundColor3 = Color3.fromRGB(200, 40, 90)
+close.BackgroundTransparency = 0.5 -- 🔥
 close.TextColor3 = Color3.new(1,1,1)
 close.Font = Enum.Font.GothamBold
 close.TextSize = 14
@@ -78,7 +82,7 @@ content.Parent = main
 content.Size = UDim2.new(1, 0, 1, -40)
 content.Position = UDim2.new(0, 0, 0, 40)
 content.BackgroundTransparency = 1
-content.Text = "JoeyHub\n\n• Mobile UI\n• Pink Theme\n• Fixed Colors"
+content.Text = "JoeyHub\n\n• Mobile UI\n• Pink Theme\n• 50% Opacity"
 content.TextColor3 = Color3.fromRGB(255, 240, 245)
 content.Font = Enum.Font.Gotham
 content.TextSize = 14
