@@ -1,10 +1,11 @@
 -- JoeyTesting GUI
--- Minimize to IMAGE ICON + 50% Opacity
+-- FIXED: Minimize to IMAGE ICON
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyTestingGUI"
 gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
 gui.Parent = plr:WaitForChild("PlayerGui")
 
 -- MAIN FRAME
@@ -17,8 +18,9 @@ main.BackgroundTransparency = 0.5
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
+main.ZIndex = 2
 
--- TITLE BAR
+-- TITLE BAR (FIX: Active = true)
 local title = Instance.new("TextLabel")
 title.Parent = main
 title.Size = UDim2.new(1, 0, 0, 40)
@@ -28,6 +30,8 @@ title.Text = "JoeyTesting"
 title.TextColor3 = Color3.fromRGB(0, 255, 200)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 18
+title.Active = true
+title.ZIndex = 3
 
 -- SIDEBAR
 local side = Instance.new("Frame")
@@ -37,6 +41,7 @@ side.Size = UDim2.new(0, 140, 1, -40)
 side.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 side.BackgroundTransparency = 0.5
 side.BorderSizePixel = 0
+side.ZIndex = 2
 
 -- CONTENT
 local content = Instance.new("Frame")
@@ -46,6 +51,7 @@ content.Size = UDim2.new(1, -140, 1, -40)
 content.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
 content.BackgroundTransparency = 0.5
 content.BorderSizePixel = 0
+content.ZIndex = 2
 
 -- CONTENT TITLE
 local ctitle = Instance.new("TextLabel")
@@ -56,6 +62,7 @@ ctitle.Text = "Menu"
 ctitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 ctitle.Font = Enum.Font.GothamBold
 ctitle.TextSize = 16
+ctitle.ZIndex = 3
 
 -- MENU BUTTON
 local function createButton(text, order)
@@ -70,6 +77,7 @@ local function createButton(text, order)
 	btn.Font = Enum.Font.Gotham
 	btn.TextSize = 14
 	btn.BorderSizePixel = 0
+	btn.ZIndex = 3
 
 	btn.MouseButton1Click:Connect(function()
 		ctitle.Text = text
@@ -83,7 +91,7 @@ createButton("Quest", 4)
 createButton("Trading", 5)
 createButton("Menu", 6)
 
--- CLOSE BUTTON
+-- CLOSE
 local close = Instance.new("TextButton")
 close.Parent = title
 close.Size = UDim2.new(0, 40, 0, 40)
@@ -93,6 +101,7 @@ close.BackgroundTransparency = 1
 close.TextColor3 = Color3.fromRGB(255, 80, 80)
 close.Font = Enum.Font.GothamBold
 close.TextSize = 16
+close.ZIndex = 4
 
 close.MouseButton1Click:Connect(function()
 	gui:Destroy()
@@ -108,28 +117,28 @@ minimize.BackgroundTransparency = 1
 minimize.TextColor3 = Color3.fromRGB(255, 255, 255)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 20
+minimize.ZIndex = 4
 
--- ===== IMAGE ICON =====
-local ICON_ID = "rbxassetid://7072719337" -- GANTI SESUKA LU
-
+-- IMAGE ICON (RESTORE)
 local icon = Instance.new("ImageButton")
 icon.Parent = gui
 icon.Size = UDim2.new(0, 50, 0, 50)
 icon.Position = UDim2.new(0, 20, 0.5, -25)
 icon.BackgroundColor3 = Color3.fromRGB(25,25,25)
-icon.BackgroundTransparency = 0.3
-icon.Image = ICON_ID
+icon.BackgroundTransparency = 0.2
+icon.Image = "rbxassetid://7072719337"
 icon.ScaleType = Enum.ScaleType.Fit
 icon.Visible = false
 icon.BorderSizePixel = 0
 icon.Active = true
 icon.Draggable = true
+icon.ZIndex = 10
 
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(1, 0)
+corner.CornerRadius = UDim.new(1,0)
 corner.Parent = icon
 
--- MINIMIZE LOGIC
+-- MINIMIZE LOGIC (FIXED)
 minimize.MouseButton1Click:Connect(function()
 	main.Visible = false
 	icon.Visible = true
