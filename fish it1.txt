@@ -1,5 +1,5 @@
 -- JoeyTesting GUI
--- Menu + Minimize + 50% Opacity
+-- Minimize to ICON + 50% Opacity
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -57,7 +57,7 @@ ctitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 ctitle.Font = Enum.Font.GothamBold
 ctitle.TextSize = 16
 
--- MENU BUTTON FUNCTION
+-- MENU BUTTON
 local function createButton(text, order)
 	local btn = Instance.new("TextButton")
 	btn.Parent = side
@@ -76,7 +76,6 @@ local function createButton(text, order)
 	end)
 end
 
--- MENU LIST
 createButton("Fishing", 1)
 createButton("Automatically", 2)
 createButton("Teleport", 3)
@@ -84,7 +83,7 @@ createButton("Quest", 4)
 createButton("Trading", 5)
 createButton("Menu", 6)
 
--- CLOSE BUTTON
+-- CLOSE
 local close = Instance.new("TextButton")
 close.Parent = title
 close.Size = UDim2.new(0, 40, 0, 40)
@@ -110,19 +109,30 @@ minimize.TextColor3 = Color3.fromRGB(255, 255, 255)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 20
 
-local minimized = false
-local oldSize = main.Size
+-- ICON (restore button)
+local icon = Instance.new("TextButton")
+icon.Parent = gui
+icon.Size = UDim2.new(0, 50, 0, 50)
+icon.Position = UDim2.new(0, 20, 0.5, -25)
+icon.BackgroundColor3 = Color3.fromRGB(25,25,25)
+icon.BackgroundTransparency = 0.3
+icon.Text = "🎣"
+icon.TextSize = 22
+icon.Visible = false
+icon.BorderSizePixel = 0
+icon.Active = true
+icon.Draggable = true
 
+local corner = Instance.new("UICorner", icon)
+corner.CornerRadius = UDim.new(1,0)
+
+-- MINIMIZE LOGIC
 minimize.MouseButton1Click:Connect(function()
-	minimized = not minimized
-	if minimized then
-		oldSize = main.Size
-		side.Visible = false
-		content.Visible = false
-		main.Size = UDim2.new(0, 520, 0, 40)
-	else
-		side.Visible = true
-		content.Visible = true
-		main.Size = oldSize
-	end
+	main.Visible = false
+	icon.Visible = true
+end)
+
+icon.MouseButton1Click:Connect(function()
+	main.Visible = true
+	icon.Visible = false
 end)
