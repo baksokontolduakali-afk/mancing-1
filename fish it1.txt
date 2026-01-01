@@ -1,12 +1,11 @@
--- JoeyTesting GUI
--- Menu + Minimize (ImageButton, Full Script)
+-- JoeyTesting GUI with Minimize to Icon
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyTestingGUI"
 gui.ResetOnSpawn = false
 gui.Parent = plr:WaitForChild("PlayerGui")
-gui.ZIndexBehavior = Enum.ZIndexBehavior.Global -- supaya icon bisa di atas teks
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
 -- MAIN FRAME
 local main = Instance.new("Frame")
@@ -23,17 +22,16 @@ mainStroke.Color = Color3.fromRGB(255,255,255)
 mainStroke.Thickness = 2
 mainStroke.Transparency = 0.35
 
--- TITLE BAR (FRAME)
+-- TITLE BAR
 local title = Instance.new("Frame")
 title.Parent = main
-title.Size = UDim2.new(1, 0, 0, 36)
+title.Size = UDim2.new(1,0,0,36)
 title.BackgroundColor3 = Color3.fromRGB(30,30,30)
 title.BorderSizePixel = 0
 
--- TITLE TEXT
 local titleText = Instance.new("TextLabel")
 titleText.Parent = title
-titleText.Size = UDim2.new(1, -40, 1, 0) -- kasih space kanan buat icon
+titleText.Size = UDim2.new(1, -40, 1, 0)
 titleText.Position = UDim2.new(0,0,0,0)
 titleText.BackgroundTransparency = 1
 titleText.Text = "JoeyTesting"
@@ -120,21 +118,35 @@ close.TextColor3 = Color3.fromRGB(255,80,80)
 close.Font = Enum.Font.GothamBold
 close.TextSize = 16
 close.ZIndex = 2
-
 close.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
 
--- MINIMIZE ICON (IMAGEBUTTON)
-local minimize = Instance.new("ImageButton")
+-- MINIMIZE BUTTON (MINIMIZE TO ICON)
+local minimize = Instance.new("TextButton")
 minimize.Parent = title
 minimize.Size = UDim2.new(0,26,0,26)
-minimize.Position = UDim2.new(1,-6-26,0.5,-13) -- kanan atas
-minimize.BackgroundTransparency = 1
-minimize.Image = "rbxassetid://3926305904" -- icon minus, pasti kelihatan
-minimize.ScaleType = Enum.ScaleType.Fit
-minimize.ZIndex = 5
-minimize.AutoButtonColor = false
+minimize.Position = UDim2.new(1,-72,0.5,-13)
+minimize.BackgroundColor3 = Color3.fromRGB(200,200,200)
+minimize.Text = "-"
+minimize.Font = Enum.Font.GothamBold
+minimize.TextSize = 20
+minimize.TextColor3 = Color3.fromRGB(0,0,0)
+minimize.ZIndex = 2
+
+-- MINI ICON (APPEARS WHEN MINIMIZED)
+local miniIcon = Instance.new("TextButton")
+miniIcon.Parent = gui
+miniIcon.Size = UDim2.new(0,40,0,40)
+miniIcon.Position = UDim2.new(0,50,0,50)
+miniIcon.BackgroundColor3 = Color3.fromRGB(50,50,50)
+miniIcon.Text = "J"
+miniIcon.TextColor3 = Color3.fromRGB(0,255,200)
+miniIcon.Font = Enum.Font.GothamBold
+miniIcon.TextSize = 18
+miniIcon.Visible = false
+miniIcon.ZIndex = 10
+miniIcon.AutoButtonColor = true
 
 local minimized = false
 local oldSize = main.Size
@@ -145,10 +157,20 @@ minimize.MouseButton1Click:Connect(function()
 		oldSize = main.Size
 		side.Visible = false
 		content.Visible = false
-		main.Size = UDim2.new(0,200,0,36)
+		main.Visible = false
+		miniIcon.Visible = true
 	else
 		side.Visible = true
 		content.Visible = true
-		main.Size = oldSize
+		main.Visible = true
+		miniIcon.Visible = false
 	end
+end)
+
+-- CLICK MINI ICON TO RESTORE
+miniIcon.MouseButton1Click:Connect(function()
+	main.Visible = true
+	side.Visible = true
+	content.Visible = true
+	miniIcon.Visible = false
 end)
