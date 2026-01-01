@@ -1,79 +1,46 @@
--- JoeyTesting GUI
--- FINAL FIX (NO TEXT BORDER AT ALL)
+-- JoeyTesting GUI (Fixed & Clean)
 
-local UIS = game:GetService("UserInputService")
 local plr = game.Players.LocalPlayer
-
--- CLEAN OLD GUI
-if plr.PlayerGui:FindFirstChild("JoeyTestingGUI") then
-	plr.PlayerGui.JoeyTestingGUI:Destroy()
-end
-
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyTestingGUI"
-gui.IgnoreGuiInset = true
 gui.ResetOnSpawn = false
-gui.Parent = plr.PlayerGui
+gui.Parent = plr:WaitForChild("PlayerGui")
 
 -- MAIN FRAME
-local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0,420,0,260)
-main.Position = UDim2.new(0.5,-210,0.5,-130)
+local main = Instance.new("Frame")
+main.Parent = gui
+main.Size = UDim2.new(0, 420, 0, 260)
+main.Position = UDim2.new(0.5, -210, 0.5, -130)
 main.BackgroundColor3 = Color3.fromRGB(25,25,25)
-main.BackgroundTransparency = 0.45
 main.BorderSizePixel = 0
+main.Active = true
+main.Draggable = true
 
+-- BORDER MAIN
 local mainStroke = Instance.new("UIStroke", main)
 mainStroke.Color = Color3.fromRGB(255,255,255)
 mainStroke.Thickness = 2
-mainStroke.Transparency = 0.3
+mainStroke.Transparency = 0.35
 
--- TITLE BAR (TEXT ONLY)
-local title = Instance.new("TextLabel", main)
+-- TITLE BAR
+local title = Instance.new("TextLabel")
+title.Parent = main
 title.Size = UDim2.new(1,0,0,36)
 title.BackgroundColor3 = Color3.fromRGB(30,30,30)
-title.BackgroundTransparency = 0.4
+title.BorderSizePixel = 0
 title.Text = "JoeyTesting"
 title.TextColor3 = Color3.fromRGB(0,255,200)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Center
 title.TextYAlignment = Enum.TextYAlignment.Center
-title.BorderSizePixel = 0
-title.Active = true
 
--- FORCE REMOVE STROKE FROM TEXT
-for _,v in ipairs(title:GetChildren()) do
-	if v:IsA("UIStroke") then v:Destroy() end
-end
-
--- DRAG
-local dragging, dragStart, startPos
-title.InputBegan:Connect(function(i)
-	if i.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = i.Position
-		startPos = main.Position
-	end
-end)
-
-UIS.InputChanged:Connect(function(i)
-	if dragging and i.UserInputType == Enum.UserInputType.MouseMovement then
-		local d = i.Position - dragStart
-		main.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset+d.X,startPos.Y.Scale,startPos.Y.Offset+d.Y)
-	end
-end)
-
-UIS.InputEnded:Connect(function(i)
-	if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
-end)
-
--- SIDEBAR (FRAME BORDER OK)
-local side = Instance.new("Frame", main)
+-- SIDEBAR
+local side = Instance.new("Frame")
+side.Parent = main
 side.Position = UDim2.new(0,0,0,36)
 side.Size = UDim2.new(0,120,1,-36)
 side.BackgroundColor3 = Color3.fromRGB(20,20,20)
-side.BackgroundTransparency = 0.45
 side.BorderSizePixel = 0
 
 local sideStroke = Instance.new("UIStroke", side)
@@ -81,12 +48,12 @@ sideStroke.Color = Color3.fromRGB(255,255,255)
 sideStroke.Thickness = 2
 sideStroke.Transparency = 0.45
 
--- CONTENT (FRAME BORDER OK)
-local content = Instance.new("Frame", main)
+-- CONTENT
+local content = Instance.new("Frame")
+content.Parent = main
 content.Position = UDim2.new(0,120,0,36)
 content.Size = UDim2.new(1,-120,1,-36)
 content.BackgroundColor3 = Color3.fromRGB(18,18,18)
-content.BackgroundTransparency = 0.45
 content.BorderSizePixel = 0
 
 local contentStroke = Instance.new("UIStroke", content)
@@ -94,99 +61,82 @@ contentStroke.Color = Color3.fromRGB(255,255,255)
 contentStroke.Thickness = 2
 contentStroke.Transparency = 0.45
 
--- CONTENT TITLE (TEXT ONLY)
-local ctitle = Instance.new("TextLabel", content)
-ctitle.Size = UDim2.new(1,0,0,32)
+-- CONTENT TITLE (NO BORDER)
+local ctitle = Instance.new("TextLabel")
+ctitle.Parent = content
+ctitle.Size = UDim2.new(1,0,0,36)
 ctitle.BackgroundTransparency = 1
 ctitle.Text = "Menu"
 ctitle.TextColor3 = Color3.fromRGB(255,255,255)
 ctitle.Font = Enum.Font.GothamBold
 ctitle.TextSize = 14
-ctitle.TextXAlignment = Enum.TextXAlignment.Left
+ctitle.TextXAlignment = Enum.TextXAlignment.Center
 ctitle.TextYAlignment = Enum.TextYAlignment.Center
-ctitle.BorderSizePixel = 0
 
-for _,v in ipairs(ctitle:GetChildren()) do
-	if v:IsA("UIStroke") then v:Destroy() end
-end
-
--- MENU BUTTON (TEXT ONLY)
+-- MENU BUTTON FUNCTION (TEXT CENTER, NO BORDER)
 local function createButton(text, order)
-	local btn = Instance.new("TextButton", side)
+	local btn = Instance.new("TextButton")
+	btn.Parent = side
 	btn.Size = UDim2.new(1,0,0,34)
 	btn.Position = UDim2.new(0,0,0,(order-1)*36)
 	btn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-	btn.BackgroundTransparency = 0.45
+	btn.BorderSizePixel = 0
 	btn.Text = text
-	btn.TextColor3 = Color3.fromRGB(220,220,220)
+	btn.TextColor3 = Color3.fromRGB(200,200,200)
 	btn.Font = Enum.Font.Gotham
 	btn.TextSize = 13
-	btn.TextXAlignment = Enum.TextXAlignment.Left
+	btn.TextXAlignment = Enum.TextXAlignment.Center
 	btn.TextYAlignment = Enum.TextYAlignment.Center
-	btn.BorderSizePixel = 0
-
-	for _,v in ipairs(btn:GetChildren()) do
-		if v:IsA("UIStroke") then v:Destroy() end
-	end
+	btn.AutoButtonColor = true
 
 	btn.MouseButton1Click:Connect(function()
 		ctitle.Text = text
 	end)
 end
 
-createButton("Fishing",1)
-createButton("Automatically",2)
-createButton("Teleport",3)
-createButton("Quest",4)
-createButton("Trading",5)
-createButton("Menu",6)
+-- MENU LIST
+createButton("Fishing", 1)
+createButton("Automatically", 2)
+createButton("Teleport", 3)
+createButton("Quest", 4)
+createButton("Trading", 5)
+createButton("Menu", 6)
 
--- CLOSE
-local close = Instance.new("TextButton", title)
+-- CLOSE BUTTON
+local close = Instance.new("TextButton")
+close.Parent = title
 close.Size = UDim2.new(0,36,0,36)
 close.Position = UDim2.new(1,-36,0,0)
-close.Text = "X"
 close.BackgroundTransparency = 1
+close.Text = "X"
 close.TextColor3 = Color3.fromRGB(255,80,80)
 close.Font = Enum.Font.GothamBold
-close.TextSize = 14
-close.BorderSizePixel = 0
-close.MouseButton1Click:Connect(function() gui:Destroy() end)
+close.TextSize = 16
 
--- MINIMIZE
-local minimize = Instance.new("TextButton", title)
-minimize.Size = UDim2.new(0,36,0,36)
-minimize.Position = UDim2.new(1,-72,0,0)
-minimize.Text = "-"
-minimize.BackgroundTransparency = 1
-minimize.TextColor3 = Color3.fromRGB(255,255,255)
-minimize.Font = Enum.Font.GothamBold
-minimize.TextSize = 18
-minimize.BorderSizePixel = 0
-
--- ICON (BORDER OK)
-local icon = Instance.new("ImageButton", gui)
-icon.Size = UDim2.new(0,46,0,46)
-icon.Position = UDim2.new(0,16,0.5,-23)
-icon.BackgroundColor3 = Color3.fromRGB(25,25,25)
-icon.BackgroundTransparency = 0.25
-icon.Image = "rbxassetid://7072719337"
-icon.Visible = false
-icon.BorderSizePixel = 0
-icon.Active = true
-icon.Draggable = true
-
-local iconStroke = Instance.new("UIStroke", icon)
-iconStroke.Color = Color3.fromRGB(255,255,255)
-iconStroke.Thickness = 2
-iconStroke.Transparency = 0.3
-
-minimize.MouseButton1Click:Connect(function()
-	main.Visible = false
-	icon.Visible = true
+close.MouseButton1Click:Connect(function()
+	gui:Destroy()
 end)
 
-icon.MouseButton1Click:Connect(function()
-	main.Visible = true
-	icon.Visible = false
+-- MINIMIZE ICON (IMAGEBUTTON)
+local minimize = Instance.new("ImageButton")
+minimize.Parent = title
+minimize.Size = UDim2.new(0,28,0,28)
+minimize.Position = UDim2.new(1,-70,0.5,-14)
+minimize.BackgroundTransparency = 1
+minimize.Image = "rbxassetid://6031091002" -- icon garis
+
+local minimized = false
+local oldSize = main.Size
+
+minimize.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	if minimized then
+		side.Visible = false
+		content.Visible = false
+		main.Size = UDim2.new(0,200,0,36)
+	else
+		side.Visible = true
+		content.Visible = true
+		main.Size = oldSize
+	end
 end)
