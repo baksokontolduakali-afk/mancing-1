@@ -1,5 +1,5 @@
 -- JoeyTesting GUI
--- Menu + Minimize
+-- Blue Light + 50% Opacity + Square Minimize
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -12,27 +12,38 @@ local main = Instance.new("Frame")
 main.Parent = gui
 main.Size = UDim2.new(0, 520, 0, 320)
 main.Position = UDim2.new(0.5, -260, 0.5, -160)
-main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+main.BackgroundColor3 = Color3.fromRGB(120, 200, 255)
+main.BackgroundTransparency = 0.5
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
 
 -- TITLE BAR
-local title = Instance.new("TextLabel")
+local title = Instance.new("Frame")
 title.Parent = main
 title.Size = UDim2.new(1, 0, 0, 40)
-title.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-title.Text = "JoeyTesting"
-title.TextColor3 = Color3.fromRGB(0, 255, 200)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 18
+title.BackgroundColor3 = Color3.fromRGB(80, 170, 230)
+title.BackgroundTransparency = 0.4
+title.BorderSizePixel = 0
+
+local titleText = Instance.new("TextLabel")
+titleText.Parent = title
+titleText.Size = UDim2.new(1, -80, 1, 0)
+titleText.Position = UDim2.new(0, 10, 0, 0)
+titleText.BackgroundTransparency = 1
+titleText.Text = "JoeyTesting"
+titleText.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleText.Font = Enum.Font.GothamBold
+titleText.TextSize = 18
+titleText.TextXAlignment = Left
 
 -- SIDEBAR
 local side = Instance.new("Frame")
 side.Parent = main
 side.Position = UDim2.new(0, 0, 0, 40)
 side.Size = UDim2.new(0, 140, 1, -40)
-side.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+side.BackgroundColor3 = Color3.fromRGB(90, 180, 240)
+side.BackgroundTransparency = 0.5
 side.BorderSizePixel = 0
 
 -- CONTENT
@@ -40,7 +51,8 @@ local content = Instance.new("Frame")
 content.Parent = main
 content.Position = UDim2.new(0, 140, 0, 40)
 content.Size = UDim2.new(1, -140, 1, -40)
-content.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+content.BackgroundColor3 = Color3.fromRGB(140, 210, 255)
+content.BackgroundTransparency = 0.55
 content.BorderSizePixel = 0
 
 -- CONTENT TITLE
@@ -48,7 +60,7 @@ local ctitle = Instance.new("TextLabel")
 ctitle.Parent = content
 ctitle.Size = UDim2.new(1, 0, 0, 40)
 ctitle.BackgroundTransparency = 1
-ctitle.Text = "Menu"
+ctitle.Text = "Fishing"
 ctitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 ctitle.Font = Enum.Font.GothamBold
 ctitle.TextSize = 16
@@ -59,9 +71,10 @@ local function createButton(text, order)
 	btn.Parent = side
 	btn.Size = UDim2.new(1, 0, 0, 40)
 	btn.Position = UDim2.new(0, 0, 0, (order - 1) * 42)
-	btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+	btn.BackgroundColor3 = Color3.fromRGB(70, 160, 220)
+	btn.BackgroundTransparency = 0.4
 	btn.Text = text
-	btn.TextColor3 = Color3.fromRGB(200, 200, 200)
+	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 	btn.Font = Enum.Font.Gotham
 	btn.TextSize = 14
 	btn.BorderSizePixel = 0
@@ -71,13 +84,13 @@ local function createButton(text, order)
 	end)
 end
 
--- MENU LIST
+-- MENU LIST (tanpa "Menu")
 createButton("Fishing", 1)
 createButton("Automatically", 2)
 createButton("Teleport", 3)
 createButton("Quest", 4)
 createButton("Trading", 5)
-createButton("Menu", 6)
+createButton("Info", 6)
 
 -- CLOSE BUTTON
 local close = Instance.new("TextButton")
@@ -94,16 +107,16 @@ close.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
 
--- MINIMIZE BUTTON
+-- MINIMIZE BUTTON (KOTAK)
 local minimize = Instance.new("TextButton")
 minimize.Parent = title
 minimize.Size = UDim2.new(0, 40, 0, 40)
 minimize.Position = UDim2.new(1, -80, 0, 0)
-minimize.Text = "-"
+minimize.Text = "▢"
 minimize.BackgroundTransparency = 1
 minimize.TextColor3 = Color3.fromRGB(255, 255, 255)
 minimize.Font = Enum.Font.GothamBold
-minimize.TextSize = 20
+minimize.TextSize = 16
 
 local minimized = false
 local oldSize = main.Size
@@ -114,7 +127,7 @@ minimize.MouseButton1Click:Connect(function()
 		oldSize = main.Size
 		side.Visible = false
 		content.Visible = false
-		main.Size = UDim2.new(0, 520, 0, 40)
+		main.Size = UDim2.new(0, 160, 0, 40)
 	else
 		side.Visible = true
 		content.Visible = true
