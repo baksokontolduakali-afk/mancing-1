@@ -1,20 +1,12 @@
--- JoeyHub UI Script (iOS Blur + Pink)
+-- JoeyHub UI Script (PINK FIXED)
 
 local player = game.Players.LocalPlayer
-local lighting = game:GetService("Lighting")
 
--- Hapus GUI lama
+-- 🔥 HAPUS GUI LAMA JIKA ADA
 if player:WaitForChild("PlayerGui"):FindFirstChild("JoeyHubGui") then
 	player.PlayerGui.JoeyHubGui:Destroy()
 end
 
--- 🔥 iOS BLUR EFFECT
-local blur = Instance.new("BlurEffect")
-blur.Name = "JoeyHubBlur"
-blur.Size = 18 -- iOS-style blur
-blur.Parent = lighting
-
--- ScreenGui
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyHubGui"
 gui.Parent = player.PlayerGui
@@ -25,30 +17,25 @@ local main = Instance.new("Frame")
 main.Parent = gui
 main.Size = UDim2.new(0, 420, 0, 260)
 main.Position = UDim2.new(0.5, -210, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(255, 105, 180)
+main.BackgroundColor3 = Color3.fromRGB(255, 105, 180) -- 💗 HOT PINK
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
 
--- 🔥 GLOBAL OPACITY (iOS STYLE)
-local canvas = Instance.new("CanvasGroup")
-canvas.Parent = main
-canvas.Transparency = 0.5
-
 -- Corner
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 14)
+corner.CornerRadius = UDim.new(0, 12)
 corner.Parent = main
 
 -- Top Bar
 local topBar = Instance.new("Frame")
 topBar.Parent = main
 topBar.Size = UDim2.new(1, 0, 0, 40)
-topBar.BackgroundColor3 = Color3.fromRGB(255, 20, 147)
+topBar.BackgroundColor3 = Color3.fromRGB(255, 20, 147) -- 💗 DEEP PINK
 topBar.BorderSizePixel = 0
 
 local topCorner = Instance.new("UICorner")
-topCorner.CornerRadius = UDim.new(0, 14)
+topCorner.CornerRadius = UDim.new(0, 12)
 topCorner.Parent = topBar
 
 -- Title
@@ -63,7 +50,7 @@ title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Left
 
--- Minimize
+-- Minimize Button
 local minimize = Instance.new("TextButton")
 minimize.Parent = topBar
 minimize.Size = UDim2.new(0, 30, 0, 25)
@@ -74,7 +61,7 @@ minimize.TextColor3 = Color3.new(1,1,1)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
 
--- Close
+-- Close Button
 local close = Instance.new("TextButton")
 close.Parent = topBar
 close.Size = UDim2.new(0, 30, 0, 25)
@@ -91,13 +78,13 @@ content.Parent = main
 content.Size = UDim2.new(1, 0, 1, -40)
 content.Position = UDim2.new(0, 0, 0, 40)
 content.BackgroundTransparency = 1
-content.Text = "JoeyHub\n\n• iOS Blur\n• Pink Glass UI\n• 50% Opacity"
+content.Text = "JoeyHub\n\n• Mobile UI\n• Pink Theme\n• Fixed Colors"
 content.TextColor3 = Color3.fromRGB(255, 240, 245)
 content.Font = Enum.Font.Gotham
 content.TextSize = 14
 content.TextWrapped = true
 
--- Minimize function
+-- Functions
 local minimized = false
 minimize.MouseButton1Click:Connect(function()
 	minimized = not minimized
@@ -105,8 +92,6 @@ minimize.MouseButton1Click:Connect(function()
 	main.Size = minimized and UDim2.new(0, 420, 0, 40) or UDim2.new(0, 420, 0, 260)
 end)
 
--- Close function (REMOVE BLUR)
 close.MouseButton1Click:Connect(function()
-	if blur then blur:Destroy() end
 	gui:Destroy()
 end)
