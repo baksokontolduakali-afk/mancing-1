@@ -1,11 +1,7 @@
--- JoeyTesting GUI CLEAN VERSION with Stable Draggable Mini Icon
+-- JoeyTesting GUI CLEAN with Minimize Button in Title
 local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-
 local plr = Players.LocalPlayer
 
--- SCREENGUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyTestingGUI"
 gui.ResetOnSpawn = false
@@ -35,7 +31,7 @@ title.BackgroundColor3 = Color3.fromRGB(30,30,30)
 
 local titleText = Instance.new("TextLabel")
 titleText.Parent = title
-titleText.Size = UDim2.new(1,-40,1,0)
+titleText.Size = UDim2.new(1,-72,1,0)
 titleText.BackgroundTransparency = 1
 titleText.Text = "JoeyTesting"
 titleText.TextColor3 = Color3.fromRGB(0,255,200)
@@ -43,6 +39,45 @@ titleText.Font = Enum.Font.GothamBold
 titleText.TextSize = 16
 titleText.TextXAlignment = Enum.TextXAlignment.Center
 titleText.TextYAlignment = Enum.TextYAlignment.Center
+
+-- ===== CLOSE BUTTON =====
+local close = Instance.new("TextButton")
+close.Parent = title
+close.Size = UDim2.new(0,36,0,36)
+close.Position = UDim2.new(1,-36,0,0)
+close.BackgroundTransparency = 1
+close.Text = "X"
+close.TextColor3 = Color3.fromRGB(255,80,80)
+close.Font = Enum.Font.GothamBold
+close.TextSize = 16
+close.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
+-- ===== MINIMIZE BUTTON =====
+local minimize = Instance.new("TextButton")
+minimize.Parent = title
+minimize.Size = UDim2.new(0,36,0,36)
+minimize.Position = UDim2.new(1,-72,0,0)
+minimize.BackgroundTransparency = 1
+minimize.Text = "_"
+minimize.TextColor3 = Color3.fromRGB(255,255,255)
+minimize.Font = Enum.Font.GothamBold
+minimize.TextSize = 20
+
+local minimized = false
+minimize.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	if minimized then
+		main.Size = UDim2.new(0,420,0,36) -- tinggal title
+		side.Visible = false
+		content.Visible = false
+	else
+		main.Size = UDim2.new(0,420,0,260)
+		side.Visible = true
+		content.Visible = true
+	end
+end)
 
 -- ===== SIDEBAR =====
 local side = Instance.new("Frame")
@@ -80,7 +115,7 @@ ctitle.TextSize = 14
 ctitle.TextXAlignment = Enum.TextXAlignment.Center
 ctitle.TextYAlignment = Enum.TextYAlignment.Center
 
--- ===== MENU BUTTONS =====
+-- MENU BUTTONS
 local function createButton(text, order)
 	local btn = Instance.new("TextButton")
 	btn.Parent = side
@@ -106,90 +141,3 @@ createButton("Teleport",3)
 createButton("Quest",4)
 createButton("Trading",5)
 createButton("Menu",6)
-
--- ===== CLOSE BUTTON =====
-local close = Instance.new("TextButton")
-close.Parent = title
-close.Size = UDim2.new(0,36,0,36)
-close.Position = UDim2.new(1,-36,0,0)
-close.BackgroundTransparency = 1
-close.Text = "X"
-close.TextColor3 = Color3.fromRGB(255,80,80)
-close.Font = Enum.Font.GothamBold
-close.TextSize = 16
-close.MouseButton1Click:Connect(function()
-	gui:Destroy()
-end)
-
--- ===== MINIMIZE BUTTON =====
-local minimize = Instance.new("TextButton")
-minimize.Parent = title
-minimize.Size = UDim2.new(0,26,0,26)
-minimize.Position = UDim2.new(1,-72,0.5,-13)
-minimize.BackgroundColor3 = Color3.fromRGB(200,200,200)
-minimize.Text = "-"
-minimize.Font = Enum.Font.GothamBold
-minimize.TextSize = 20
-minimize.TextColor3 = Color3.fromRGB(0,0,0)
-
--- ===== MINI ICON (DRAGGABLE) =====
-local miniIcon = Instance.new("Frame")
-miniIcon.Parent = gui
-miniIcon.Size = UDim2.new(0,50,0,50)
-miniIcon.Position = UDim2.new(0,100,0,100)
-miniIcon.BackgroundColor3 = Color3.fromRGB(50,50,50)
-miniIcon.Visible = false
-miniIcon.Active = true
-miniIcon.BorderSizePixel = 0
-
-local iconLabel = Instance.new("TextLabel")
-iconLabel.Parent = miniIcon
-iconLabel.Size = UDim2.new(1,0,1,0)
-iconLabel.BackgroundTransparency = 1
-iconLabel.Text = "J"
-iconLabel.TextColor3 = Color3.fromRGB(0,255,200)
-iconLabel.Font = Enum.Font.GothamBold
-iconLabel.TextSize = 18
-
--- ===== MINIMIZE / RESTORE LOGIC =====
-local minimized = false
-minimize.MouseButton1Click:Connect(function()
-	minimized = not minimized
-	if minimized then
-		main.Visible = false
-		miniIcon.Visible = true
-	else
-		main.Visible = true
-		miniIcon.Visible = false
-	end
-end)
-
-miniIcon.MouseButton1Click:Connect(function()
-	main.Visible = true
-	miniIcon.Visible = false
-end)
-
--- ===== DRAG MINI ICON STABLE =====
-local dragging = false
-local dragOffset = Vector2.new()
-
-miniIcon.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		local mousePos = UserInputService:GetMouseLocation()
-		dragOffset = Vector2.new(miniIcon.AbsolutePosition.X, miniIcon.AbsolutePosition.Y) - mousePos
-	end
-end)
-
-miniIcon.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = false
-	end
-end)
-
-RunService.RenderStepped:Connect(function()
-	if dragging then
-		local mousePos = UserInputService:GetMouseLocation()
-		miniIcon.Position = UDim2.new(0, mousePos.X + dragOffset.X, 0, mousePos.Y + dragOffset.Y)
-	end
-end)
