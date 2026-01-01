@@ -1,4 +1,4 @@
--- JoeyTesting GUI CLEAN with Minimize Button in Title
+-- JoeyTesting GUI CLEAN FINAL with Minimize (buttons stay)
 local Players = game:GetService("Players")
 local plr = Players.LocalPlayer
 
@@ -8,7 +8,7 @@ gui.ResetOnSpawn = false
 gui.Parent = plr:WaitForChild("PlayerGui")
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
--- ===== MAIN FRAME =====
+-- MAIN FRAME
 local main = Instance.new("Frame")
 main.Parent = gui
 main.Size = UDim2.new(0,420,0,260)
@@ -23,7 +23,7 @@ mainStroke.Color = Color3.fromRGB(255,255,255)
 mainStroke.Thickness = 2
 mainStroke.Transparency = 0.35
 
--- ===== TITLE BAR =====
+-- TITLE BAR
 local title = Instance.new("Frame")
 title.Parent = main
 title.Size = UDim2.new(1,0,0,36)
@@ -40,7 +40,7 @@ titleText.TextSize = 16
 titleText.TextXAlignment = Enum.TextXAlignment.Center
 titleText.TextYAlignment = Enum.TextYAlignment.Center
 
--- ===== CLOSE BUTTON =====
+-- CLOSE BUTTON
 local close = Instance.new("TextButton")
 close.Parent = title
 close.Size = UDim2.new(0,36,0,36)
@@ -54,7 +54,7 @@ close.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
 
--- ===== MINIMIZE BUTTON =====
+-- MINIMIZE BUTTON
 local minimize = Instance.new("TextButton")
 minimize.Parent = title
 minimize.Size = UDim2.new(0,36,0,36)
@@ -65,21 +65,7 @@ minimize.TextColor3 = Color3.fromRGB(255,255,255)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 20
 
-local minimized = false
-minimize.MouseButton1Click:Connect(function()
-	minimized = not minimized
-	if minimized then
-		main.Size = UDim2.new(0,420,0,36) -- tinggal title
-		side.Visible = false
-		content.Visible = false
-	else
-		main.Size = UDim2.new(0,420,0,260)
-		side.Visible = true
-		content.Visible = true
-	end
-end)
-
--- ===== SIDEBAR =====
+-- SIDEBAR
 local side = Instance.new("Frame")
 side.Parent = main
 side.Position = UDim2.new(0,0,0,36)
@@ -91,7 +77,7 @@ sideStroke.Color = Color3.fromRGB(255,255,255)
 sideStroke.Thickness = 2
 sideStroke.Transparency = 0.45
 
--- ===== CONTENT =====
+-- CONTENT
 local content = Instance.new("Frame")
 content.Parent = main
 content.Position = UDim2.new(0,120,0,36)
@@ -115,7 +101,7 @@ ctitle.TextSize = 14
 ctitle.TextXAlignment = Enum.TextXAlignment.Center
 ctitle.TextYAlignment = Enum.TextYAlignment.Center
 
--- MENU BUTTONS
+-- MENU BUTTONS FUNCTION
 local function createButton(text, order)
 	local btn = Instance.new("TextButton")
 	btn.Parent = side
@@ -135,9 +121,23 @@ local function createButton(text, order)
 	end)
 end
 
-createButton("Fishing",1)
-createButton("Automatically",2)
-createButton("Teleport",3)
-createButton("Quest",4)
-createButton("Trading",5)
-createButton("Menu",6)
+-- CREATE ALL MENU BUTTONS
+local menuList = {"Fishing","Automatically","Teleport","Quest","Trading","Menu"}
+for i,text in ipairs(menuList) do
+	createButton(text,i)
+end
+
+-- MINIMIZE LOGIC
+local minimized = false
+minimize.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	if minimized then
+		main.Size = UDim2.new(0,420,0,36) -- hanya title bar
+		side.Visible = false
+		content.Visible = false
+	else
+		main.Size = UDim2.new(0,420,0,260)
+		side.Visible = true
+		content.Visible = true
+	end
+end)
