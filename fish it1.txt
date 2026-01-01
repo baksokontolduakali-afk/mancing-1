@@ -1,25 +1,34 @@
--- JoeyTesting GUI with MINI ICON draggable (stable FINAL 100%)
-local plr = game.Players.LocalPlayer
+-- JoeyTesting GUI FULL FINAL with Draggable Mini Icon
+local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
+local plr = Players.LocalPlayer
+
+-- SCREENGUI
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyTestingGUI"
 gui.ResetOnSpawn = false
 gui.Parent = plr:WaitForChild("PlayerGui")
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
--- MAIN GUI (sama seperti sebelumnya)
+-- MAIN FRAME
 local main = Instance.new("Frame")
 main.Parent = gui
-main.Size = UDim2.new(0, 420, 0, 260)
-main.Position = UDim2.new(0.5, -210, 0.5, -130)
+main.Size = UDim2.new(0,420,0,260)
+main.Position = UDim2.new(0.5,-210,0.5,-130)
 main.BackgroundColor3 = Color3.fromRGB(25,25,25)
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
 
--- TITLE
+-- MAIN BORDER
+local mainStroke = Instance.new("UIStroke", main)
+mainStroke.Color = Color3.fromRGB(255,255,255)
+mainStroke.Thickness = 2
+mainStroke.Transparency = 0.35
+
+-- TITLE BAR
 local title = Instance.new("Frame")
 title.Parent = main
 title.Size = UDim2.new(1,0,0,36)
@@ -36,6 +45,83 @@ titleText.TextSize = 16
 titleText.TextXAlignment = Enum.TextXAlignment.Center
 titleText.TextYAlignment = Enum.TextYAlignment.Center
 
+-- SIDEBAR
+local side = Instance.new("Frame")
+side.Parent = main
+side.Position = UDim2.new(0,0,0,36)
+side.Size = UDim2.new(0,120,1,-36)
+side.BackgroundColor3 = Color3.fromRGB(20,20,20)
+
+local sideStroke = Instance.new("UIStroke", side)
+sideStroke.Color = Color3.fromRGB(255,255,255)
+sideStroke.Thickness = 2
+sideStroke.Transparency = 0.45
+
+-- CONTENT
+local content = Instance.new("Frame")
+content.Parent = main
+content.Position = UDim2.new(0,120,0,36)
+content.Size = UDim2.new(1,-120,1,-36)
+content.BackgroundColor3 = Color3.fromRGB(18,18,18)
+
+local contentStroke = Instance.new("UIStroke", content)
+contentStroke.Color = Color3.fromRGB(255,255,255)
+contentStroke.Thickness = 2
+contentStroke.Transparency = 0.45
+
+-- CONTENT TITLE
+local ctitle = Instance.new("TextLabel")
+ctitle.Parent = content
+ctitle.Size = UDim2.new(1,0,0,36)
+ctitle.BackgroundTransparency = 1
+ctitle.Text = "Menu"
+ctitle.TextColor3 = Color3.fromRGB(255,255,255)
+ctitle.Font = Enum.Font.GothamBold
+ctitle.TextSize = 14
+ctitle.TextXAlignment = Enum.TextXAlignment.Center
+ctitle.TextYAlignment = Enum.TextYAlignment.Center
+
+-- MENU BUTTONS
+local function createButton(text, order)
+	local btn = Instance.new("TextButton")
+	btn.Parent = side
+	btn.Size = UDim2.new(1,0,0,34)
+	btn.Position = UDim2.new(0,0,0,(order-1)*36)
+	btn.BackgroundColor3 = Color3.fromRGB(30,30,30)
+	btn.BorderSizePixel = 0
+	btn.Text = text
+	btn.TextColor3 = Color3.fromRGB(200,200,200)
+	btn.Font = Enum.Font.Gotham
+	btn.TextSize = 13
+	btn.TextXAlignment = Enum.TextXAlignment.Center
+	btn.TextYAlignment = Enum.TextYAlignment.Center
+
+	btn.MouseButton1Click:Connect(function()
+		ctitle.Text = text
+	end)
+end
+
+createButton("Fishing",1)
+createButton("Automatically",2)
+createButton("Teleport",3)
+createButton("Quest",4)
+createButton("Trading",5)
+createButton("Menu",6)
+
+-- CLOSE BUTTON
+local close = Instance.new("TextButton")
+close.Parent = title
+close.Size = UDim2.new(0,36,0,36)
+close.Position = UDim2.new(1,-36,0,0)
+close.BackgroundTransparency = 1
+close.Text = "X"
+close.TextColor3 = Color3.fromRGB(255,80,80)
+close.Font = Enum.Font.GothamBold
+close.TextSize = 16
+close.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
 -- MINIMIZE BUTTON
 local minimize = Instance.new("TextButton")
 minimize.Parent = title
@@ -46,13 +132,12 @@ minimize.Text = "-"
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 20
 minimize.TextColor3 = Color3.fromRGB(0,0,0)
-minimize.ZIndex = 2
 
--- MINI ICON (pakai FRAME)
+-- MINI ICON FRAME (DRAGGABLE)
 local miniIcon = Instance.new("Frame")
 miniIcon.Parent = gui
 miniIcon.Size = UDim2.new(0,50,0,50)
-miniIcon.Position = UDim2.new(0,50,0,50)
+miniIcon.Position = UDim2.new(0,100,0,100)
 miniIcon.BackgroundColor3 = Color3.fromRGB(50,50,50)
 miniIcon.Visible = false
 miniIcon.Active = true
@@ -85,14 +170,15 @@ miniIcon.MouseButton1Click:Connect(function()
 	miniIcon.Visible = false
 end)
 
--- DRAG MINI ICON PAKAI RENDERSTEPPED (100% STABLE)
+-- DRAG MINI ICON (STABLE, WORKS 100%)
 local dragging = false
 local dragOffset = Vector2.new()
 
 miniIcon.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = true
-		dragOffset = UserInputService:GetMouseLocation() - Vector2.new(miniIcon.AbsolutePosition.X, miniIcon.AbsolutePosition.Y)
+		local mousePos = UserInputService:GetMouseLocation()
+		dragOffset = Vector2.new(miniIcon.AbsolutePosition.X, miniIcon.AbsolutePosition.Y) - mousePos
 	end
 end)
 
@@ -105,7 +191,6 @@ end)
 RunService.RenderStepped:Connect(function()
 	if dragging then
 		local mousePos = UserInputService:GetMouseLocation()
-		local newPos = mousePos - dragOffset
-		miniIcon.Position = UDim2.new(0, newPos.X, 0, newPos.Y)
+		miniIcon.Position = UDim2.new(0, mousePos.X + dragOffset.X, 0, mousePos.Y + dragOffset.Y)
 	end
 end)
