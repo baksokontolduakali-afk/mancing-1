@@ -50,22 +50,22 @@ title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Left
 
--- Minimize Button (KIRI)
+-- Minimize Button
 local minimize = Instance.new("TextButton")
 minimize.Parent = topBar
 minimize.Size = UDim2.new(0, 30, 0, 25)
-minimize.Position = UDim2.new(0, 10, 0.5, -12) -- ⬅️ ke kiri
+minimize.Position = UDim2.new(1, -70, 0.5, -12)
 minimize.Text = "-"
 minimize.BackgroundColor3 = Color3.fromRGB(255, 120, 200)
 minimize.TextColor3 = Color3.new(1,1,1)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
 
--- Close Button (KIRI, sebelah minimize)
+-- Close Button
 local close = Instance.new("TextButton")
 close.Parent = topBar
 close.Size = UDim2.new(0, 30, 0, 25)
-close.Position = UDim2.new(0, 45, 0.5, -12) -- ⬅️ sebelah minimize
+close.Position = UDim2.new(1, -40, 0.5, -12)
 close.Text = "X"
 close.BackgroundColor3 = Color3.fromRGB(200, 40, 90)
 close.TextColor3 = Color3.new(1,1,1)
