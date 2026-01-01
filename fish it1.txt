@@ -1,17 +1,19 @@
--- JoeyTesting GUI (FINAL FIX)
+-- JoeyTesting GUI
+-- Menu + Minimize (ImageButton, Full Script)
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyTestingGUI"
 gui.ResetOnSpawn = false
 gui.Parent = plr:WaitForChild("PlayerGui")
+gui.ZIndexBehavior = Enum.ZIndexBehavior.Global -- supaya icon bisa di atas teks
 
 -- MAIN FRAME
 local main = Instance.new("Frame")
 main.Parent = gui
 main.Size = UDim2.new(0, 420, 0, 260)
 main.Position = UDim2.new(0.5, -210, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(25,25,25)
+main.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
@@ -21,17 +23,18 @@ mainStroke.Color = Color3.fromRGB(255,255,255)
 mainStroke.Thickness = 2
 mainStroke.Transparency = 0.35
 
--- TITLE BAR (FRAME, BUKAN TEXTLABEL)
+-- TITLE BAR (FRAME)
 local title = Instance.new("Frame")
 title.Parent = main
-title.Size = UDim2.new(1,0,0,36)
+title.Size = UDim2.new(1, 0, 0, 36)
 title.BackgroundColor3 = Color3.fromRGB(30,30,30)
 title.BorderSizePixel = 0
 
 -- TITLE TEXT
 local titleText = Instance.new("TextLabel")
 titleText.Parent = title
-titleText.Size = UDim2.new(1,0,1,0)
+titleText.Size = UDim2.new(1, -40, 1, 0) -- kasih space kanan buat icon
+titleText.Position = UDim2.new(0,0,0,0)
 titleText.BackgroundTransparency = 1
 titleText.Text = "JoeyTesting"
 titleText.TextColor3 = Color3.fromRGB(0,255,200)
@@ -39,6 +42,7 @@ titleText.Font = Enum.Font.GothamBold
 titleText.TextSize = 16
 titleText.TextXAlignment = Enum.TextXAlignment.Center
 titleText.TextYAlignment = Enum.TextYAlignment.Center
+titleText.ZIndex = 1
 
 -- SIDEBAR
 local side = Instance.new("Frame")
@@ -121,15 +125,16 @@ close.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
 
--- MINIMIZE ICON (100% KELIATAN)
+-- MINIMIZE ICON (IMAGEBUTTON)
 local minimize = Instance.new("ImageButton")
 minimize.Parent = title
 minimize.Size = UDim2.new(0,26,0,26)
-minimize.Position = UDim2.new(1,-72,0.5,-13)
+minimize.Position = UDim2.new(1,-6-26,0.5,-13) -- kanan atas
 minimize.BackgroundTransparency = 1
-minimize.Image = "rbxassetid://6031091002"
+minimize.Image = "rbxassetid://3926305904" -- icon minus, pasti kelihatan
 minimize.ScaleType = Enum.ScaleType.Fit
-minimize.ZIndex = 2
+minimize.ZIndex = 5
+minimize.AutoButtonColor = false
 
 local minimized = false
 local oldSize = main.Size
