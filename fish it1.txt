@@ -1,9 +1,15 @@
--- JoeyHub UI Script (Pink Theme)
+-- JoeyHub UI Script (PINK FIXED)
 
 local player = game.Players.LocalPlayer
+
+-- 🔥 HAPUS GUI LAMA JIKA ADA
+if player:WaitForChild("PlayerGui"):FindFirstChild("JoeyHubGui") then
+	player.PlayerGui.JoeyHubGui:Destroy()
+end
+
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyHubGui"
-gui.Parent = player:WaitForChild("PlayerGui")
+gui.Parent = player.PlayerGui
 gui.ResetOnSpawn = false
 
 -- Main Frame
@@ -11,25 +17,25 @@ local main = Instance.new("Frame")
 main.Parent = gui
 main.Size = UDim2.new(0, 420, 0, 260)
 main.Position = UDim2.new(0.5, -210, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(70, 20, 50) -- pink dark
+main.BackgroundColor3 = Color3.fromRGB(255, 105, 180) -- 💗 HOT PINK
 main.BorderSizePixel = 0
 main.Active = true
 main.Draggable = true
 
 -- Corner
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
+corner.CornerRadius = UDim.new(0, 12)
 corner.Parent = main
 
 -- Top Bar
 local topBar = Instance.new("Frame")
 topBar.Parent = main
 topBar.Size = UDim2.new(1, 0, 0, 40)
-topBar.BackgroundColor3 = Color3.fromRGB(90, 30, 70) -- pink header
+topBar.BackgroundColor3 = Color3.fromRGB(255, 20, 147) -- 💗 DEEP PINK
 topBar.BorderSizePixel = 0
 
 local topCorner = Instance.new("UICorner")
-topCorner.CornerRadius = UDim.new(0, 10)
+topCorner.CornerRadius = UDim.new(0, 12)
 topCorner.Parent = topBar
 
 -- Title
@@ -39,7 +45,7 @@ title.Size = UDim2.new(1, -80, 1, 0)
 title.Position = UDim2.new(0, 15, 0, 0)
 title.BackgroundTransparency = 1
 title.Text = "JoeyHub"
-title.TextColor3 = Color3.fromRGB(255, 220, 235)
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -50,7 +56,7 @@ minimize.Parent = topBar
 minimize.Size = UDim2.new(0, 30, 0, 25)
 minimize.Position = UDim2.new(1, -65, 0.5, -12)
 minimize.Text = "-"
-minimize.BackgroundColor3 = Color3.fromRGB(170, 70, 130) -- pink button
+minimize.BackgroundColor3 = Color3.fromRGB(255, 120, 200)
 minimize.TextColor3 = Color3.new(1,1,1)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
@@ -61,24 +67,24 @@ close.Parent = topBar
 close.Size = UDim2.new(0, 30, 0, 25)
 close.Position = UDim2.new(1, -30, 0.5, -12)
 close.Text = "X"
-close.BackgroundColor3 = Color3.fromRGB(180, 60, 90) -- red-pink
+close.BackgroundColor3 = Color3.fromRGB(200, 40, 90)
 close.TextColor3 = Color3.new(1,1,1)
 close.Font = Enum.Font.GothamBold
 close.TextSize = 14
 
--- Content Text
+-- Content
 local content = Instance.new("TextLabel")
 content.Parent = main
 content.Size = UDim2.new(1, 0, 1, -40)
 content.Position = UDim2.new(0, 0, 0, 40)
 content.BackgroundTransparency = 1
-content.Text = "JoeyHub\n\n• Mobile UI\n• Pink Theme\n• Mini Animated"
-content.TextColor3 = Color3.fromRGB(240, 200, 220)
+content.Text = "JoeyHub\n\n• Mobile UI\n• Pink Theme\n• Fixed Colors"
+content.TextColor3 = Color3.fromRGB(255, 240, 245)
 content.Font = Enum.Font.Gotham
 content.TextSize = 14
 content.TextWrapped = true
 
--- Button Functions
+-- Functions
 local minimized = false
 minimize.MouseButton1Click:Connect(function()
 	minimized = not minimized
