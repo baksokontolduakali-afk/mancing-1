@@ -1,19 +1,24 @@
 -- JoeyTesting GUI
--- FINAL CLEAN (BORDER FRAME ONLY, NO TEXT BORDER)
+-- FINAL FIX (NO TEXT BORDER AT ALL)
 
 local UIS = game:GetService("UserInputService")
 local plr = game.Players.LocalPlayer
 
+-- CLEAN OLD GUI
+if plr.PlayerGui:FindFirstChild("JoeyTestingGUI") then
+	plr.PlayerGui.JoeyTestingGUI:Destroy()
+end
+
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyTestingGUI"
-gui.ResetOnSpawn = false
 gui.IgnoreGuiInset = true
-gui.Parent = plr:WaitForChild("PlayerGui")
+gui.ResetOnSpawn = false
+gui.Parent = plr.PlayerGui
 
 -- MAIN FRAME
 local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0, 420, 0, 260)
-main.Position = UDim2.new(0.5, -210, 0.5, -130)
+main.Size = UDim2.new(0,420,0,260)
+main.Position = UDim2.new(0.5,-210,0.5,-130)
 main.BackgroundColor3 = Color3.fromRGB(25,25,25)
 main.BackgroundTransparency = 0.45
 main.BorderSizePixel = 0
@@ -23,7 +28,7 @@ mainStroke.Color = Color3.fromRGB(255,255,255)
 mainStroke.Thickness = 2
 mainStroke.Transparency = 0.3
 
--- TITLE BAR (NO BORDER)
+-- TITLE BAR (TEXT ONLY)
 local title = Instance.new("TextLabel", main)
 title.Size = UDim2.new(1,0,0,36)
 title.BackgroundColor3 = Color3.fromRGB(30,30,30)
@@ -34,7 +39,13 @@ title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Center
 title.TextYAlignment = Enum.TextYAlignment.Center
+title.BorderSizePixel = 0
 title.Active = true
+
+-- FORCE REMOVE STROKE FROM TEXT
+for _,v in ipairs(title:GetChildren()) do
+	if v:IsA("UIStroke") then v:Destroy() end
+end
 
 -- DRAG
 local dragging, dragStart, startPos
@@ -49,19 +60,12 @@ end)
 UIS.InputChanged:Connect(function(i)
 	if dragging and i.UserInputType == Enum.UserInputType.MouseMovement then
 		local d = i.Position - dragStart
-		main.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + d.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + d.Y
-		)
+		main.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset+d.X,startPos.Y.Scale,startPos.Y.Offset+d.Y)
 	end
 end)
 
 UIS.InputEnded:Connect(function(i)
-	if i.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = false
-	end
+	if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
 end)
 
 -- SIDEBAR (FRAME BORDER OK)
@@ -90,7 +94,7 @@ contentStroke.Color = Color3.fromRGB(255,255,255)
 contentStroke.Thickness = 2
 contentStroke.Transparency = 0.45
 
--- CONTENT TITLE (NO BORDER)
+-- CONTENT TITLE (TEXT ONLY)
 local ctitle = Instance.new("TextLabel", content)
 ctitle.Size = UDim2.new(1,0,0,32)
 ctitle.BackgroundTransparency = 1
@@ -100,8 +104,13 @@ ctitle.Font = Enum.Font.GothamBold
 ctitle.TextSize = 14
 ctitle.TextXAlignment = Enum.TextXAlignment.Left
 ctitle.TextYAlignment = Enum.TextYAlignment.Center
+ctitle.BorderSizePixel = 0
 
--- MENU BUTTON (NO BORDER)
+for _,v in ipairs(ctitle:GetChildren()) do
+	if v:IsA("UIStroke") then v:Destroy() end
+end
+
+-- MENU BUTTON (TEXT ONLY)
 local function createButton(text, order)
 	local btn = Instance.new("TextButton", side)
 	btn.Size = UDim2.new(1,0,0,34)
@@ -112,9 +121,13 @@ local function createButton(text, order)
 	btn.TextColor3 = Color3.fromRGB(220,220,220)
 	btn.Font = Enum.Font.Gotham
 	btn.TextSize = 13
-	btn.BorderSizePixel = 0
 	btn.TextXAlignment = Enum.TextXAlignment.Left
 	btn.TextYAlignment = Enum.TextYAlignment.Center
+	btn.BorderSizePixel = 0
+
+	for _,v in ipairs(btn:GetChildren()) do
+		if v:IsA("UIStroke") then v:Destroy() end
+	end
 
 	btn.MouseButton1Click:Connect(function()
 		ctitle.Text = text
@@ -137,6 +150,7 @@ close.BackgroundTransparency = 1
 close.TextColor3 = Color3.fromRGB(255,80,80)
 close.Font = Enum.Font.GothamBold
 close.TextSize = 14
+close.BorderSizePixel = 0
 close.MouseButton1Click:Connect(function() gui:Destroy() end)
 
 -- MINIMIZE
@@ -148,8 +162,9 @@ minimize.BackgroundTransparency = 1
 minimize.TextColor3 = Color3.fromRGB(255,255,255)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
+minimize.BorderSizePixel = 0
 
--- ICON
+-- ICON (BORDER OK)
 local icon = Instance.new("ImageButton", gui)
 icon.Size = UDim2.new(0,46,0,46)
 icon.Position = UDim2.new(0,16,0.5,-23)
