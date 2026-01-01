@@ -1,139 +1,80 @@
--- JoeyTesting GUI FINAL FULL MINIMIZE
-local Players = game:GetService("Players")
-local plr = Players.LocalPlayer
+-- JoeyHub Test GUI for Fish It
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local CloseButton = Instance.new("TextButton")
+local AutoFishButton = Instance.new("TextButton")
+local TeleportButton = Instance.new("TextButton")
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "JoeyTestingGUI"
-gui.ResetOnSpawn = false
-gui.Parent = plr:WaitForChild("PlayerGui")
-gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
+-- ScreenGui
+ScreenGui.Name = "JoeyHubTestGUI"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
 
--- ===== MAIN FRAME =====
-local main = Instance.new("Frame")
-main.Parent = gui
-main.Size = UDim2.new(0,420,0,260)
-main.Position = UDim2.new(0.5,-210,0.5,-130)
-main.BackgroundColor3 = Color3.fromRGB(25,25,25)
-main.BorderSizePixel = 0
-main.Active = true
-main.Draggable = true
+-- MainFrame
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.Position = UDim2.new(0.3, 0, 0.3, 0)
+MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Active = true
+MainFrame.Draggable = true
+MainFrame.BorderSizePixel = 0
+MainFrame.BackgroundTransparency = 0.1
+MainFrame.ClipsDescendants = true
 
-local mainStroke = Instance.new("UIStroke", main)
-mainStroke.Color = Color3.fromRGB(255,255,255)
-mainStroke.Thickness = 2
-mainStroke.Transparency = 0.35
+-- Title
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Position = UDim2.new(0, 0, 0, 0)
+Title.Text = "JoeyHub test"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 18
 
--- ===== TITLE BAR =====
-local title = Instance.new("Frame")
-title.Parent = main
-title.Size = UDim2.new(1,0,0,36)
-title.BackgroundColor3 = Color3.fromRGB(30,30,30)
+-- CloseButton
+CloseButton.Name = "CloseButton"
+CloseButton.Parent = MainFrame
+CloseButton.Text = "X"
+CloseButton.Position = UDim2.new(1, -30, 0, 0)
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.Font = Enum.Font.SourceSansBold
+CloseButton.TextSize = 18
 
-local titleText = Instance.new("TextLabel")
-titleText.Parent = title
-titleText.Size = UDim2.new(1,-72,1,0)
-titleText.BackgroundTransparency = 1
-titleText.Text = "JoeyTesting"
-titleText.TextColor3 = Color3.fromRGB(0,255,200)
-titleText.Font = Enum.Font.GothamBold
-titleText.TextSize = 16
-titleText.TextXAlignment = Enum.TextXAlignment.Center
-titleText.TextYAlignment = Enum.TextYAlignment.Center
-
--- ===== CLOSE BUTTON =====
-local close = Instance.new("TextButton")
-close.Parent = title
-close.Size = UDim2.new(0,36,0,36)
-close.Position = UDim2.new(1,-36,0,0)
-close.BackgroundTransparency = 1
-close.Text = "X"
-close.TextColor3 = Color3.fromRGB(255,80,80)
-close.Font = Enum.Font.GothamBold
-close.TextSize = 16
-close.MouseButton1Click:Connect(function()
-	gui:Destroy()
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
 end)
 
--- ===== MINIMIZE BUTTON =====
-local minimize = Instance.new("TextButton")
-minimize.Parent = title
-minimize.Size = UDim2.new(0,36,0,36)
-minimize.Position = UDim2.new(1,-72,0,0)
-minimize.BackgroundTransparency = 1
-minimize.Text = "_"
-minimize.TextColor3 = Color3.fromRGB(255,255,255)
-minimize.Font = Enum.Font.GothamBold
-minimize.TextSize = 20
+-- AutoFishButton
+AutoFishButton.Name = "AutoFishButton"
+AutoFishButton.Parent = MainFrame
+AutoFishButton.Size = UDim2.new(0.8, 0, 0, 40)
+AutoFishButton.Position = UDim2.new(0.1, 0, 0.2, 0)
+AutoFishButton.Text = "Auto Fish"
+AutoFishButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
+AutoFishButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+AutoFishButton.Font = Enum.Font.SourceSansBold
+AutoFishButton.TextSize = 16
 
--- ===== SIDEBAR =====
-local side = Instance.new("Frame")
-side.Parent = main
-side.Position = UDim2.new(0,0,0,36)
-side.Size = UDim2.new(0,120,1,-36)
-side.BackgroundColor3 = Color3.fromRGB(20,20,20)
+AutoFishButton.MouseButton1Click:Connect(function()
+    print("Auto Fish Activated") -- Ganti dengan script auto fish asli
+end)
 
-local sideStroke = Instance.new("UIStroke", side)
-sideStroke.Color = Color3.fromRGB(255,255,255)
-sideStroke.Thickness = 2
-sideStroke.Transparency = 0.45
+-- TeleportButton
+TeleportButton.Name = "TeleportButton"
+TeleportButton.Parent = MainFrame
+TeleportButton.Size = UDim2.new(0.8, 0, 0, 40)
+TeleportButton.Position = UDim2.new(0.1, 0, 0.5, 0)
+TeleportButton.Text = "Teleport"
+TeleportButton.BackgroundColor3 = Color3.fromRGB(50, 50, 150)
+TeleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+TeleportButton.Font = Enum.Font.SourceSansBold
+TeleportButton.TextSize = 16
 
--- ===== CONTENT =====
-local content = Instance.new("Frame")
-content.Parent = main
-content.Position = UDim2.new(0,120,0,36)
-content.Size = UDim2.new(1,-120,1,-36)
-content.BackgroundColor3 = Color3.fromRGB(18,18,18)
-
-local contentStroke = Instance.new("UIStroke", content)
-contentStroke.Color = Color3.fromRGB(255,255,255)
-contentStroke.Thickness = 2
-contentStroke.Transparency = 0.45
-
--- ===== CONTENT TITLE =====
-local ctitle = Instance.new("TextLabel")
-ctitle.Parent = content
-ctitle.Size = UDim2.new(1,0,0,36)
-ctitle.BackgroundTransparency = 1
-ctitle.Text = "Menu"
-ctitle.TextColor3 = Color3.fromRGB(255,255,255)
-ctitle.Font = Enum.Font.GothamBold
-ctitle.TextSize = 14
-ctitle.TextXAlignment = Enum.TextXAlignment.Center
-ctitle.TextYAlignment = Enum.TextYAlignment.Center
-
--- ===== MENU BUTTONS =====
-local function createButton(text, order)
-	local btn = Instance.new("TextButton")
-	btn.Parent = side
-	btn.Size = UDim2.new(1,0,0,34)
-	btn.Position = UDim2.new(0,0,0,(order-1)*36)
-	btn.BackgroundColor3 = Color3.fromRGB(30,30,30)
-	btn.BorderSizePixel = 0
-	btn.Text = text
-	btn.TextColor3 = Color3.fromRGB(200,200,200)
-	btn.Font = Enum.Font.Gotham
-	btn.TextSize = 13
-	btn.TextXAlignment = Enum.TextXAlignment.Center
-	btn.TextYAlignment = Enum.TextYAlignment.Center
-
-	btn.MouseButton1Click:Connect(function()
-		ctitle.Text = text
-	end)
-end
-
-local menuList = {"Fishing","Automatically","Teleport","Quest","Trading","Menu"}
-for i,text in ipairs(menuList) do
-	createButton(text,i)
-end
-
--- ===== MINIMIZE LOGIC FULL =====
-local minimized = false
-minimize.MouseButton1Click:Connect(function()
-	minimized = not minimized
-	if minimized then
-		-- Hide entire GUI except maybe optional shadow (title stays inside main)
-		main.Visible = false
-	else
-		main.Visible = true
-	end
+TeleportButton.MouseButton1Click:Connect(function()
+    print("Teleport Activated") -- Ganti dengan script teleport asli
 end)
