@@ -1,0 +1,54 @@
+-- Fish It GUI White Theme
+local ScreenGui = Instance.new("ScreenGui")
+local Frame = Instance.new("Frame")
+local UICorner = Instance.new("UICorner")
+local Title = Instance.new("TextLabel")
+local AutoFish = Instance.new("TextButton")
+local Close = Instance.new("TextButton")
+
+ScreenGui.Parent = game.CoreGui
+
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(255,255,255)
+Frame.Position = UDim2.new(0.35,0,0.3,0)
+Frame.Size = UDim2.new(0,300,0,200)
+Frame.Active = true
+Frame.Draggable = true
+
+UICorner.Parent = Frame
+UICorner.CornerRadius = UDim.new(0,15)
+
+Title.Parent = Frame
+Title.BackgroundTransparency = 1
+Title.Size = UDim2.new(1,0,0,40)
+Title.Text = "FISH IT GUI"
+Title.TextColor3 = Color3.fromRGB(0,0,0)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 20
+
+AutoFish.Parent = Frame
+AutoFish.BackgroundColor3 = Color3.fromRGB(240,240,240)
+AutoFish.Position = UDim2.new(0.1,0,0.35,0)
+AutoFish.Size = UDim2.new(0,240,0,50)
+AutoFish.Text = "AUTO FISH"
+AutoFish.TextColor3 = Color3.fromRGB(0,0,0)
+AutoFish.Font = Enum.Font.Gotham
+AutoFish.TextSize = 18
+
+Close.Parent = Frame
+Close.BackgroundColor3 = Color3.fromRGB(255,80,80)
+Close.Position = UDim2.new(0.35,0,0.7,0)
+Close.Size = UDim2.new(0,100,0,35)
+Close.Text = "CLOSE"
+Close.TextColor3 = Color3.fromRGB(255,255,255)
+Close.Font = Enum.Font.GothamBold
+Close.TextSize = 14
+
+-- Fungsi tombol
+AutoFish.MouseButton1Click:Connect(function()
+    print("Auto Fish ON (isi logic fish di sini)")
+end)
+
+Close.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
