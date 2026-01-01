@@ -1,4 +1,4 @@
--- JoeyTesting GUI with Minimize to Icon
+-- JoeyTesting GUI with Draggable Mini Icon
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -122,7 +122,7 @@ close.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
 
--- MINIMIZE BUTTON (MINIMIZE TO ICON)
+-- MINIMIZE BUTTON (toggles miniIcon)
 local minimize = Instance.new("TextButton")
 minimize.Parent = title
 minimize.Size = UDim2.new(0,26,0,26)
@@ -137,7 +137,7 @@ minimize.ZIndex = 2
 -- MINI ICON (APPEARS WHEN MINIMIZED)
 local miniIcon = Instance.new("TextButton")
 miniIcon.Parent = gui
-miniIcon.Size = UDim2.new(0,40,0,40)
+miniIcon.Size = UDim2.new(0,50,0,50)
 miniIcon.Position = UDim2.new(0,50,0,50)
 miniIcon.BackgroundColor3 = Color3.fromRGB(50,50,50)
 miniIcon.Text = "J"
@@ -155,22 +155,45 @@ minimize.MouseButton1Click:Connect(function()
 	minimized = not minimized
 	if minimized then
 		oldSize = main.Size
-		side.Visible = false
-		content.Visible = false
 		main.Visible = false
 		miniIcon.Visible = true
 	else
-		side.Visible = true
-		content.Visible = true
 		main.Visible = true
 		miniIcon.Visible = false
 	end
 end)
 
--- CLICK MINI ICON TO RESTORE
 miniIcon.MouseButton1Click:Connect(function()
 	main.Visible = true
-	side.Visible = true
-	content.Visible = true
 	miniIcon.Visible = false
+end)
+
+-- MAKE MINI ICON DRAGGABLE
+local dragging = false
+local dragInput, mousePos, framePos
+
+miniIcon.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		mousePos = input.Position
+		framePos = miniIcon.Position
+	end
+end)
+
+miniIcon.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = false
+	end
+end)
+
+miniIcon.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+		local delta = input.Position - mousePos
+		miniIcon.Position = UDim2.new(
+			framePos.X.Scale,
+			framePos.X.Offset + delta.X,
+			framePos.Y.Scale,
+			framePos.Y.Offset + delta.Y
+		)
+	end
 end)
