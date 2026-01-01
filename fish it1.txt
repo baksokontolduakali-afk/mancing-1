@@ -1,5 +1,5 @@
 -- JoeyTesting GUI
--- Menu only (no feature yet)
+-- Menu + Minimize
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -71,7 +71,7 @@ local function createButton(text, order)
 	end)
 end
 
--- MENU LIST (sesuai gambar)
+-- MENU LIST
 createButton("Fishing", 1)
 createButton("Automatically", 2)
 createButton("Teleport", 3)
@@ -92,4 +92,32 @@ close.TextSize = 16
 
 close.MouseButton1Click:Connect(function()
 	gui:Destroy()
+end)
+
+-- MINIMIZE BUTTON
+local minimize = Instance.new("TextButton")
+minimize.Parent = title
+minimize.Size = UDim2.new(0, 40, 0, 40)
+minimize.Position = UDim2.new(1, -80, 0, 0)
+minimize.Text = "-"
+minimize.BackgroundTransparency = 1
+minimize.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimize.Font = Enum.Font.GothamBold
+minimize.TextSize = 20
+
+local minimized = false
+local oldSize = main.Size
+
+minimize.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	if minimized then
+		oldSize = main.Size
+		side.Visible = false
+		content.Visible = false
+		main.Size = UDim2.new(0, 520, 0, 40)
+	else
+		side.Visible = true
+		content.Visible = true
+		main.Size = oldSize
+	end
 end)
