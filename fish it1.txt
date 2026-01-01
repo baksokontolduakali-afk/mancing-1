@@ -1,10 +1,8 @@
--- JoeyHub Test GUI for Fish It
+-- JoeyHub Test GUI - Polos
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("Frame")
 local Title = Instance.new("TextLabel")
 local CloseButton = Instance.new("TextButton")
-local AutoFishButton = Instance.new("TextButton")
-local TeleportButton = Instance.new("TextButton")
 
 -- ScreenGui
 ScreenGui.Name = "JoeyHubTestGUI"
@@ -16,12 +14,11 @@ MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 MainFrame.Position = UDim2.new(0.3, 0, 0.3, 0)
-MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Size = UDim2.new(0, 300, 0, 100)
 MainFrame.Active = true
 MainFrame.Draggable = true
 MainFrame.BorderSizePixel = 0
 MainFrame.BackgroundTransparency = 0.1
-MainFrame.ClipsDescendants = true
 
 -- Title
 Title.Name = "Title"
