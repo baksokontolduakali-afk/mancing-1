@@ -1,12 +1,12 @@
--- JoeyTesting GUI with Mini Icon Draggable (Stable)
+-- JoeyTesting GUI with Fully Draggable Mini Icon
 local plr = game.Players.LocalPlayer
+local UserInputService = game:GetService("UserInputService")
+
 local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyTestingGUI"
 gui.ResetOnSpawn = false
 gui.Parent = plr:WaitForChild("PlayerGui")
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
-
-local UserInputService = game:GetService("UserInputService")
 
 -- MAIN FRAME
 local main = Instance.new("Frame")
@@ -135,7 +135,7 @@ minimize.TextSize = 20
 minimize.TextColor3 = Color3.fromRGB(0,0,0)
 minimize.ZIndex = 2
 
--- MINI ICON (draggable)
+-- MINI ICON (Draggable)
 local miniIcon = Instance.new("TextButton")
 miniIcon.Parent = gui
 miniIcon.Size = UDim2.new(0,50,0,50)
@@ -147,10 +147,15 @@ miniIcon.Font = Enum.Font.GothamBold
 miniIcon.TextSize = 18
 miniIcon.Visible = false
 miniIcon.ZIndex = 10
-miniIcon.AutoButtonColor = true
+miniIcon.Active = true
+miniIcon.AutoButtonColor = false
 
--- MINIMIZE FUNCTION
 local minimized = false
+local dragging = false
+local dragStart = Vector2.new()
+local iconStartPos = UDim2.new()
+
+-- MINIMIZE / RESTORE
 minimize.MouseButton1Click:Connect(function()
 	minimized = not minimized
 	if minimized then
@@ -167,46 +172,28 @@ miniIcon.MouseButton1Click:Connect(function()
 	miniIcon.Visible = false
 end)
 
--- DRAG LOGIC FOR MINI ICON
-local dragging = false
-local dragStartPos = Vector2.new()
-local startPos = UDim2.new()
-
+-- DRAG LOGIC
 miniIcon.InputBegan:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseButton1 then
 		dragging = true
-		dragStartPos = input.Position
-		startPos = miniIcon.Position
+		dragStart = input.Position
+		iconStartPos = miniIcon.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
 	end
 end)
 
-miniIcon.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = false
-	end
-end)
-
-miniIcon.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = input.Position - dragStartPos
-		miniIcon.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
-		)
-	end
-end)
-
--- OPTIONAL: also allow drag via UserInputService (more robust)
 UserInputService.InputChanged:Connect(function(input)
 	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-		local delta = input.Position - dragStartPos
+		local delta = input.Position - dragStart
 		miniIcon.Position = UDim2.new(
-			startPos.X.Scale,
-			startPos.X.Offset + delta.X,
-			startPos.Y.Scale,
-			startPos.Y.Offset + delta.Y
+			iconStartPos.X.Scale,
+			iconStartPos.X.Offset + delta.X,
+			iconStartPos.Y.Scale,
+			iconStartPos.Y.Offset + delta.Y
 		)
 	end
 end)
