@@ -1,18 +1,20 @@
 -- JoeyTesting GUI
--- FINAL ALL BORDER (MAIN + TITLE + MENU + BUTTON)
+-- FULL FINAL (SAFE VERSION)
 
 local UIS = game:GetService("UserInputService")
 local plr = game.Players.LocalPlayer
 
-local gui = Instance.new("ScreenGui", plr:WaitForChild("PlayerGui"))
+local gui = Instance.new("ScreenGui")
 gui.Name = "JoeyTestingGUI"
-gui.IgnoreGuiInset = true
 gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.Parent = plr:WaitForChild("PlayerGui")
 
--- MAIN
-local main = Instance.new("Frame", gui)
-main.Size = UDim2.new(0,420,0,260)
-main.Position = UDim2.new(0.5,-210,0.5,-130)
+-- MAIN FRAME
+local main = Instance.new("Frame")
+main.Parent = gui
+main.Size = UDim2.new(0, 420, 0, 260)
+main.Position = UDim2.new(0.5, -210, 0.5, -130)
 main.BackgroundColor3 = Color3.fromRGB(25,25,25)
 main.BackgroundTransparency = 0.45
 main.BorderSizePixel = 0
@@ -23,8 +25,9 @@ mainStroke.Thickness = 2
 mainStroke.Transparency = 0.3
 
 -- TITLE BAR
-local title = Instance.new("TextLabel", main)
-title.Size = UDim2.new(1,0,0,36)
+local title = Instance.new("TextLabel")
+title.Parent = main
+title.Size = UDim2.new(1, 0, 0, 36)
 title.BackgroundColor3 = Color3.fromRGB(30,30,30)
 title.BackgroundTransparency = 0.4
 title.Text = "JoeyTesting"
@@ -32,11 +35,13 @@ title.TextColor3 = Color3.fromRGB(0,255,200)
 title.Font = Enum.Font.GothamBold
 title.TextSize = 16
 title.Active = true
+title.TextXAlignment = Enum.TextXAlignment.Center
+title.TextYAlignment = Enum.TextYAlignment.Center
 
 local titleStroke = Instance.new("UIStroke", title)
 titleStroke.Color = Color3.fromRGB(255,255,255)
 titleStroke.Thickness = 2
-titleStroke.Transparency = 0.4
+titleStroke.Transparency = 0.45
 
 -- DRAG
 local dragging, dragStart, startPos
@@ -47,18 +52,28 @@ title.InputBegan:Connect(function(i)
 		startPos = main.Position
 	end
 end)
+
 UIS.InputChanged:Connect(function(i)
 	if dragging and i.UserInputType == Enum.UserInputType.MouseMovement then
 		local d = i.Position - dragStart
-		main.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset+d.X,startPos.Y.Scale,startPos.Y.Offset+d.Y)
+		main.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + d.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + d.Y
+		)
 	end
 end)
+
 UIS.InputEnded:Connect(function(i)
-	if i.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+	if i.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = false
+	end
 end)
 
--- SIDEBAR MENU
-local side = Instance.new("Frame", main)
+-- SIDEBAR
+local side = Instance.new("Frame")
+side.Parent = main
 side.Position = UDim2.new(0,0,0,36)
 side.Size = UDim2.new(0,120,1,-36)
 side.BackgroundColor3 = Color3.fromRGB(20,20,20)
@@ -68,10 +83,11 @@ side.BorderSizePixel = 0
 local sideStroke = Instance.new("UIStroke", side)
 sideStroke.Color = Color3.fromRGB(255,255,255)
 sideStroke.Thickness = 2
-sideStroke.Transparency = 0.4
+sideStroke.Transparency = 0.45
 
 -- CONTENT
-local content = Instance.new("Frame", main)
+local content = Instance.new("Frame")
+content.Parent = main
 content.Position = UDim2.new(0,120,0,36)
 content.Size = UDim2.new(1,-120,1,-36)
 content.BackgroundColor3 = Color3.fromRGB(18,18,18)
@@ -81,10 +97,11 @@ content.BorderSizePixel = 0
 local contentStroke = Instance.new("UIStroke", content)
 contentStroke.Color = Color3.fromRGB(255,255,255)
 contentStroke.Thickness = 2
-contentStroke.Transparency = 0.4
+contentStroke.Transparency = 0.45
 
 -- CONTENT TITLE
-local ctitle = Instance.new("TextLabel", content)
+local ctitle = Instance.new("TextLabel")
+ctitle.Parent = content
 ctitle.Size = UDim2.new(1,0,0,32)
 ctitle.BackgroundColor3 = Color3.fromRGB(22,22,22)
 ctitle.BackgroundTransparency = 0.3
@@ -92,15 +109,18 @@ ctitle.Text = "Menu"
 ctitle.TextColor3 = Color3.fromRGB(255,255,255)
 ctitle.Font = Enum.Font.GothamBold
 ctitle.TextSize = 14
+ctitle.TextXAlignment = Enum.TextXAlignment.Left
+ctitle.TextYAlignment = Enum.TextYAlignment.Center
 
 local ctitleStroke = Instance.new("UIStroke", ctitle)
 ctitleStroke.Color = Color3.fromRGB(255,255,255)
 ctitleStroke.Thickness = 2
-ctitleStroke.Transparency = 0.4
+ctitleStroke.Transparency = 0.45
 
--- MENU BUTTON
+-- MENU BUTTON FUNCTION
 local function createButton(text, order)
-	local btn = Instance.new("TextButton", side)
+	local btn = Instance.new("TextButton")
+	btn.Parent = side
 	btn.Size = UDim2.new(1,0,0,34)
 	btn.Position = UDim2.new(0,0,0,(order-1)*36)
 	btn.BackgroundColor3 = Color3.fromRGB(30,30,30)
@@ -110,6 +130,8 @@ local function createButton(text, order)
 	btn.Font = Enum.Font.Gotham
 	btn.TextSize = 13
 	btn.BorderSizePixel = 0
+	btn.TextXAlignment = Enum.TextXAlignment.Left
+	btn.TextYAlignment = Enum.TextYAlignment.Center
 
 	local stroke = Instance.new("UIStroke", btn)
 	stroke.Color = Color3.fromRGB(255,255,255)
@@ -121,15 +143,17 @@ local function createButton(text, order)
 	end)
 end
 
-createButton("Fishing",1)
-createButton("Automatically",2)
-createButton("Teleport",3)
-createButton("Quest",4)
-createButton("Trading",5)
-createButton("Menu",6)
+-- MENU LIST (TETAP)
+createButton("Fishing", 1)
+createButton("Automatically", 2)
+createButton("Teleport", 3)
+createButton("Quest", 4)
+createButton("Trading", 5)
+createButton("Menu", 6)
 
 -- CLOSE
-local close = Instance.new("TextButton", title)
+local close = Instance.new("TextButton")
+close.Parent = title
 close.Size = UDim2.new(0,36,0,36)
 close.Position = UDim2.new(1,-36,0,0)
 close.Text = "X"
@@ -137,10 +161,14 @@ close.BackgroundTransparency = 1
 close.TextColor3 = Color3.fromRGB(255,80,80)
 close.Font = Enum.Font.GothamBold
 close.TextSize = 14
-close.MouseButton1Click:Connect(function() gui:Destroy() end)
 
--- MINIMIZE ICON
-local minimize = Instance.new("TextButton", title)
+close.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
+-- MINIMIZE
+local minimize = Instance.new("TextButton")
+minimize.Parent = title
 minimize.Size = UDim2.new(0,36,0,36)
 minimize.Position = UDim2.new(1,-72,0,0)
 minimize.Text = "-"
@@ -149,7 +177,9 @@ minimize.TextColor3 = Color3.fromRGB(255,255,255)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
 
-local icon = Instance.new("ImageButton", gui)
+-- ICON
+local icon = Instance.new("ImageButton")
+icon.Parent = gui
 icon.Size = UDim2.new(0,46,0,46)
 icon.Position = UDim2.new(0,16,0.5,-23)
 icon.BackgroundColor3 = Color3.fromRGB(25,25,25)
