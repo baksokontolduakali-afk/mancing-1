@@ -1,5 +1,5 @@
 -- JoeyTesting GUI
--- COMPACT + ICON + WHITE OUTLINE
+-- COMPACT + ICON + SECTION DIVIDER
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -20,13 +20,6 @@ main.Active = true
 main.Draggable = true
 main.ZIndex = 2
 
--- OUTLINE MAIN
-local mainStroke = Instance.new("UIStroke")
-mainStroke.Parent = main
-mainStroke.Color = Color3.fromRGB(255,255,255)
-mainStroke.Thickness = 1
-mainStroke.Transparency = 0.6
-
 -- TITLE BAR
 local title = Instance.new("TextLabel")
 title.Parent = main
@@ -40,6 +33,15 @@ title.TextSize = 16
 title.Active = true
 title.ZIndex = 3
 
+-- GARIS BAWAH TITLE
+local titleLine = Instance.new("Frame")
+titleLine.Parent = title
+titleLine.Size = UDim2.new(1, 0, 0, 1)
+titleLine.Position = UDim2.new(0, 0, 1, -1)
+titleLine.BackgroundColor3 = Color3.fromRGB(255,255,255)
+titleLine.BackgroundTransparency = 0.7
+titleLine.BorderSizePixel = 0
+
 -- SIDEBAR
 local side = Instance.new("Frame")
 side.Parent = main
@@ -49,6 +51,15 @@ side.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 side.BackgroundTransparency = 0.5
 side.BorderSizePixel = 0
 side.ZIndex = 2
+
+-- GARIS KANAN SIDEBAR
+local sideLine = Instance.new("Frame")
+sideLine.Parent = side
+sideLine.Size = UDim2.new(0, 1, 1, 0)
+sideLine.Position = UDim2.new(1, -1, 0, 0)
+sideLine.BackgroundColor3 = Color3.fromRGB(255,255,255)
+sideLine.BackgroundTransparency = 0.7
+sideLine.BorderSizePixel = 0
 
 -- CONTENT
 local content = Instance.new("Frame")
@@ -71,6 +82,15 @@ ctitle.Font = Enum.Font.GothamBold
 ctitle.TextSize = 14
 ctitle.ZIndex = 3
 
+-- GARIS BAWAH CONTENT TITLE
+local contentLine = Instance.new("Frame")
+contentLine.Parent = ctitle
+contentLine.Size = UDim2.new(1, 0, 0, 1)
+contentLine.Position = UDim2.new(0, 0, 1, -1)
+contentLine.BackgroundColor3 = Color3.fromRGB(255,255,255)
+contentLine.BackgroundTransparency = 0.75
+contentLine.BorderSizePixel = 0
+
 -- MENU BUTTON
 local function createButton(text, order)
 	local btn = Instance.new("TextButton")
@@ -85,6 +105,15 @@ local function createButton(text, order)
 	btn.TextSize = 13
 	btn.BorderSizePixel = 0
 	btn.ZIndex = 3
+
+	-- GARIS BAWAH TOMBOL
+	local line = Instance.new("Frame")
+	line.Parent = btn
+	line.Size = UDim2.new(1, 0, 0, 1)
+	line.Position = UDim2.new(0, 0, 1, -1)
+	line.BackgroundColor3 = Color3.fromRGB(255,255,255)
+	line.BackgroundTransparency = 0.85
+	line.BorderSizePixel = 0
 
 	btn.MouseButton1Click:Connect(function()
 		ctitle.Text = text
@@ -126,7 +155,7 @@ minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 18
 minimize.ZIndex = 4
 
--- ICON IMAGE
+-- ICON
 local icon = Instance.new("ImageButton")
 icon.Parent = gui
 icon.Size = UDim2.new(0, 46, 0, 46)
@@ -144,13 +173,6 @@ icon.ZIndex = 10
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(1,0)
 corner.Parent = icon
-
--- ICON OUTLINE
-local iconStroke = Instance.new("UIStroke")
-iconStroke.Parent = icon
-iconStroke.Color = Color3.fromRGB(255,255,255)
-iconStroke.Thickness = 1
-iconStroke.Transparency = 0.5
 
 -- LOGIC
 minimize.MouseButton1Click:Connect(function()
