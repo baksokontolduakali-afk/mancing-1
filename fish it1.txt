@@ -48,33 +48,3 @@ CloseButton.TextSize = 18
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
-
--- AutoFishButton
-AutoFishButton.Name = "AutoFishButton"
-AutoFishButton.Parent = MainFrame
-AutoFishButton.Size = UDim2.new(0.8, 0, 0, 40)
-AutoFishButton.Position = UDim2.new(0.1, 0, 0.2, 0)
-AutoFishButton.Text = "Auto Fish"
-AutoFishButton.BackgroundColor3 = Color3.fromRGB(50, 150, 50)
-AutoFishButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-AutoFishButton.Font = Enum.Font.SourceSansBold
-AutoFishButton.TextSize = 16
-
-AutoFishButton.MouseButton1Click:Connect(function()
-    print("Auto Fish Activated") -- Ganti dengan script auto fish asli
-end)
-
--- TeleportButton
-TeleportButton.Name = "TeleportButton"
-TeleportButton.Parent = MainFrame
-TeleportButton.Size = UDim2.new(0.8, 0, 0, 40)
-TeleportButton.Position = UDim2.new(0.1, 0, 0.5, 0)
-TeleportButton.Text = "Teleport"
-TeleportButton.BackgroundColor3 = Color3.fromRGB(50, 50, 150)
-TeleportButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-TeleportButton.Font = Enum.Font.SourceSansBold
-TeleportButton.TextSize = 16
-
-TeleportButton.MouseButton1Click:Connect(function()
-    print("Teleport Activated") -- Ganti dengan script teleport asli
-end)
