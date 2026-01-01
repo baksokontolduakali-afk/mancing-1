@@ -1,91 +1,93 @@
--- JoeyHub UI Script (Light Blue Theme)
+--// Joey Hub UI
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
 
-local player = game.Players.LocalPlayer
-local gui = Instance.new("ScreenGui")
-gui.Name = "JoeyHubGui"
-gui.Parent = player:WaitForChild("PlayerGui")
-gui.ResetOnSpawn = false
+-- ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "PinkHubGui"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = PlayerGui
 
 -- Main Frame
-local main = Instance.new("Frame")
-main.Parent = gui
-main.Size = UDim2.new(0, 420, 0, 260)
-main.Position = UDim2.new(0.5, -210, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(255, 0, 0)) -- biru muda
-main.BorderSizePixel = 0
-main.Active = true
-main.Draggable = true
+local Main = Instance.new("Frame")
+Main.Size = UDim2.new(0, 360, 0, 220)
+Main.Position = UDim2.new(0.5, -180, 0.5, -110)
+Main.BackgroundColor3 = Color3.fromRGB(255, 105, 180) -- Pink
+Main.BorderSizePixel = 0
+Main.Parent = ScreenGui
+Main.Active = true
+Main.Draggable = true
 
--- Corner
+-- UICorner
 local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 10)
-corner.Parent = main
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = Main
 
 -- Top Bar
-local topBar = Instance.new("Frame")
-topBar.Parent = main
-topBar.Size = UDim2.new(1, 0, 0, 40)
-topBar.BackgroundColor3 = Color3.fromRGB(120, 180, 255) -- biru muda lebih gelap
-topBar.BorderSizePixel = 0
+local TopBar = Instance.new("Frame")
+TopBar.Size = UDim2.new(1, 0, 0, 40)
+TopBar.BackgroundColor3 = Color3.fromRGB(255, 20, 147)
+TopBar.BorderSizePixel = 0
+TopBar.Parent = Main
 
 local topCorner = Instance.new("UICorner")
-topCorner.CornerRadius = UDim.new(0, 10)
-topCorner.Parent = topBar
+topCorner.CornerRadius = UDim.new(0, 12)
+topCorner.Parent = TopBar
 
 -- Title
-local title = Instance.new("TextLabel")
-title.Parent = topBar
-title.Size = UDim2.new(1, -80, 1, 0)
-title.Position = UDim2.new(0, 15, 0, 0)
-title.BackgroundTransparency = 1
-title.Text = "JoeyHub"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 16
-title.TextXAlignment = Enum.TextXAlignment.Left
-
--- Minimize Button
-local minimize = Instance.new("TextButton")
-minimize.Parent = topBar
-minimize.Size = UDim2.new(0, 30, 0, 25)
-minimize.Position = UDim2.new(1, -65, 0.5, -12)
-minimize.Text = "-"
-minimize.BackgroundColor3 = Color3.fromRGB(90, 150, 230)
-minimize.TextColor3 = Color3.new(1,1,1)
-minimize.Font = Enum.Font.GothamBold
-minimize.TextSize = 18
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -80, 1, 0)
+Title.Position = UDim2.new(0, 15, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "Joey Hub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 18
+Title.TextXAlignment = Left
+Title.Parent = TopBar
 
 -- Close Button
-local close = Instance.new("TextButton")
-close.Parent = topBar
-close.Size = UDim2.new(0, 30, 0, 25)
-close.Position = UDim2.new(1, -30, 0.5, -12)
-close.Text = "X"
-close.BackgroundColor3 = Color3.fromRGB(255, 120, 120)
-close.TextColor3 = Color3.new(1,1,1)
-close.Font = Enum.Font.GothamBold
-close.TextSize = 14
+local Close = Instance.new("TextButton")
+Close.Size = UDim2.new(0, 30, 0, 30)
+Close.Position = UDim2.new(1, -35, 0, 5)
+Close.BackgroundColor3 = Color3.fromRGB(255, 70, 70)
+Close.Text = "X"
+Close.TextColor3 = Color3.new(1,1,1)
+Close.Font = Enum.Font.GothamBold
+Close.TextSize = 16
+Close.Parent = TopBar
 
--- Content
-local content = Instance.new("TextLabel")
-content.Parent = main
-content.Size = UDim2.new(1, 0, 1, -40)
-content.Position = UDim2.new(0, 0, 0, 40)
-content.BackgroundTransparency = 1
-content.Text = "JoeyHub\n\n• Mobile UI\n• Light Blue Theme\n• Mini Animated"
-content.TextColor3 = Color3.fromRGB(40, 40, 40)
-content.Font = Enum.Font.Gotham
-content.TextSize = 14
-content.TextWrapped = true
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(1, 0)
+closeCorner.Parent = Close
 
--- Button Functions
-local minimized = false
-minimize.MouseButton1Click:Connect(function()
-	minimized = not minimized
-	content.Visible = not minimized
-	main.Size = minimized and UDim2.new(0, 420, 0, 40) or UDim2.new(0, 420, 0, 260)
+Close.MouseButton1Click:Connect(function()
+	ScreenGui:Destroy()
 end)
 
-close.MouseButton1Click:Connect(function()
-	gui:Destroy()
-end)
+-- Content Text
+local Content = Instance.new("TextLabel")
+Content.Size = UDim2.new(1, -20, 1, -60)
+Content.Position = UDim2.new(0, 10, 0, 50)
+Content.BackgroundTransparency = 1
+Content.TextWrapped = true
+Content.TextYAlignment = Top
+Content.Text = [[
+Pink Hub
+
+• Mobile UI
+• Pink Theme
+• Mini Animated
+]]
+Content.TextColor3 = Color3.fromRGB(255, 240, 245)
+Content.Font = Enum.Font.Gotham
+Content.TextSize = 14
+Content.Parent = Main
+
+-- Mini Animation
+Main.BackgroundTransparency = 1
+for i = 1, 0, -0.1 do
+	Main.BackgroundTransparency = i
+	task.wait(0.03)
+end
