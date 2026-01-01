@@ -1,5 +1,5 @@
 -- JoeyTesting GUI
--- Minimize to ICON + 50% Opacity
+-- Minimize to IMAGE ICON + 50% Opacity
 
 local plr = game.Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
@@ -83,7 +83,7 @@ createButton("Quest", 4)
 createButton("Trading", 5)
 createButton("Menu", 6)
 
--- CLOSE
+-- CLOSE BUTTON
 local close = Instance.new("TextButton")
 close.Parent = title
 close.Size = UDim2.new(0, 40, 0, 40)
@@ -109,22 +109,25 @@ minimize.TextColor3 = Color3.fromRGB(255, 255, 255)
 minimize.Font = Enum.Font.GothamBold
 minimize.TextSize = 20
 
--- ICON (restore button)
-local icon = Instance.new("TextButton")
+-- ===== IMAGE ICON =====
+local ICON_ID = "rbxassetid://7072719337" -- GANTI SESUKA LU
+
+local icon = Instance.new("ImageButton")
 icon.Parent = gui
 icon.Size = UDim2.new(0, 50, 0, 50)
 icon.Position = UDim2.new(0, 20, 0.5, -25)
 icon.BackgroundColor3 = Color3.fromRGB(25,25,25)
 icon.BackgroundTransparency = 0.3
-icon.Text = "🎣"
-icon.TextSize = 22
+icon.Image = ICON_ID
+icon.ScaleType = Enum.ScaleType.Fit
 icon.Visible = false
 icon.BorderSizePixel = 0
 icon.Active = true
 icon.Draggable = true
 
-local corner = Instance.new("UICorner", icon)
-corner.CornerRadius = UDim.new(1,0)
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(1, 0)
+corner.Parent = icon
 
 -- MINIMIZE LOGIC
 minimize.MouseButton1Click:Connect(function()
