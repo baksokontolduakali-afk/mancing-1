@@ -1,50 +1,52 @@
--- 1. Hapus GUI lama jika sudah ada (Agar perubahan langsung terlihat saat Execute)
+-- 1. Hapus GUI lama agar tidak tumpuk
 local oldGui = game:GetService("CoreGui"):FindFirstChild("JoeyTesting_Final") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("JoeyTesting_Final")
-if oldGui then
-    oldGui:Destroy()
-end
+if oldGui then oldGui:Destroy() end
 
--- 2. Setup ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local TitleBar = Instance.new("Frame")
+local TitleText = Instance.new("TextLabel")
+local CloseButton = Instance.new("TextButton")
+local MinimizeButton = Instance.new("TextButton") -- Tambahan Tombol Minimize
+local SideBar = Instance.new("Frame")
+local UIListLayout = Instance.new("UIListLayout")
+
+-- Setup ScreenGui
 ScreenGui.Name = "JoeyTesting_Final"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 
--- 3. Main Frame (Body)
-local MainFrame = Instance.new("Frame")
+-- Main Frame
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 MainFrame.BorderSizePixel = 0
 MainFrame.Position = UDim2.new(0.5, -200, 0.5, -135)
-MainFrame.Size = UDim2.new(0, 420, 0, 270)
+MainFrame.Size = UDim2.new(0, 400, 0, 270)
 MainFrame.Active = true
-MainFrame.Draggable = true -- Bisa digeser
+MainFrame.Draggable = true 
 
--- 4. Title Bar (Header) - Ini yang membuat rapi
-local TitleBar = Instance.new("Frame")
+-- Title Bar
 TitleBar.Name = "TitleBar"
 TitleBar.Parent = MainFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+TitleBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 TitleBar.BorderSizePixel = 0
 TitleBar.Size = UDim2.new(1, 0, 0, 35)
 
-local TitleText = Instance.new("TextLabel")
 TitleText.Parent = TitleBar
 TitleText.BackgroundTransparency = 1
-TitleText.Position = UDim2.new(0, 15, 0, 0)
+TitleText.Position = UDim2.new(0, 10, 0, 0)
 TitleText.Size = UDim2.new(0, 200, 1, 0)
 TitleText.Font = Enum.Font.SourceSansBold
-TitleText.Text = "JoeyTesting | Premium Menu"
+TitleText.Text = "JoeyTesting"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 150)
 TitleText.TextSize = 18
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
--- 5. Tombol Close (X) di pojok kanan Title Bar
-local CloseButton = Instance.new("TextButton")
+-- Tombol Close (X)
 CloseButton.Name = "CloseButton"
 CloseButton.Parent = TitleBar
-CloseButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+CloseButton.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
 CloseButton.BorderSizePixel = 0
 CloseButton.Position = UDim2.new(1, -35, 0, 0)
 CloseButton.Size = UDim2.new(0, 35, 1, 0)
@@ -53,27 +55,36 @@ CloseButton.Text = "X"
 CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseButton.TextSize = 18
 
--- 6. Sidebar (Samping)
-local SideBar = Instance.new("Frame")
+-- Tombol Minimize (-)
+MinimizeButton.Name = "MinimizeButton"
+MinimizeButton.Parent = TitleBar
+MinimizeButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+MinimizeButton.BorderSizePixel = 0
+MinimizeButton.Position = UDim2.new(1, -75, 0, 0) -- Di sebelah kiri tombol X
+MinimizeButton.Size = UDim2.new(0, 35, 1, 0)
+MinimizeButton.Font = Enum.Font.SourceSansBold
+MinimizeButton.Text = "-"
+MinimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+MinimizeButton.TextSize = 22
+
+-- Sidebar
 SideBar.Name = "SideBar"
 SideBar.Parent = MainFrame
-SideBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+SideBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 SideBar.BorderSizePixel = 0
 SideBar.Position = UDim2.new(0, 0, 0, 35)
-SideBar.Size = UDim2.new(0, 110, 1, -35)
+SideBar.Size = UDim2.new(0, 100, 1, -35)
 
-local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Parent = SideBar
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Fungsi Tambah Tab
 local function AddTab(name)
     local btn = Instance.new("TextButton")
     btn.Parent = SideBar
-    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
     btn.BackgroundTransparency = 1
     btn.BorderSizePixel = 0
-    btn.Size = UDim2.new(1, 0, 0, 38)
+    btn.Size = UDim2.new(1, 0, 0, 35)
     btn.Font = Enum.Font.SourceSans
     btn.Text = name
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -81,7 +92,6 @@ local function AddTab(name)
     return btn
 end
 
--- Daftar Menu
 AddTab("Fishing")
 AddTab("Automatically")
 AddTab("Teleport")
@@ -89,7 +99,23 @@ AddTab("Quest")
 AddTab("Trading")
 AddTab("Menu")
 
--- Fungsi Close
+--- FUNGSIONALITAS ---
+
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
+end)
+
+-- Fungsi Minimize (Sembunyikan isi menu, sisakan Title Bar)
+local minimized = false
+MinimizeButton.MouseButton1Click:Connect(function()
+    minimized = not minimized
+    if minimized then
+        SideBar.Visible = false
+        MainFrame.Size = UDim2.new(0, 400, 0, 35) -- Kecilkan Frame hanya seukuran Title Bar
+        MinimizeButton.Text = "+" -- Ubah ikon jadi plus
+    else
+        SideBar.Visible = true
+        MainFrame.Size = UDim2.new(0, 400, 0, 270) -- Kembalikan ukuran normal
+        MinimizeButton.Text = "-" -- Ubah ikon kembali minus
+    end
 end)
