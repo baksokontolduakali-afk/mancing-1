@@ -1,49 +1,115 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
 
--- 1. Inisialisasi Window
-local Window = Rayfield:CreateWindow({
-   Name = "Joey Hub",
-   LoadingTitle = "Joey Hub Executive",
-   LoadingSubtitle = "Menyiapkan Data...",
-   ConfigurationSaving = { Enabled = false },
-   KeySystem = false,
-})
+-- 1. Membuat ScreenGui
+local JoeyGui = Instance.new("ScreenGui")
+JoeyGui.Name = "JoeyHubUI"
+JoeyGui.Parent = CoreGui
 
--- 2. Animasi Loading 1% - 100%
-for i = 1, 100 do
-    task.wait(0.02)
-    Window:ModifyLoadingSubtitle("Memuat: " .. i .. "%")
-end
+-- 2. Main Frame
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 400, 0, 250)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+MainFrame.BackgroundColor3 = Color3.fromRGB(255, 192, 203) -- Pink
+MainFrame.BorderSizePixel = 0
+MainFrame.ClipsDescendants = true
+MainFrame.Visible = false
+MainFrame.Parent = JoeyGui
 
-Window:ModifyLoadingSubtitle("Selesai!")
-task.wait(0.3)
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 10)
+Corner.Parent = MainFrame
 
--- 3. Mengganti Tulisan Rayfield di UI menjadi Joey Hub & Set Warna Pink
-Rayfield:SetTheme("Pink")
+-- 3. Top Bar (Title, Minimize, Close)
+local TopBar = Instance.new("Frame")
+TopBar.Size = UDim2.new(1, 0, 0, 35)
+TopBar.BackgroundColor3 = Color3.fromRGB(255, 105, 180) -- Hot Pink
+TopBar.BorderSizePixel = 0
+TopBar.Parent = MainFrame
 
--- Fungsi ini akan mencari teks "Rayfield" di dalam GUI dan mengubahnya jadi "Joey Hub"
-pcall(function()
-    local coreGui = game:GetService("CoreGui")
-    local ui = coreGui:FindFirstChild("Rayfield") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Rayfield")
-    
-    if ui then
-        -- Mencari semua teks berlabel "Rayfield" di bagian bawah/samping
-        for _, v in pairs(ui:GetDescendants()) do
-            if v:IsA("TextLabel") and (v.Text:find("Rayfield") or v.Text:find("rayfield")) then
-                v.Text = v.Text:gsub("Rayfield", "Joey Hub")
-                v.Text = v.Text:gsub("rayfield", "Joey Hub")
-            end
-        end
-    end
+local Title = Instance.new("TextLabel")
+Title.Text = "Joey Hub"
+Title.Size = UDim2.new(1, -80, 1, 0)
+Title.Position = UDim2.new(0, 10, 0, 0)
+Title.BackgroundTransparency = 1
+Title.TextColor3 = Color3.new(1, 1, 1)
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 18
+Title.Parent = TopBar
+
+local CloseBtn = Instance.new("TextButton")
+CloseBtn.Text = "X"
+CloseBtn.Size = UDim2.new(0, 30, 0, 30)
+CloseBtn.Position = UDim2.new(1, -35, 0, 2.5)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
+CloseBtn.TextColor3 = Color3.new(1, 1, 1)
+CloseBtn.Parent = TopBar
+
+local MiniBtn = Instance.new("TextButton")
+MiniBtn.Text = "-"
+MiniBtn.Size = UDim2.new(0, 30, 0, 30)
+MiniBtn.Position = UDim2.new(1, -70, 0, 2.5)
+MiniBtn.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+MiniBtn.TextColor3 = Color3.new(0, 0, 0)
+MiniBtn.Parent = TopBar
+
+-- 4. Loading Screen
+local LoadingFrame = Instance.new("Frame")
+LoadingFrame.Size = UDim2.new(0, 400, 0, 250)
+LoadingFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+LoadingFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+LoadingFrame.Parent = JoeyGui
+
+local LoadCorner = Corner:Clone()
+LoadCorner.Parent = LoadingFrame
+
+local LoadingText = Instance.new("TextLabel")
+LoadingText.Size = UDim2.new(1, 0, 1, 0)
+LoadingText.BackgroundTransparency = 1
+LoadingText.Text = "Joey Hub | 0%"
+LoadingText.TextColor3 = Color3.fromRGB(255, 105, 180)
+LoadingText.Font = Enum.Font.GothamBold
+LoadingText.TextSize = 25
+LoadingText.Parent = LoadingFrame
+
+-- 5. FUNGSI LOGIKA
+-- Tombol Close
+CloseBtn.MouseButton1Click:Connect(function()
+    JoeyGui:Destroy()
 end)
 
--- 4. Membuat Konten (Hanya Tab & Section sesuai permintaan)
-local Tab = Window:CreateTab("Home", 4483362458)
-local Section = Tab:CreateSection("Joey Hub | Active")
+-- Tombol Minimize (Simple Toggle)
+local minimized = false
+MiniBtn.MouseButton1Click:Connect(function()
+    if not minimized then
+        TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 400, 0, 35)}):Play()
+    else
+        TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 400, 0, 250)}):Play()
+    end
+    minimized = not minimized
+end)
 
--- Notifikasi Akhir
-Rayfield:Notify({
-   Title = "Joey Hub",
-   Content = "Script Berhasil Terpasang!",
-   Duration = 3,
-})
+-- Animasi Loading 1% - 100%
+task.spawn(function()
+    for i = 0, 100 do
+        LoadingText.Text = "Joey Hub | " .. i .. "%"
+        task.wait(0.02) -- Kecepatan loading
+    end
+    
+    -- Fade Out Loading & Show Main
+    TweenService:Create(LoadingFrame, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
+    TweenService:Create(LoadingText, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+    task.wait(0.5)
+    LoadingFrame.Visible = false
+    MainFrame.Visible = true
+    
+    -- Pop Up Animation
+    MainFrame.Size = UDim2.new(0, 0, 0, 0)
+    MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+    TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {
+        Size = UDim2.new(0, 400, 0, 250),
+        Position = UDim2.new(0.5, -200, 0.5, -125)
+    }):Play()
+end)
