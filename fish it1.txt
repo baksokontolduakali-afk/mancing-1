@@ -1,114 +1,123 @@
+-- Memastikan script hanya berjalan satu kali
+if game.CoreGui:FindFirstChild("JoeyHubGui") then
+    game.CoreGui:FindFirstChild("JoeyHubGui"):Destroy()
+end
+
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
 
--- Create ScreenGui
+-- Menentukan Parent GUI (Mencoba CoreGui dulu, kalau gagal ke PlayerGui)
+local TargetParent = (gethui and gethui()) or game.CoreGui or Players.LocalPlayer:WaitForChild("PlayerGui")
+
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "JoeyHubGui"
-ScreenGui.Parent = game.CoreGui
+ScreenGui.Parent = TargetParent
 ScreenGui.ResetOnSpawn = false
 
 -- Main Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 400, 0, 250)
-MainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
-MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.Size = UDim2.new(0, 350, 0, 200) -- Ukuran sedikit lebih kecil agar pas di HP
+MainFrame.Position = UDim2.new(0.5, -175, 0.5, -100)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 MainFrame.BorderSizePixel = 0
-MainFrame.ClipsDescendants = true
+MainFrame.Active = true -- Penting agar bisa di-drag
+MainFrame.Draggable = true -- Metode drag sederhana agar lancar di mobile
 MainFrame.Parent = ScreenGui
 
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.CornerRadius = UDim.new(0, 12)
 UICorner.Parent = MainFrame
 
--- Top Bar (Header)
+-- Top Bar
 local TopBar = Instance.new("Frame")
 TopBar.Name = "TopBar"
-TopBar.Size = UDim2.new(1, 0, 0, 40)
-TopBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+TopBar.Size = UDim2.new(1, 0, 0, 45)
+TopBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 TopBar.BorderSizePixel = 0
 TopBar.Parent = MainFrame
 
+local TopCorner = Instance.new("UICorner")
+TopCorner.CornerRadius = UDim.new(0, 12)
+TopCorner.Parent = TopBar
+
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, -80, 1, 0)
+Title.Size = UDim2.new(1, -90, 1, 0)
 Title.Position = UDim2.new(0, 15, 0, 0)
 Title.Text = "Joey Hub"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 18
+Title.TextSize = 20
 Title.Font = Enum.Font.GothamBold
 Title.BackgroundTransparency = 1
 Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.Parent = TopBar
 
--- Close Button
+-- Tombol Close (X)
 local CloseBtn = Instance.new("TextButton")
 CloseBtn.Name = "CloseBtn"
 CloseBtn.Size = UDim2.new(0, 30, 0, 30)
-CloseBtn.Position = UDim2.new(1, -35, 0, 5)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+CloseBtn.Position = UDim2.new(1, -40, 0, 7)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 80, 80)
 CloseBtn.Text = "X"
 CloseBtn.TextColor3 = Color3.white
 CloseBtn.Font = Enum.Font.GothamBold
 CloseBtn.Parent = TopBar
 
 local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(0, 5)
+CloseCorner.CornerRadius = UDim.new(1, 0) -- Membuat tombol bulat
 CloseCorner.Parent = CloseBtn
 
--- Minimize Button
+-- Tombol Minimize (-)
 local MinBtn = Instance.new("TextButton")
 MinBtn.Name = "MinBtn"
 MinBtn.Size = UDim2.new(0, 30, 0, 30)
-MinBtn.Position = UDim2.new(1, -70, 0, 5)
-MinBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+MinBtn.Position = UDim2.new(1, -80, 0, 7)
+MinBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
 MinBtn.Text = "-"
 MinBtn.TextColor3 = Color3.white
 MinBtn.Font = Enum.Font.GothamBold
 MinBtn.Parent = TopBar
 
 local MinCorner = Instance.new("UICorner")
-MinCorner.CornerRadius = UDim.new(0, 5)
+MinCorner.CornerRadius = UDim.new(1, 0)
 MinCorner.Parent = MinBtn
 
--- Content Area (Where your scripts would show output)
-local Content = Instance.new("TextLabel")
-Content.Size = UDim2.new(1, 0, 1, -40)
-Content.Position = UDim2.new(0, 0, 0, 40)
-Content.BackgroundTransparency = 1
-Content.Text = "Fish It Script Active"
-Content.TextColor3 = Color3.fromRGB(150, 150, 150)
-Content.Font = Enum.Font.Gotham
-Content.Parent = MainFrame
+-- Status Text
+local Status = Instance.new("TextLabel")
+Status.Size = UDim2.new(1, 0, 0, 100)
+Status.Position = UDim2.new(0, 0, 0, 70)
+Status.BackgroundTransparency = 1
+Status.Text = "Script Executed Successfully\nWaiting for Fishing..."
+Status.TextColor3 = Color3.fromRGB(200, 200, 200)
+Status.TextSize = 14
+Status.Font = Enum.Font.Gotham
+Status.Parent = MainFrame
 
---- FUNCTIONS ---
+--- LOGIC WITH TWEENSERVICE ---
 
--- Close Function with Tween
+-- Fungsi Close
 CloseBtn.MouseButton1Click:Connect(function()
-	MainFrame:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Quad", 0.3, true)
-	task.wait(0.3)
-	ScreenGui:Destroy()
+    local tween = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0), ImageTransparency = 1})
+    tween:Play()
+    tween.Completed:Connect(function()
+        ScreenGui:Destroy()
+    end)
 end)
 
--- Minimize Function
+-- Fungsi Minimize
 local minimized = false
+local originalSize = MainFrame.Size
+
 MinBtn.MouseButton1Click:Connect(function()
-	if not minimized then
-		MainFrame:TweenSize(UDim2.new(0, 400, 0, 40), "Out", "Quad", 0.3, true)
-	else
-		MainFrame:TweenSize(UDim2.new(0, 400, 0, 250), "Out", "Quad", 0.3, true)
-	end
-	minimized = not minimized
+    if not minimized then
+        -- Minimize ke atas
+        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 350, 0, 45)}):Play()
+        Status.Visible = false
+    else
+        -- Balik ke ukuran semula
+        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = originalSize}):Play()
+        Status.Visible = true
+    end
+    minimized = not minimized
 end)
-
--- Dragging System
-local dragging, dragInput, dragStart, startPos
-TopBar.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then
-		dragging = true
-		dragStart = input.Position
-		startPos = MainFrame.Position
-	end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-	if dragging and input.UserInputType == Enum.UserInputType.Mouse
