@@ -6,8 +6,9 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "JoeyHubGui"
 ScreenGui.Parent = game:GetService("CoreGui")
 ScreenGui.ResetOnSpawn = false
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- 2. Main Frame (Panel Utama)
+-- 2. Main Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 400, 0, 250)
@@ -21,12 +22,13 @@ local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
--- 3. Top Bar
+-- 3. Top Bar (Tempat Judul dan Tombol)
 local TopBar = Instance.new("Frame")
 TopBar.Name = "TopBar"
 TopBar.Size = UDim2.new(1, 0, 0, 35)
-TopBar.BackgroundColor3 = Color3.fromRGB(20, 35, 65)
+TopBar.BackgroundColor3 = Color3.fromRGB(25, 40, 70)
 TopBar.BorderSizePixel = 0
+TopBar.ZIndex = 5
 TopBar.Parent = MainFrame
 
 local TopCorner = Instance.new("UICorner")
@@ -35,13 +37,14 @@ TopCorner.Parent = TopBar
 
 local Title = Instance.new("TextLabel")
 Title.Text = "Joey Hub"
-Title.Size = UDim2.new(0, 100, 1, 0)
+Title.Size = UDim2.new(0, 150, 1, 0)
 Title.Position = UDim2.new(0, 15, 0, 0)
 Title.BackgroundTransparency = 1
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 16
+Title.ZIndex = 6
 Title.Parent = TopBar
 
 -- 4. Tombol Close (X)
@@ -53,28 +56,32 @@ CloseBtn.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
 CloseBtn.Text = "X"
 CloseBtn.TextColor3 = Color3.white
 CloseBtn.Font = Enum.Font.GothamBold
+CloseBtn.TextSize = 14
+CloseBtn.ZIndex = 7
 CloseBtn.Parent = TopBar
 
 local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(0, 5)
+CloseCorner.CornerRadius = UDim.new(0, 6)
 CloseCorner.Parent = CloseBtn
 
 -- 5. Tombol Minimize (-)
 local MinBtn = Instance.new("TextButton")
 MinBtn.Name = "MinBtn"
 MinBtn.Size = UDim2.new(0, 25, 0, 25)
-MinBtn.Position = UDim2.new(1, -65, 0, 5)
+MinBtn.Position = UDim2.new(1, -70, 0, 5)
 MinBtn.BackgroundColor3 = Color3.fromRGB(60, 80, 110)
 MinBtn.Text = "-"
 MinBtn.TextColor3 = Color3.white
 MinBtn.Font = Enum.Font.GothamBold
+MinBtn.TextSize = 18
+MinBtn.ZIndex = 7
 MinBtn.Parent = TopBar
 
 local MinCorner = Instance.new("UICorner")
-MinCorner.CornerRadius = UDim.new(0, 5)
+MinCorner.CornerRadius = UDim.new(0, 6)
 MinCorner.Parent = MinBtn
 
--- 6. Content (Teks Tengah)
+-- 6. Content Text
 local Content = Instance.new("TextLabel")
 Content.Size = UDim2.new(1, 0, 1, -35)
 Content.Position = UDim2.new(0, 0, 0, 35)
@@ -83,21 +90,55 @@ Content.Text = "Joey Hub\n\n• Mobile UI\n• Blue Theme\n• Mini Animated"
 Content.TextColor3 = Color3.fromRGB(200, 210, 230)
 Content.Font = Enum.Font.Gotham
 Content.TextSize = 14
+Content.ZIndex = 4
 Content.Parent = MainFrame
 
---- LOGIKA & ANIMASI ---
+--- FUNGSI ANIMASI & LOGIKA ---
 
--- Animasi Muncul (Pop-up)
+-- Animasi Muncul
 MainFrame.Size = UDim2.new(0, 0, 0, 0)
 TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 400, 0, 250)}):Play()
 
--- Fungsi Tombol Close
+-- Fungsi Close
 CloseBtn.MouseButton1Click:Connect(function()
     local t = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {Size = UDim2.new(0, 0, 0, 0)})
     t:Play()
     t.Completed:Connect(function() ScreenGui:Destroy() end)
 end)
 
--- Fungsi Tombol Minimize (Toggle)
+-- Fungsi Minimize (Toggle)
 local isMinimized = false
 MinBtn.MouseButton1Click:Connect(function()
+    if not isMinimized then
+        TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Quart), {Size = UDim2.new(0, 400, 0, 35)}):Play()
+        isMinimized = true
+        Content.Visible = false
+    else
+        TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back), {Size = UDim2.new(0, 400, 0, 250)}):Play()
+        isMinimized = false
+        Content.Visible = true
+    end
+end)
+
+-- Draggable (Bisa digeser di Mobile)
+local dragging, dragInput, dragStart, startPos
+TopBar.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+        local delta = input.Position - dragStart
+        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = false
+    end
+end)
