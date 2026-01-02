@@ -1,67 +1,80 @@
--- Referensi Layanan
-local TweenService = game:GetService("TweenService")
-
--- 1. Membuat ScreenGui Utama
+-- 1. ScreenGui Utama
 local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "JoeyTestingMenu"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 
--- 2. Frame Utama (Background)
+-- 2. Main Frame (Kontainer Utama)
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 400, 0, 250)
-MainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
-MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-MainFrame.BackgroundTransparency = 0.2 -- Sedikit transparan seperti di gambar
+MainFrame.Size = UDim2.new(0, 420, 0, 280)
+MainFrame.Position = UDim2.new(0.5, -210, 0.5, -140)
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 MainFrame.BorderSizePixel = 0
-MainFrame.Active = true
-MainFrame.Draggable = true 
+MainFrame.ClipsDescendants = true
 MainFrame.Parent = ScreenGui
 
--- 3. Tombol Close (X)
+-- 3. Title Bar (Bagian Atas)
+local TitleBar = Instance.new("Frame")
+TitleBar.Name = "TitleBar"
+TitleBar.Size = UDim2.new(1, 0, 0, 35)
+TitleBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TitleBar.BorderSizePixel = 0
+TitleBar.Parent = MainFrame
+
+-- Judul di dalam Title Bar
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -40, 1, 0)
+Title.Position = UDim2.new(0, 10, 0, 0)
+Title.BackgroundTransparency = 1
+Title.Text = "JoeyTesting | Menu"
+Title.TextColor3 = Color3.fromRGB(0, 255, 150) -- Hijau Neon
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 18
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = TitleBar
+
+-- Tombol Close di pojok Title Bar
 local CloseButton = Instance.new("TextButton")
 CloseButton.Name = "CloseButton"
-CloseButton.Size = UDim2.new(0, 30, 0, 30)
-CloseButton.Position = UDim2.new(1, -35, 0, 5) -- Pojok kanan atas
-CloseButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+CloseButton.Size = UDim2.new(0, 35, 1, 0)
+CloseButton.Position = UDim2.new(1, -35, 0, 0)
+CloseButton.BackgroundColor3 = Color3.fromRGB(180, 50, 50)
+CloseButton.BorderSizePixel = 0
 CloseButton.Text = "X"
 CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseButton.Font = Enum.Font.SourceSansBold
-CloseButton.TextSize = 20
-CloseButton.Parent = MainFrame
+CloseButton.TextSize = 18
+CloseButton.Parent = TitleBar
 
--- Fungsi untuk Menutup Menu
-CloseButton.MouseButton1Click:Connect(function()
-    ScreenGui:Destroy() -- Menghapus GUI sepenuhnya
-end)
-
--- 4. Sidebar (Sisi Kiri)
+-- 4. Sidebar (Menu Samping)
 local SideBar = Instance.new("Frame")
 SideBar.Name = "SideBar"
-SideBar.Size = UDim2.new(0, 110, 1, 0)
+SideBar.Size = UDim2.new(0, 110, 1, -35)
+SideBar.Position = UDim2.new(0, 0, 0, 35)
 SideBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 SideBar.BorderSizePixel = 0
 SideBar.Parent = MainFrame
 
 local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Parent = SideBar
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 2)
 
--- Fungsi untuk membuat tombol tab
+-- Fungsi untuk membuat tombol tab yang rapi
 local function CreateTab(name)
-    local TabButton = Instance.new("TextButton")
-    TabButton.Size = UDim2.new(1, 0, 0, 35)
-    TabButton.BackgroundTransparency = 1
-    TabButton.Text = name
-    TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TabButton.Font = Enum.Font.SourceSans
-    TabButton.TextSize = 16
-    TabButton.Parent = SideBar
-    return TabButton
+	local TabButton = Instance.new("TextButton")
+	TabButton.Size = UDim2.new(1, 0, 0, 38)
+	TabButton.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+	TabButton.BorderSizePixel = 0
+	TabButton.Text = name
+	TabButton.TextColor3 = Color3.fromRGB(220, 220, 220)
+	TabButton.Font = Enum.Font.SourceSans
+	TabButton.TextSize = 15
+	TabButton.Parent = SideBar
+	return TabButton
 end
 
--- Menambahkan kategori
+-- Menambahkan Tab sesuai gambar
 CreateTab("Fishing")
 CreateTab("Automatically")
 CreateTab("Teleport")
@@ -69,13 +82,42 @@ CreateTab("Quest")
 CreateTab("Trading")
 CreateTab("Menu")
 
--- 5. Judul (JoeyTesting)
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(0, 200, 0, 30)
-Title.Position = UDim2.new(0.35, 0, 0, 5)
-Title.BackgroundTransparency = 1
-Title.Text = "JoeyTesting"
-Title.TextColor3 = Color3.fromRGB(0, 255, 150)
-Title.Font = Enum.Font.SourceSansBold
-Title.TextSize = 22
-Title.Parent = MainFrame
+-- 5. Fungsionalitas
+-- Membuat menu bisa digeser (Drag) melalui TitleBar
+local UserInputService = game:GetService("UserInputService")
+local dragging, dragInput, dragStart, startPos
+
+local function update(input)
+	local delta = input.Position - dragStart
+	MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+TitleBar.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = MainFrame.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+TitleBar.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		dragInput = input
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if input == dragInput and dragging then
+		update(input)
+	end
+end)
+
+-- Fungsi Tombol Close
+CloseButton.MouseButton1Click:Connect(function()
+	ScreenGui:Destroy()
+end)
