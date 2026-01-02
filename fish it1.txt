@@ -33,15 +33,16 @@ TitleBar.Size = UDim2.new(1, 0, 0, 30)
 UICorner_2.CornerRadius = UDim.new(0, 8)
 UICorner_2.Parent = TitleBar
 
--- Teks Judul
+-- Teks Judul (Hanya Joey Hub)
+TitleText.Name = "TitleText"
 TitleText.Parent = TitleBar
 TitleText.BackgroundTransparency = 1
-TitleText.Position = UDim2.new(0, 10, 0, 0)
-TitleText.Size = UDim2.new(0, 200, 1, 0)
+TitleText.Position = UDim2.new(0, 12, 0, 0)
+TitleText.Size = UDim2.new(0, 250, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "Joey Hub"
-TitleText.TextColor3 = Color3.fromRGB(0, 170, 255) -- Warna biru muda
-TitleText.TextSize = 14
+TitleText.Text = "Joey Hub" -- Versi sudah dihapus
+TitleText.TextColor3 = Color3.fromRGB(0, 190, 255)
+TitleText.TextSize = 15 -- Ukuran sedikit diperbesar agar lebih proporsional
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Tombol Close (X)
