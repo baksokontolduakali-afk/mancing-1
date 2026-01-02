@@ -9,26 +9,27 @@ local UICorner_2 = Instance.new("UICorner")
 
 -- Properti ScreenGui
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.Name = "JoeyHubGui"
 ScreenGui.ResetOnSpawn = false
 
--- Frame Utama (Background Hitam Transparan)
+-- Frame Utama (Background Gelap)
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20) -- Warna gelap
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
 MainFrame.BackgroundTransparency = 0.1
 MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
 MainFrame.Size = UDim2.new(0, 300, 0, 200)
 MainFrame.Active = true
-MainFrame.Draggable = true -- Agar bisa digeser
+MainFrame.Draggable = true -- Bisa digeser
 
 UICorner.CornerRadius = UDim.new(0, 8)
 UICorner.Parent = MainFrame
 
--- Bar Judul (Atas)
+-- Bar Judul
 TitleBar.Name = "TitleBar"
 TitleBar.Parent = MainFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
-TitleBar.Size = UDim2.new(1, 0, 0, 30)
+TitleBar.BackgroundColor3 = Color3.fromRGB(25(0, 20, 30)
+TitleBar.Size = UDim2.new(1, 0, 0, 35)
 
 UICorner_2.CornerRadius = UDim.new(0, 8)
 UICorner_2.Parent = TitleBar
@@ -38,11 +39,11 @@ TitleText.Name = "TitleText"
 TitleText.Parent = TitleBar
 TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 12, 0, 0)
-TitleText.Size = UDim2.new(0, 250, 1, 0)
+TitleText.Size = UDim2.new(0, 200, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "Joey Hub" -- Versi sudah dihapus
+TitleText.Text = "Joey Hub" -- VERSI SUDAH DIHAPUS TOTAL
 TitleText.TextColor3 = Color3.fromRGB(0, 190, 255)
-TitleText.TextSize = 15 -- Ukuran sedikit diperbesar agar lebih proporsional
+TitleText.TextSize = 16
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
 -- Tombol Close (X)
@@ -50,23 +51,22 @@ CloseButton.Name = "CloseButton"
 CloseButton.Parent = TitleBar
 CloseButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 CloseButton.BackgroundTransparency = 1
-CloseButton.Position = UDim2.new(1, -30, 0, 0)
-CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Position = UDim2.new(1, -35, 0, 0)
+CloseButton.Size = UDim2.new(0, 35, 0, 35)
 CloseButton.Font = Enum.Font.GothamBold
 CloseButton.Text = "X"
 CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
 CloseButton.TextSize = 18
 
--- Fungsi untuk Menutup GUI
+-- Fungsi Tutup
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
 
--- Efek Hover Tombol Close
+-- Efek Tombol Close
 CloseButton.MouseEnter:Connect(function()
-    CloseButton.TextColor3 = Color3.fromRGB(255, 0, 0) -- Berubah merah saat disentuh mouse
+    CloseButton.TextColor3 = Color3.fromRGB(255, 50, 50)
 end)
-
 CloseButton.MouseLeave:Connect(function()
     CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
 end)
