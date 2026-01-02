@@ -1,42 +1,53 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Fungsi Animasi Loading
-local function StartLoading()
+-- Fungsi untuk memulai GUI dengan Loading
+local function LaunchJoeyHub()
     local Window = Rayfield:CreateWindow({
        Name = "Joey Hub",
-       LoadingTitle = "Joey Hub | Menyiapkan Sistem...",
-       LoadingSubtitle = "Tunggu sebentar...",
+       LoadingTitle = "Joey Hub Executive",
+       LoadingSubtitle = "Menyiapkan Data...",
        ConfigurationSaving = { Enabled = false },
        KeySystem = false,
     })
 
-    -- Proses Loading 1% - 100%
+    -- Animasi Loading 1% - 100%
     for i = 1, 100 do
-        task.wait(0.03) -- Atur kecepatan loading di sini
-        Window:ModifyLoadingSubtitle("Proses Memuat: " .. tostring(i) .. "%")
+        task.wait(0.02) -- Kecepatan loading
+        Window:ModifyLoadingSubtitle("Loading: " .. i .. "%")
     end
 
-    -- Mengganti Subtitle saat selesai
-    Window:ModifyLoadingSubtitle("Berhasil Dimuat!")
+    Window:ModifyLoadingSubtitle("Selesai!")
     task.wait(0.5)
-    
+
+    -- PROSES MENGHAPUS TEKS/WATERMARK RAYFIELD
+    pcall(function()
+        local coreGui = game:GetService("CoreGui")
+        local ui = coreGui:FindFirstChild("Rayfield") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Rayfield")
+        if ui and ui:FindFirstChild("Main") then
+            if ui.Main:FindFirstChild("Navigation") and ui.Main.Navigation:FindFirstChild("Badge") then
+                ui.Main.Navigation.Badge:Destroy() -- Menghapus logo kecil
+            end
+            if ui.Main:FindFirstChild("Status") then
+                ui.Main.Status:Destroy() -- Menghapus teks versi/watermark di bawah
+            end
+        end
+    end)
+
     return Window
 end
 
--- Menjalankan Loading
-local Window = StartLoading()
+-- Eksekusi
+local Window = LaunchJoeyHub()
 
--- Setup Tema Pink
+-- Warna Tema Pink
 Rayfield:SetTheme("Pink")
 
--- Tab Utama (Sesuai permintaan: Hanya judul, Close, dan Minimize)
-local MainTab = Window:CreateTab("Home", 4483362458) 
-local Section = MainTab:CreateSection("Selamat Datang di Joey Hub")
+-- Tab Utama
+local Tab = Window:CreateTab("Home", 4483362458)
+local Section = Tab:CreateSection("Joey Hub | Active")
 
--- Notifikasi Akhir
 Rayfield:Notify({
-   Title = "Selesai!",
-   Content = "Joey Hub siap digunakan.",
+   Title = "Joey Hub",
+   Content = "Selamat datang!",
    Duration = 3,
-   Image = 4483362458,
 })
