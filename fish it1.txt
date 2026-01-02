@@ -1,42 +1,42 @@
-local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))() -- Ganti dengan link library kamu jika berbeda
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
-local Window = Rayfield:CreateWindow({
-   Name = "Joey Hub",
-   LoadingTitle = "Joey Hub",
-   LoadingSubtitle = "by Joey",
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = "JoeyHubConfigs",
-      FileName = "MainConfig"
-   },
-   Discord = {
-      Enabled = false,
-      Invite = "",
-      RememberJoins = true
-   },
-   KeySystem = false,
-})
+-- Fungsi Animasi Loading
+local function StartLoading()
+    local Window = Rayfield:CreateWindow({
+       Name = "Joey Hub",
+       LoadingTitle = "Joey Hub | Menyiapkan Sistem...",
+       LoadingSubtitle = "Tunggu sebentar...",
+       ConfigurationSaving = { Enabled = false },
+       KeySystem = false,
+    })
 
--- Menyesuaikan tema ke Pink
+    -- Proses Loading 1% - 100%
+    for i = 1, 100 do
+        task.wait(0.03) -- Atur kecepatan loading di sini
+        Window:ModifyLoadingSubtitle("Proses Memuat: " .. tostring(i) .. "%")
+    end
+
+    -- Mengganti Subtitle saat selesai
+    Window:ModifyLoadingSubtitle("Berhasil Dimuat!")
+    task.wait(0.5)
+    
+    return Window
+end
+
+-- Menjalankan Loading
+local Window = StartLoading()
+
+-- Setup Tema Pink
 Rayfield:SetTheme("Pink")
 
--- Membuat Tab Utama (Kosong sesuai permintaan, hanya menyisakan Close/Minimize bawaan)
-local Tab = Window:CreateTab("Main Menu", 4483362458)
+-- Tab Utama (Sesuai permintaan: Hanya judul, Close, dan Minimize)
+local MainTab = Window:CreateTab("Home", 4483362458) 
+local Section = MainTab:CreateSection("Selamat Datang di Joey Hub")
 
-local Section = Tab:CreateSection("Welcome to Joey Hub")
-
--- Notifikasi saat script berhasil di-load
+-- Notifikasi Akhir
 Rayfield:Notify({
-   Title = "Joey Hub",
-   Content = "Script Berhasil Dijalankan",
-   Duration = 5,
+   Title = "Selesai!",
+   Content = "Joey Hub siap digunakan.",
+   Duration = 3,
    Image = 4483362458,
-   Actions = {
-      Ignore = {
-         Name = "Okay",
-         Callback = function()
-            print("Joey Hub Active")
-         end
-      },
-   },
 })
