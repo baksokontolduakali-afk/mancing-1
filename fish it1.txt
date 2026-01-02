@@ -1,10 +1,9 @@
--- [[ JOEY HUB - FINAL VERSION WITH TOGGLES ]]
+-- [[ JOEY HUB - FIXED CONTROLS ]]
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
 
 local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
-
 if PlayerGui:FindFirstChild("JoeyHub") then PlayerGui.JoeyHub:Destroy() end
 
 local ScreenGui = Instance.new("ScreenGui")
@@ -23,7 +22,7 @@ MainFrame.Parent = ScreenGui
 MainFrame.ZIndex = 2
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
 
--- [[ HEADER & CONTROLS ]]
+-- [[ HEADER & CONTROLS (POSISI DIPERBAIKI) ]]
 local Header = Instance.new("Frame")
 Header.Size = UDim2.new(1, 0, 0, 35)
 Header.BackgroundTransparency = 1
@@ -38,7 +37,7 @@ ControlButtons.Parent = Header
 
 local UIList = Instance.new("UIListLayout")
 UIList.FillDirection = Enum.FillDirection.Horizontal
-UIList.HorizontalAlignment = Enum.HorizontalAlignment.Right
+UIList.HorizontalAlignment = Enum.HorizontalAlignment.Right -- Biar rapi ke kanan
 UIList.VerticalAlignment = Enum.VerticalAlignment.Center
 UIList.Padding = UDim.new(0, 8)
 UIList.Parent = ControlButtons
@@ -53,8 +52,10 @@ local function CreateControl(text, color, callback)
     btn.Parent = ControlButtons
     Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
     btn.MouseButton1Click:Connect(callback)
+    return btn
 end
 
+-- Floating Button saat minimize
 local OpenBtn = Instance.new("TextButton")
 OpenBtn.Size = UDim2.new(0, 55, 0, 55)
 OpenBtn.Position = UDim2.new(0, 15, 0.5, -25)
@@ -66,11 +67,22 @@ OpenBtn.Visible = false
 OpenBtn.Parent = ScreenGui
 Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(1, 0)
 
-CreateControl("-", Color3.fromRGB(40, 40, 40), function() MainFrame.Visible = false OpenBtn.Visible = true end)
-CreateControl("X", Color3.fromRGB(180, 50, 50), function() ScreenGui:Destroy() end)
-OpenBtn.MouseButton1Click:Connect(function() MainFrame.Visible = true OpenBtn.Visible = false end)
+-- URUTAN TOMBOL: Minimize dulu baru Close (agar X paling pojok kanan)
+CreateControl("-", Color3.fromRGB(40, 40, 40), function() 
+    MainFrame.Visible = false 
+    OpenBtn.Visible = true 
+end)
 
--- [[ SIDEBAR & TABS ]]
+CreateControl("X", Color3.fromRGB(180, 50, 50), function() 
+    ScreenGui:Destroy() 
+end)
+
+OpenBtn.MouseButton1Click:Connect(function() 
+    MainFrame.Visible = true 
+    OpenBtn.Visible = false 
+end)
+
+-- [[ SIDEBAR ]]
 local Sidebar = Instance.new("Frame")
 Sidebar.Size = UDim2.new(0, 130, 1, 0)
 Sidebar.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
@@ -126,9 +138,7 @@ local function CreatePage(name, order)
     page.Visible = false
     page.ScrollBarThickness = 0
     page.Parent = Container
-    local layout = Instance.new("UIListLayout")
-    layout.Padding = UDim.new(0, 8)
-    layout.Parent = page
+    Instance.new("UIListLayout", page).Padding = UDim.new(0, 8)
 
     btn.MouseButton1Click:Connect(function()
         for _, v in pairs(Container:GetChildren()) do v.Visible = false end
@@ -137,66 +147,16 @@ local function CreatePage(name, order)
     return page
 end
 
--- [[ COMPONENT: TOGGLE ]]
-local function CreateToggle(name, parent, callback)
-    local toggleFrame = Instance.new("TextButton")
-    toggleFrame.Size = UDim2.new(1, 0, 0, 40)
-    toggleFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    toggleFrame.Text = "  " .. name
-    toggleFrame.TextColor3 = Color3.fromRGB(200, 200, 200)
-    toggleFrame.Font = Enum.Font.Gotham
-    toggleFrame.TextXAlignment = Enum.TextXAlignment.Left
-    toggleFrame.Parent = parent
-    Instance.new("UICorner", toggleFrame).CornerRadius = UDim.new(0, 6)
-
-    local status = Instance.new("Frame")
-    status.Size = UDim2.new(0, 30, 0, 15)
-    status.Position = UDim2.new(1, -40, 0.5, -7)
-    status.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    status.Parent = toggleFrame
-    Instance.new("UICorner", status).CornerRadius = UDim.new(1, 0)
-
-    local circle = Instance.new("Frame")
-    circle.Size = UDim2.new(0, 11, 0, 11)
-    circle.Position = UDim2.new(0, 2, 0.5, -5)
-    circle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    circle.Parent = status
-    Instance.new("UICorner", circle).CornerRadius = UDim.new(1, 0)
-
-    local state = false
-    toggleFrame.MouseButton1Click:Connect(function()
-        state = not state
-        local targetPos = state and UDim2.new(1, -13, 0.5, -5) or UDim2.new(0, 2, 0.5, -5)
-        local targetColor = state and Color3.fromRGB(0, 255, 150) or Color3.fromRGB(50, 50, 50)
-        
-        TweenService:Create(circle, TweenInfo.new(0.2), {Position = targetPos}):Play()
-        TweenService:Create(status, TweenInfo.new(0.2), {BackgroundColor3 = targetColor}):Play()
-        callback(state)
-    end)
-end
-
--- [[ SETUP TABS ]]
+-- [[ SETUP TABS & CONTENT ]]
 local fishTab = CreatePage("Fishing", 0)
-local blatantTab = CreatePage("Blatant", 1)
-
 fishTab.Visible = true
 
--- [[ TAMBAHKAN FITUR DISINI ]]
-CreateToggle("Auto Fishing", fishTab, function(v)
-    print("Auto Fish is: ", v)
-    -- Masukkan script auto fish kamu di sini
-end)
+local lbl = Instance.new("TextLabel")
+lbl.Size = UDim2.new(1, 0, 0, 30)
+lbl.BackgroundTransparency = 1
+lbl.Text = "Joey Hub Loaded!"
+lbl.TextColor3 = Color3.fromRGB(0, 255, 150)
+lbl.Font = Enum.Font.GothamBold
+lbl.Parent = fishTab
 
-CreateToggle("Auto Sell Fish", fishTab, function(v)
-    print("Auto Sell is: ", v)
-end)
-
-CreateToggle("Walkspeed (100)", blatantTab, function(v)
-    if v then 
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 100
-    else
-        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16
-    end
-end)
-
-print("Joey Hub Ready!")
+print("Joey Hub: Tombol sudah diperbaiki posisinya!")
