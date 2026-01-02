@@ -1,71 +1,71 @@
+-- Create ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local TitleBar = Instance.new("Frame")
+local TitleText = Instance.new("TextLabel")
+local CloseButton = Instance.new("TextButton")
+local UICorner = Instance.new("UICorner")
+local UICorner_2 = Instance.new("UICorner")
 
+-- Properti ScreenGui
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
 
-local Window = Rayfield:CreateWindow({
-   Name = "Joey Hub | Version 1.0.9",
-   LoadingTitle = "Joey Hub Loading...",
-   LoadingSubtitle = "by Joey",
-   ConfigurationSaving = {
-      Enabled = true,
-      FolderName = "JoeyHubConfig",
-      FileName = "MainGui"
-   },
-   Discord = {
-      Enabled = false,
-      Invite = "noinvite",
-      RememberJoins = true
-   },
-   KeySystem = false -- Set ke true jika ingin pakai sistem kunci
-})
+-- Frame Utama (Background Hitam Transparan)
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20) -- Warna gelap
+MainFrame.BackgroundTransparency = 0.1
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+MainFrame.Size = UDim2.new(0, 300, 0, 200)
+MainFrame.Active = true
+MainFrame.Draggable = true -- Agar bisa digeser
 
--- [[ TAB: FISHING ]]
-local Tab = Window:CreateTab("Fishing", 4483362458) -- Icon ID bisa diganti
+UICorner.CornerRadius = UDim.new(0, 8)
+UICorner.Parent = MainFrame
 
-local Section = Tab:CreateSection("Fishing Support")
+-- Bar Judul (Atas)
+TitleBar.Name = "TitleBar"
+TitleBar.Parent = MainFrame
+TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
+TitleBar.Size = UDim2.new(1, 0, 0, 30)
 
-Tab:CreateToggle({
-   Name = "Auto Fish",
-   CurrentValue = false,
-   Flag = "Toggle1",
-   Callback = function(Value)
-      -- Masukkan script auto fish di sini
-      print("Auto Fish status: ", Value)
-   end,
-})
+UICorner_2.CornerRadius = UDim.new(0, 8)
+UICorner_2.Parent = TitleBar
 
--- [[ TAB: AUTOMATICALLY ]]
-local Tab2 = Window:CreateTab("Automatically", 4483362458)
-local Section2 = Tab2:CreateSection("Fishing Features")
+-- Teks Judul
+TitleText.Parent = TitleBar
+TitleText.BackgroundTransparency = 1
+TitleText.Position = UDim2.new(0, 10, 0, 0)
+TitleText.Size = UDim2.new(0, 200, 1, 0)
+TitleText.Font = Enum.Font.GothamBold
+TitleText.Text = "Chloe X | Version 1.0.9"
+TitleText.TextColor3 = Color3.fromRGB(0, 170, 255) -- Warna biru muda
+TitleText.TextSize = 14
+TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
-Tab2:CreateToggle({
-   Name = "Auto Sell",
-   CurrentValue = false,
-   Flag = "Toggle2",
-   Callback = function(Value)
-      -- Masukkan script auto sell di sini
-   end,
-})
+-- Tombol Close (X)
+CloseButton.Name = "CloseButton"
+CloseButton.Parent = TitleBar
+CloseButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.BackgroundTransparency = 1
+CloseButton.Position = UDim2.new(1, -30, 0, 0)
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Font = Enum.Font.GothamBold
+CloseButton.Text = "X"
+CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+CloseButton.TextSize = 18
 
--- [[ TAB: TRADING ]]
-local Tab3 = Window:CreateTab("Trading", 4483362458)
-Tab3:CreateButton({
-   Name = "Open Trading Menu",
-   Callback = function()
-      -- Script buka menu trade
-   end,
-})
+-- Fungsi untuk Menutup GUI
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
 
--- [[ TAB: BLATANT ]]
-local Tab4 = Window:CreateTab("Blatant Features", 4483362458)
-Tab4:CreateSlider({
-   Name = "Walkspeed",
-   Range = {16, 300},
-   Increment = 1,
-   Suffix = "Speed",
-   CurrentValue = 16,
-   Flag = "Slider1",
-   Callback = function(Value)
-      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
-   end,
-})
+-- Efek Hover Tombol Close
+CloseButton.MouseEnter:Connect(function()
+    CloseButton.TextColor3 = Color3.fromRGB(255, 0, 0) -- Berubah merah saat disentuh mouse
+end)
 
-Rayfield:LoadConfiguration()
+CloseButton.MouseLeave:Connect(function()
+    CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+end)
