@@ -8,11 +8,11 @@ local UICorner = Instance.new("UICorner")
 local UICorner_2 = Instance.new("UICorner")
 
 -- Properti ScreenGui
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.Parent = game.CoreGui -- Menggunakan CoreGui agar tidak hilang saat mati (reset)
 ScreenGui.Name = "JoeyHubGui"
 ScreenGui.ResetOnSpawn = false
 
--- Frame Utama (Background Gelap)
+-- Frame Utama
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
@@ -20,7 +20,7 @@ MainFrame.BackgroundTransparency = 0.1
 MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
 MainFrame.Size = UDim2.new(0, 300, 0, 200)
 MainFrame.Active = true
-MainFrame.Draggable = true -- Bisa digeser
+MainFrame.Draggable = true 
 
 UICorner.CornerRadius = UDim.new(0, 8)
 UICorner.Parent = MainFrame
@@ -28,20 +28,20 @@ UICorner.Parent = MainFrame
 -- Bar Judul
 TitleBar.Name = "TitleBar"
 TitleBar.Parent = MainFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(25(0, 20, 30)
+TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 30) -- Sudah diperbaiki
 TitleBar.Size = UDim2.new(1, 0, 0, 35)
 
 UICorner_2.CornerRadius = UDim.new(0, 8)
 UICorner_2.Parent = TitleBar
 
--- Teks Judul (Hanya Joey Hub)
+-- Teks Judul (Murni Joey Hub)
 TitleText.Name = "TitleText"
 TitleText.Parent = TitleBar
 TitleText.BackgroundTransparency = 1
 TitleText.Position = UDim2.new(0, 12, 0, 0)
 TitleText.Size = UDim2.new(0, 200, 1, 0)
 TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "Joey Hub" -- VERSI SUDAH DIHAPUS TOTAL
+TitleText.Text = "Joey Hub" 
 TitleText.TextColor3 = Color3.fromRGB(0, 190, 255)
 TitleText.TextSize = 16
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
@@ -61,12 +61,4 @@ CloseButton.TextSize = 18
 -- Fungsi Tutup
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
-end)
-
--- Efek Tombol Close
-CloseButton.MouseEnter:Connect(function()
-    CloseButton.TextColor3 = Color3.fromRGB(255, 50, 50)
-end)
-CloseButton.MouseLeave:Connect(function()
-    CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
 end)
