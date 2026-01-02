@@ -1,123 +1,118 @@
--- Memastikan script hanya berjalan satu kali
-if game.CoreGui:FindFirstChild("JoeyHubGui") then
-    game.CoreGui:FindFirstChild("JoeyHubGui"):Destroy()
-end
+-- Hapus GUI lama jika ada
+local existingGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("JoeyHubDelta")
+if existingGui then existingGui:Destroy() end
 
 local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
+local Player = game:GetService("Players").LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
 
--- Menentukan Parent GUI (Mencoba CoreGui dulu, kalau gagal ke PlayerGui)
-local TargetParent = (gethui and gethui()) or game.CoreGui or Players.LocalPlayer:WaitForChild("PlayerGui")
-
+-- Container Utama
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "JoeyHubGui"
-ScreenGui.Parent = TargetParent
+ScreenGui.Name = "JoeyHubDelta"
+ScreenGui.Parent = PlayerGui
 ScreenGui.ResetOnSpawn = false
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 -- Main Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 350, 0, 200) -- Ukuran sedikit lebih kecil agar pas di HP
-MainFrame.Position = UDim2.new(0.5, -175, 0.5, -100)
-MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.Size = UDim2.new(0, 300, 0, 180)
+MainFrame.Position = UDim2.new(0.5, -150, 0.4, -90)
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 MainFrame.BorderSizePixel = 0
-MainFrame.Active = true -- Penting agar bisa di-drag
-MainFrame.Draggable = true -- Metode drag sederhana agar lancar di mobile
+MainFrame.Active = true
+MainFrame.Draggable = true -- Delta sangat stabil dengan fungsi bawaan ini
 MainFrame.Parent = ScreenGui
 
 local UICorner = Instance.new("UICorner")
-UICorner.CornerRadius = UDim.new(0, 12)
+UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
--- Top Bar
+-- Shadow / Glow efek sederhana
+local Stroke = Instance.new("UIStroke")
+Stroke.Thickness = 2
+Stroke.Color = Color3.fromRGB(50, 50, 50)
+Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+Stroke.Parent = MainFrame
+
+-- Header
 local TopBar = Instance.new("Frame")
 TopBar.Name = "TopBar"
-TopBar.Size = UDim2.new(1, 0, 0, 45)
-TopBar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+TopBar.Size = UDim2.new(1, 0, 0, 40)
+TopBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 TopBar.BorderSizePixel = 0
 TopBar.Parent = MainFrame
 
 local TopCorner = Instance.new("UICorner")
-TopCorner.CornerRadius = UDim.new(0, 12)
+TopCorner.CornerRadius = UDim.new(0, 10)
 TopCorner.Parent = TopBar
 
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, -90, 1, 0)
+Title.Size = UDim2.new(1, -80, 1, 0)
 Title.Position = UDim2.new(0, 15, 0, 0)
 Title.Text = "Joey Hub"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 20
+Title.TextColor3 = Color3.white
+Title.TextSize = 18
 Title.Font = Enum.Font.GothamBold
 Title.BackgroundTransparency = 1
 Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.Parent = TopBar
 
--- Tombol Close (X)
+-- Button Container (X dan -)
+local BtnContainer = Instance.new("Frame")
+BtnContainer.Size = UDim2.new(0, 80, 1, 0)
+BtnContainer.Position = UDim2.new(1, -85, 0, 0)
+BtnContainer.BackgroundTransparency = 1
+BtnContainer.Parent = TopBar
+
+-- Close Button
 local CloseBtn = Instance.new("TextButton")
-CloseBtn.Name = "CloseBtn"
-CloseBtn.Size = UDim2.new(0, 30, 0, 30)
-CloseBtn.Position = UDim2.new(1, -40, 0, 7)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 80, 80)
-CloseBtn.Text = "X"
-CloseBtn.TextColor3 = Color3.white
-CloseBtn.Font = Enum.Font.GothamBold
-CloseBtn.Parent = TopBar
+CloseBtn.Size = UDim2.new(0, 25, 0, 25)
+CloseBtn.Position = UDim2.new(0.6, 0, 0.2, 0)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 70, 70)
+CloseBtn.Text = ""
+CloseBtn.Parent = BtnContainer
+Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(1, 0)
 
-local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(1, 0) -- Membuat tombol bulat
-CloseCorner.Parent = CloseBtn
-
--- Tombol Minimize (-)
+-- Minimize Button
 local MinBtn = Instance.new("TextButton")
-MinBtn.Name = "MinBtn"
-MinBtn.Size = UDim2.new(0, 30, 0, 30)
-MinBtn.Position = UDim2.new(1, -80, 0, 7)
-MinBtn.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-MinBtn.Text = "-"
-MinBtn.TextColor3 = Color3.white
-MinBtn.Font = Enum.Font.GothamBold
-MinBtn.Parent = TopBar
+MinBtn.Size = UDim2.new(0, 25, 0, 25)
+MinBtn.Position = UDim2.new(0.1, 0, 0.2, 0)
+MinBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
+MinBtn.Text = ""
+MinBtn.Parent = BtnContainer
+Instance.new("UICorner", MinBtn).CornerRadius = UDim.new(1, 0)
 
-local MinCorner = Instance.new("UICorner")
-MinCorner.CornerRadius = UDim.new(1, 0)
-MinCorner.Parent = MinBtn
+-- Info Text
+local InfoText = Instance.new("TextLabel")
+InfoText.Size = UDim2.new(1, 0, 1, -40)
+InfoText.Position = UDim2.new(0, 0, 0, 40)
+InfoText.BackgroundTransparency = 1
+InfoText.Text = "Joey Hub Loaded\nStatus: Active\nGame: Fish It"
+InfoText.TextColor3 = Color3.fromRGB(180, 180, 180)
+InfoText.Font = Enum.Font.Gotham
+InfoText.TextSize = 14
+InfoText.Parent = MainFrame
 
--- Status Text
-local Status = Instance.new("TextLabel")
-Status.Size = UDim2.new(1, 0, 0, 100)
-Status.Position = UDim2.new(0, 0, 0, 70)
-Status.BackgroundTransparency = 1
-Status.Text = "Script Executed Successfully\nWaiting for Fishing..."
-Status.TextColor3 = Color3.fromRGB(200, 200, 200)
-Status.TextSize = 14
-Status.Font = Enum.Font.Gotham
-Status.Parent = MainFrame
+-- TWEEN LOGIC
+local function toggleGui(minimize)
+    local targetSize = minimize and UDim2.new(0, 300, 0, 40) or UDim2.new(0, 300, 0, 180)
+    local tweenInfo = TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
+    
+    TweenService:Create(MainFrame, tweenInfo, {Size = targetSize}):Play()
+    InfoText.Visible = not minimize
+end
 
---- LOGIC WITH TWEENSERVICE ---
-
--- Fungsi Close
-CloseBtn.MouseButton1Click:Connect(function()
-    local tween = TweenService:Create(MainFrame, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0), ImageTransparency = 1})
-    tween:Play()
-    tween.Completed:Connect(function()
-        ScreenGui:Destroy()
-    end)
-end)
-
--- Fungsi Minimize
-local minimized = false
-local originalSize = MainFrame.Size
-
+local isMinimized = false
 MinBtn.MouseButton1Click:Connect(function()
-    if not minimized then
-        -- Minimize ke atas
-        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = UDim2.new(0, 350, 0, 45)}):Play()
-        Status.Visible = false
-    else
-        -- Balik ke ukuran semula
-        TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {Size = originalSize}):Play()
-        Status.Visible = true
-    end
-    minimized = not minimized
+    isMinimized = not isMinimized
+    toggleGui(isMinimized)
 end)
+
+CloseBtn.MouseButton1Click:Connect(function()
+    local tween = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0,0,0,0)})
+    tween:Play()
+    tween.Completed:Connect(function() ScreenGui:Destroy() end)
+end)
+
+print("Joey Hub successfully executed!")
