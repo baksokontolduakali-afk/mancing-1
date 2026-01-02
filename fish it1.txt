@@ -1,100 +1,42 @@
--- Create ScreenGui
-local ScreenGui = Instance.new("ScreenGui")
-local MainFrame = Instance.new("Frame")
-local TitleBar = Instance.new("Frame")
-local TitleText = Instance.new("TextLabel")
-local CloseButton = Instance.new("TextButton")
-local UICorner = Instance.new("UICorner")
-local UICorner_2 = Instance.new("UICorner")
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))() -- Ganti dengan link library kamu jika berbeda
 
--- Properti ScreenGui (Pindah ke PlayerGui agar lebih aman)
-ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-ScreenGui.Name = "JoeyHubGui"
-ScreenGui.ResetOnSpawn = false
+local Window = Rayfield:CreateWindow({
+   Name = "Joey Hub",
+   LoadingTitle = "Joey Hub",
+   LoadingSubtitle = "by Joey",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "JoeyHubConfigs",
+      FileName = "MainConfig"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "",
+      RememberJoins = true
+   },
+   KeySystem = false,
+})
 
--- Frame Utama
-MainFrame.Name = "MainFrame"
-MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-MainFrame.BackgroundTransparency = 0.1
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
-MainFrame.Size = UDim2.new(0, 300, 0, 200)
-MainFrame.Active = true
+-- Menyesuaikan tema ke Pink
+Rayfield:SetTheme("Pink")
 
-UICorner.CornerRadius = UDim.new(0, 8)
-UICorner.Parent = MainFrame
+-- Membuat Tab Utama (Kosong sesuai permintaan, hanya menyisakan Close/Minimize bawaan)
+local Tab = Window:CreateTab("Main Menu", 4483362458)
 
--- Bar Judul
-TitleBar.Name = "TitleBar"
-TitleBar.Parent = MainFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
-TitleBar.Size = UDim2.new(1, 0, 0, 35)
+local Section = Tab:CreateSection("Welcome to Joey Hub")
 
-UICorner_2.CornerRadius = UDim.new(0, 8)
-UICorner_2.Parent = TitleBar
-
--- Teks Judul
-TitleText.Name = "TitleText"
-TitleText.Parent = TitleBar
-TitleText.BackgroundTransparency = 1
-TitleText.Position = UDim2.new(0, 12, 0, 0)
-TitleText.Size = UDim2.new(0, 200, 1, 0)
-TitleText.Font = Enum.Font.GothamBold
-TitleText.Text = "Joey Hub" 
-TitleText.TextColor3 = Color3.fromRGB(0, 190, 255)
-TitleText.TextSize = 16
-TitleText.TextXAlignment = Enum.TextXAlignment.Left
-
--- Tombol Close (X)
-CloseButton.Name = "CloseButton"
-CloseButton.Parent = TitleBar
-CloseButton.BackgroundTransparency = 1
-CloseButton.Position = UDim2.new(1, -35, 0, 0)
-CloseButton.Size = UDim2.new(0, 35, 0, 35)
-CloseButton.Font = Enum.Font.GothamBold
-CloseButton.Text = "X"
-CloseButton.TextColor3 = Color3.fromRGB(200, 200, 200)
-CloseButton.TextSize = 18
-
--- Fungsi Tutup
-CloseButton.MouseButton1Click:Connect(function()
-    ScreenGui:Destroy()
-end)
-
--- SCRIPT SUPAYA BISA DIGESER (Manual Draggable)
-local UserInputService = game:GetService("UserInputService")
-local dragging
-local dragInput
-local dragStart
-local startPos
-
-local function update(input)
-    local delta = input.Position - dragStart
-    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-end
-
-MainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = MainFrame.Position
-        
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
-            end
-        end)
-    end
-end)
-
-MainFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        update(input)
-    end
-end)
+-- Notifikasi saat script berhasil di-load
+Rayfield:Notify({
+   Title = "Joey Hub",
+   Content = "Script Berhasil Dijalankan",
+   Duration = 5,
+   Image = 4483362458,
+   Actions = {
+      Ignore = {
+         Name = "Okay",
+         Callback = function()
+            print("Joey Hub Active")
+         end
+      },
+   },
+})
