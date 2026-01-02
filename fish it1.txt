@@ -1,68 +1,93 @@
--- Joey Hub Script for Delta Executor
+-- [[ JOEY HUB CUSTOM GUI ]]
 local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-
--- Main GUI
 local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "JoeyHub"
+ScreenGui.Parent = game.CoreGui -- Agar tidak hilang saat reset (gunakan PlayerGui jika di Studio)
+
+-- Frame Utama
 local MainFrame = Instance.new("Frame")
-local TopBar = Instance.new("Frame")
-local Title = Instance.new("TextLabel")
-local CloseBtn = Instance.new("TextButton")
-local MinBtn = Instance.new("TextButton")
-local ContentFrame = Instance.new("Frame")
-local WelcomeText = Instance.new("TextLabel")
-local UICorner = Instance.new("UICorner")
-
--- Properties
-ScreenGui.Name = "JoeyHubGUI"
-ScreenGui.Parent = game.CoreGui
-ScreenGui.ResetOnSpawn = false
-
 MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 500, 0, 300)
+MainFrame.Position = UDim2.new(0.5, -250, 0.5, -150)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 20, 25)
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true -- Membuat GUI bisa digeser
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 25, 45) -- Navy Blue gelap
-MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
-MainFrame.Size = UDim2.new(0, 300, 0, 200)
-MainFrame.ClipsDescendants = true
 
-local MainCorner = Instance.new("UICorner")
-MainCorner.CornerRadius = UDim.new(0, 8)
-MainCorner.Parent = MainFrame
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.Parent = MainFrame
 
--- Top Bar
-TopBar.Name = "TopBar"
-TopBar.Parent = MainFrame
-TopBar.BackgroundColor3 = Color3.fromRGB(20, 35, 65)
-TopBar.Size = UDim2.new(1, 0, 0, 30)
+-- Sidebar (Tempat Tombol Tab)
+local Sidebar = Instance.new("Frame")
+Sidebar.Size = UDim2.new(0, 120, 1, 0)
+Sidebar.BackgroundColor3 = Color3.fromRGB(20, 25, 30)
+Sidebar.BorderSizePixel = 0
+Sidebar.Parent = MainFrame
 
-local TopCorner = Instance.new("UICorner")
-TopCorner.CornerRadius = UDim.new(0, 8)
-TopCorner.Parent = TopBar
+local SidebarCorner = Instance.new("UICorner")
+SidebarCorner.Parent = Sidebar
 
-Title.Parent = TopBar
-Title.BackgroundTransparency = 1
-Title.Position = UDim2.new(0, 10, 0, 0)
-Title.Size = UDim2.new(0, 100, 1, 0)
-Title.Font = Enum.Font.GothamBold
+-- Judul
+local Title = Instance.new("TextLabel")
 Title.Text = "Joey Hub"
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.BackgroundTransparency = 1
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 14
-Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 18
+Title.Parent = Sidebar
 
--- Close Button (X)
-CloseBtn.Name = "CloseBtn"
-CloseBtn.Parent = TopBar
-CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
-CloseBtn.Position = UDim2.new(1, -30, 0, 5)
-CloseBtn.Size = UDim2.new(0, 20, 0, 20)
-CloseBtn.Text = "X"
-CloseBtn.TextColor3 = Color3.white
-CloseBtn.Font = Enum.Font.GothamBold
+-- Konten (Tempat Isi Tab)
+local ContentFrame = Instance.new("Frame")
+ContentFrame.Position = UDim2.new(0, 130, 0, 10)
+ContentFrame.Size = UDim2.new(1, -140, 1, -20)
+ContentFrame.BackgroundTransparency = 1
+ContentFrame.Parent = MainFrame
 
-local CloseCorner = Instance.new("UICorner")
-CloseCorner.CornerRadius = UDim.new(1, 0)
-CloseCorner.Parent = CloseBtn
+-- Fungsi Tween untuk Animasi
+local function FadeIn(frame)
+    frame.Visible = true
+    frame.GroupTransparency = 1
+    local tween = TweenService:Create(frame, TweenInfo.new(0.3), {GroupTransparency = 0})
+    tween:Play()
+end
 
--- Minimize Button (-)
-MinBtn.Name = "MinBtn"
-MinBtn.Parent =
+-- Tab Management
+local Tabs = {}
+local function CreateTab(name)
+    local TabButton = Instance.new("TextButton")
+    TabButton.Size = UDim2.new(1, -10, 0, 35)
+    TabButton.Position = UDim2.new(0, 5, 0, 45 + (#Sidebar:GetChildren() * 40))
+    TabButton.BackgroundColor3 = Color3.fromRGB(30, 35, 40)
+    TabButton.Text = name
+    TabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+    TabButton.Font = Enum.Font.Gotham
+    TabButton.Parent = Sidebar
+    
+    local TabContent = Instance.new("CanvasGroup") -- CanvasGroup bagus untuk Fade Effect
+    TabContent.Size = UDim2.new(1, 0, 1, 0)
+    TabContent.BackgroundTransparency = 1
+    TabContent.Visible = false
+    TabContent.Parent = ContentFrame
+    
+    TabButton.MouseButton1Click:Connect(function()
+        for _, v in pairs(ContentFrame:GetChildren()) do
+            v.Visible = false
+        end
+        FadeIn(TabContent)
+        
+        -- Animasi warna tombol saat diklik
+        TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 150, 255)}):Play()
+        task.wait(0.2)
+        TweenService:Create(TabButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(30, 35, 40)}):Play()
+    end)
+    
+    return TabContent
+end
+
+-- [[ MEMBUAT TAB SESUAI GAMBAR ]]
+local FishingTab = CreateTab("Fishing")
+local TradingTab = CreateTab("Trading")
+local BlatantTab
