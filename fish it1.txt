@@ -1,48 +1,50 @@
-local ScreenGui = Instance.new("ScreenGui")
-local MainFrame = Instance.new("Frame")
-local TitleBar = Instance.new("Frame")
-local TitleText = Instance.new("TextLabel")
-local CloseButton = Instance.new("TextButton")
-local SideBar = Instance.new("Frame")
-local UIListLayout = Instance.new("UIListLayout")
+-- 1. Hapus GUI lama jika sudah ada (Agar perubahan langsung terlihat saat Execute)
+local oldGui = game:GetService("CoreGui"):FindFirstChild("JoeyTesting_Final") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("JoeyTesting_Final")
+if oldGui then
+    oldGui:Destroy()
+end
 
--- 1. Wadah Utama
+-- 2. Setup ScreenGui Utama
+local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "JoeyTesting_Final"
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.ResetOnSpawn = false
 
--- 2. Main Frame (Background Hitam)
+-- 3. Main Frame (Body)
+local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 MainFrame.BorderSizePixel = 0
 MainFrame.Position = UDim2.new(0.5, -200, 0.5, -135)
-MainFrame.Size = UDim2.new(0, 400, 0, 270)
+MainFrame.Size = UDim2.new(0, 420, 0, 270)
 MainFrame.Active = true
-MainFrame.Draggable = true -- Memungkinkan geser frame
+MainFrame.Draggable = true -- Bisa digeser
 
--- 3. Title Bar (Bagian Atas - Di dalam MainFrame)
+-- 4. Title Bar (Header) - Ini yang membuat rapi
+local TitleBar = Instance.new("Frame")
 TitleBar.Name = "TitleBar"
 TitleBar.Parent = MainFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35) -- Warna lebih terang dari body
+TitleBar.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
 TitleBar.BorderSizePixel = 0
 TitleBar.Size = UDim2.new(1, 0, 0, 35)
 
--- Judul "JoeyTesting"
+local TitleText = Instance.new("TextLabel")
 TitleText.Parent = TitleBar
 TitleText.BackgroundTransparency = 1
-TitleText.Position = UDim2.new(0, 10, 0, 0)
+TitleText.Position = UDim2.new(0, 15, 0, 0)
 TitleText.Size = UDim2.new(0, 200, 1, 0)
 TitleText.Font = Enum.Font.SourceSansBold
-TitleText.Text = "JoeyTesting"
+TitleText.Text = "JoeyTesting | Premium Menu"
 TitleText.TextColor3 = Color3.fromRGB(0, 255, 150)
 TitleText.TextSize = 18
 TitleText.TextXAlignment = Enum.TextXAlignment.Left
 
--- Tombol Close (X) - Menempel di TitleBar
+-- 5. Tombol Close (X) di pojok kanan Title Bar
+local CloseButton = Instance.new("TextButton")
 CloseButton.Name = "CloseButton"
 CloseButton.Parent = TitleBar
-CloseButton.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+CloseButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
 CloseButton.BorderSizePixel = 0
 CloseButton.Position = UDim2.new(1, -35, 0, 0)
 CloseButton.Size = UDim2.new(0, 35, 1, 0)
@@ -51,38 +53,35 @@ CloseButton.Text = "X"
 CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 CloseButton.TextSize = 18
 
--- 4. Sidebar (Menu Samping - Di bawah TitleBar)
+-- 6. Sidebar (Samping)
+local SideBar = Instance.new("Frame")
 SideBar.Name = "SideBar"
 SideBar.Parent = MainFrame
-SideBar.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+SideBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 SideBar.BorderSizePixel = 0
 SideBar.Position = UDim2.new(0, 0, 0, 35)
-SideBar.Size = UDim2.new(0, 100, 1, -35)
+SideBar.Size = UDim2.new(0, 110, 1, -35)
 
+local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Parent = SideBar
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Fungsi Tombol Samping
+-- Fungsi Tambah Tab
 local function AddTab(name)
     local btn = Instance.new("TextButton")
     btn.Parent = SideBar
-    btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    btn.BackgroundTransparency = 1 -- Transparan agar bersih
+    btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    btn.BackgroundTransparency = 1
     btn.BorderSizePixel = 0
-    btn.Size = UDim2.new(1, 0, 0, 35)
+    btn.Size = UDim2.new(1, 0, 0, 38)
     btn.Font = Enum.Font.SourceSans
     btn.Text = name
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.TextSize = 15
-    
-    -- Efek Hover (Opsional)
-    btn.MouseEnter:Connect(function() btn.BackgroundTransparency = 0.8 end)
-    btn.MouseLeave:Connect(function() btn.BackgroundTransparency = 1 end)
-    
     return btn
 end
 
--- Tambah Menu (Persis Gambar)
+-- Daftar Menu
 AddTab("Fishing")
 AddTab("Automatically")
 AddTab("Teleport")
@@ -90,9 +89,7 @@ AddTab("Quest")
 AddTab("Trading")
 AddTab("Menu")
 
---- FUNGSIONALITAS ---
-
--- Tutup Menu
+-- Fungsi Close
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
 end)
