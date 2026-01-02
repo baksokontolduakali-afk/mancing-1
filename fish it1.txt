@@ -1,45 +1,32 @@
--- Hapus GUI lama jika ada
-local existingGui = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui"):FindFirstChild("JoeyHubDelta")
-if existingGui then existingGui:Destroy() end
-
 local TweenService = game:GetService("TweenService")
-local Player = game:GetService("Players").LocalPlayer
-local PlayerGui = Player:WaitForChild("PlayerGui")
+local UserInputService = game:GetService("UserInputService")
 
--- Container Utama
+-- 1. Membuat ScreenGui
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "JoeyHubDelta"
-ScreenGui.Parent = PlayerGui
+ScreenGui.Name = "CharlesHubGui"
+ScreenGui.Parent = game:GetService("CoreGui") -- Agar tidak hilang saat reset (jika executor support)
 ScreenGui.ResetOnSpawn = false
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
--- Main Frame
+-- 2. Main Frame (Panel Utama)
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 300, 0, 180)
-MainFrame.Position = UDim2.new(0.5, -150, 0.4, -90)
-MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.Size = UDim2.new(0, 400, 0, 250)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 25, 45) -- Warna Biru Gelap
 MainFrame.BorderSizePixel = 0
-MainFrame.Active = true
-MainFrame.Draggable = true -- Delta sangat stabil dengan fungsi bawaan ini
+MainFrame.ClipsDescendants = true
 MainFrame.Parent = ScreenGui
 
+-- Corner Bulat
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 10)
 UICorner.Parent = MainFrame
 
--- Shadow / Glow efek sederhana
-local Stroke = Instance.new("UIStroke")
-Stroke.Thickness = 2
-Stroke.Color = Color3.fromRGB(50, 50, 50)
-Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-Stroke.Parent = MainFrame
-
--- Header
+-- 3. Top Bar
 local TopBar = Instance.new("Frame")
 TopBar.Name = "TopBar"
-TopBar.Size = UDim2.new(1, 0, 0, 40)
-TopBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+TopBar.Size = UDim2.new(1, 0, 0, 35)
+TopBar.BackgroundColor3 = Color3.fromRGB(20, 35, 65)
 TopBar.BorderSizePixel = 0
 TopBar.Parent = MainFrame
 
@@ -48,71 +35,76 @@ TopCorner.CornerRadius = UDim.new(0, 10)
 TopCorner.Parent = TopBar
 
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, -80, 1, 0)
+Title.Text = "Charles Hub"
+Title.Size = UDim2.new(0, 100, 1, 0)
 Title.Position = UDim2.new(0, 15, 0, 0)
-Title.Text = "Joey Hub"
-Title.TextColor3 = Color3.white
-Title.TextSize = 18
-Title.Font = Enum.Font.GothamBold
 Title.BackgroundTransparency = 1
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Font = Enum.Font.GothamBold
+Title.TextSize = 16
 Title.Parent = TopBar
 
--- Button Container (X dan -)
-local BtnContainer = Instance.new("Frame")
-BtnContainer.Size = UDim2.new(0, 80, 1, 0)
-BtnContainer.Position = UDim2.new(1, -85, 0, 0)
-BtnContainer.BackgroundTransparency = 1
-BtnContainer.Parent = TopBar
-
--- Close Button
+-- 4. Tombol Close (X)
 local CloseBtn = Instance.new("TextButton")
+CloseBtn.Name = "CloseBtn"
 CloseBtn.Size = UDim2.new(0, 25, 0, 25)
-CloseBtn.Position = UDim2.new(0.6, 0, 0.2, 0)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 70, 70)
-CloseBtn.Text = ""
-CloseBtn.Parent = BtnContainer
-Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(1, 0)
+CloseBtn.Position = UDim2.new(1, -35, 0, 5)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(150, 40, 40)
+CloseBtn.Text = "X"
+CloseBtn.TextColor3 = Color3.white
+CloseBtn.Parent = TopBar
 
--- Minimize Button
-local MinBtn = Instance.new("TextButton")
-MinBtn.Size = UDim2.new(0, 25, 0, 25)
-MinBtn.Position = UDim2.new(0.1, 0, 0.2, 0)
-MinBtn.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-MinBtn.Text = ""
-MinBtn.Parent = BtnContainer
-Instance.new("UICorner", MinBtn).CornerRadius = UDim.new(1, 0)
+local CloseCorner = Instance.new("UICorner")
+CloseCorner.CornerRadius = UDim.new(1, 0)
+CloseCorner.Parent = CloseBtn
 
--- Info Text
-local InfoText = Instance.new("TextLabel")
-InfoText.Size = UDim2.new(1, 0, 1, -40)
-InfoText.Position = UDim2.new(0, 0, 0, 40)
-InfoText.BackgroundTransparency = 1
-InfoText.Text = "Joey Hub Loaded\nStatus: Active\nGame: Fish It"
-InfoText.TextColor3 = Color3.fromRGB(180, 180, 180)
-InfoText.Font = Enum.Font.Gotham
-InfoText.TextSize = 14
-InfoText.Parent = MainFrame
+-- 5. Content (Teks di Tengah)
+local Content = Instance.new("TextLabel")
+Content.Size = UDim2.new(1, 0, 1, -35)
+Content.Position = UDim2.new(0, 0, 0, 35)
+Content.BackgroundTransparency = 1
+Content.Text = "Charles Hub\n\n• Mobile UI\n• Blue Theme\n• Mini Animated"
+Content.TextColor3 = Color3.fromRGB(200, 210, 230)
+Content.Font = Enum.Font.Gotham
+Content.TextSize = 14
+Content.Parent = MainFrame
 
--- TWEEN LOGIC
-local function toggleGui(minimize)
-    local targetSize = minimize and UDim2.new(0, 300, 0, 40) or UDim2.new(0, 300, 0, 180)
-    local tweenInfo = TweenInfo.new(0.4, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
-    
-    TweenService:Create(MainFrame, tweenInfo, {Size = targetSize}):Play()
-    InfoText.Visible = not minimize
-end
+--- ANIMASI TWEEN ---
 
-local isMinimized = false
-MinBtn.MouseButton1Click:Connect(function()
-    isMinimized = not isMinimized
-    toggleGui(isMinimized)
-end)
+-- Fungsi Pop-up Muncul
+MainFrame.Size = UDim2.new(0, 0, 0, 0) -- Mulai dari kecil
+local openTween = TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {Size = UDim2.new(0, 400, 0, 250)})
+openTween:Play()
 
+-- Fungsi Close
 CloseBtn.MouseButton1Click:Connect(function()
-    local tween = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {Size = UDim2.new(0,0,0,0)})
-    tween:Play()
-    tween.Completed:Connect(function() ScreenGui:Destroy() end)
+	local closeTween = TweenService:Create(MainFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {Size = UDim2.new(0, 0, 0, 0), ImageTransparency = 1})
+	closeTween:Play()
+	closeTween.Completed:Connect(function()
+		ScreenGui:Destroy()
+	end)
 end)
 
-print("Joey Hub successfully executed!")
+-- SCRIPT DRAGGABLE (Agar bisa digeser di Mobile)
+local dragging, dragInput, dragStart, startPos
+TopBar.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = MainFrame.Position
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		local delta = input.Position - dragStart
+		MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = false
+	end
+end)
