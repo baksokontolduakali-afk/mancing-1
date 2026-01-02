@@ -4,7 +4,7 @@ local UserInputService = game:GetService("UserInputService")
 
 local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
 
--- Hapus GUI lama jika ada
+-- Hapus GUI lama agar tidak double
 if PlayerGui:FindFirstChild("JoeyHub") then
     PlayerGui.JoeyHub:Destroy()
 end
@@ -14,20 +14,92 @@ ScreenGui.Name = "JoeyHub"
 ScreenGui.Parent = PlayerGui
 ScreenGui.ResetOnSpawn = false
 
--- Frame Utama
+-- [[ FRAME UTAMA ]]
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 450, 0, 280)
 MainFrame.Position = UDim2.new(0.5, -225, 0.5, -140)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 MainFrame.BorderSizePixel = 0
+MainFrame.ClipsDescendants = true
 MainFrame.Parent = ScreenGui
 
 local UICorner = Instance.new("UICorner")
 UICorner.CornerRadius = UDim.new(0, 8)
 UICorner.Parent = MainFrame
 
--- Sidebar
+-- [[ TOP BAR (Tempat Tombol Close/Minimize) ]]
+local TopBar = Instance.new("Frame")
+TopBar.Size = UDim2.new(1, 0, 0, 30)
+TopBar.BackgroundTransparency = 1
+TopBar.Parent = MainFrame
+
+local ButtonsHolder = Instance.new("Frame")
+ButtonsHolder.Size = UDim2.new(0, 70, 1, 0)
+ButtonsHolder.Position = UDim2.new(1, -75, 0, 0)
+ButtonsHolder.BackgroundTransparency = 1
+ButtonsHolder.Parent = TopBar
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.FillDirection = Enum.FillDirection.Horizontal
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+UIListLayout.Padding = UDim.new(0, 5)
+UIListLayout.Parent = ButtonsHolder
+
+-- Fungsi Buat Tombol Control
+local function CreateControlBtn(name, text, color)
+    local btn = Instance.new("TextButton")
+    btn.Name = name
+    btn.Size = UDim2.new(0, 25, 0, 25)
+    btn.BackgroundColor3 = color
+    btn.Text = text
+    btn.Font = Enum.Font.GothamBold
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.TextSize = 14
+    btn.Parent = ButtonsHolder
+    
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(1, 0)
+    btnCorner.Parent = btn
+    
+    return btn
+end
+
+local MinBtn = CreateControlBtn("MinBtn", "-", Color3.fromRGB(200, 150, 50))
+local CloseBtn = CreateControlBtn("CloseBtn", "X", Color3.fromRGB(200, 50, 50))
+
+-- [[ TOMBOL OPEN (Muncul saat Minimize) ]]
+local OpenBtn = Instance.new("TextButton")
+OpenBtn.Size = UDim2.new(0, 50, 0, 50)
+OpenBtn.Position = UDim2.new(0, 10, 0.5, -25)
+OpenBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+OpenBtn.Text = "Joey"
+OpenBtn.Font = Enum.Font.GothamBold
+OpenBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+OpenBtn.Visible = false
+OpenBtn.Parent = ScreenGui
+
+local OpenCorner = Instance.new("UICorner")
+OpenCorner.CornerRadius = UDim.new(1, 0)
+OpenCorner.Parent = OpenBtn
+
+-- [[ LOGIC BUTTONS ]]
+CloseBtn.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy()
+end)
+
+MinBtn.MouseButton1Click:Connect(function()
+    MainFrame.Visible = false
+    OpenBtn.Visible = true
+end)
+
+OpenBtn.MouseButton1Click:Connect(function()
+    MainFrame.Visible = true
+    OpenBtn.Visible = false
+end)
+
+-- [[ SIDEBAR & CONTENT ]]
 local Sidebar = Instance.new("Frame")
 Sidebar.Size = UDim2.new(0, 130, 1, 0)
 Sidebar.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
@@ -46,91 +118,13 @@ Title.TextSize = 16
 Title.BackgroundTransparency = 1
 Title.Parent = Sidebar
 
--- Container Isi
 local Container = Instance.new("Frame")
-Container.Position = UDim2.new(0, 140, 0, 10)
-Container.Size = UDim2.new(1, -150, 1, -20)
+Container.Position = UDim2.new(0, 140, 0, 40)
+Container.Size = UDim2.new(1, -150, 1, -50)
 Container.BackgroundTransparency = 1
 Container.Parent = MainFrame
 
--- Fungsi Drag Manual (Lebih Stabil di Delta)
+-- [[ DRAG LOGIC ]]
 local dragging, dragInput, dragStart, startPos
 MainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = MainFrame.Position
-    end
-end)
-
-MainFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-        dragInput = input
-    end
-end)
-
-UserInputService.InputChanged:Connect(function(input)
-    if input == dragInput and dragging then
-        local delta = input.Position - dragStart
-        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-end)
-
-UserInputService.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = false
-    end
-end)
-
--- Fungsi Buat Tab
-local function CreateTab(name, order)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0.9, 0, 0, 35)
-    btn.Position = UDim2.new(0.05, 0, 0, 50 + (order * 40))
-    btn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-    btn.Text = name
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.Font = Enum.Font.Gotham
-    btn.TextSize = 14
-    btn.Parent = Sidebar
-    
-    local corner = Instance.new("UICorner")
-    corner.CornerRadius = UDim.new(0, 6)
-    corner.Parent = btn
-
-    local page = Instance.new("ScrollingFrame")
-    page.Size = UDim2.new(1, 0, 1, 0)
-    page.BackgroundTransparency = 1
-    page.Visible = false
-    page.ScrollBarThickness = 2
-    page.Parent = Container
-
-    btn.MouseButton1Click:Connect(function()
-        for _, v in pairs(Container:GetChildren()) do v.Visible = false end
-        page.Visible = true
-        -- Animasi Click
-        local tw = TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(60, 60, 60)})
-        tw:Play()
-        tw.Completed:Connect(function()
-            TweenService:Create(btn, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 35)}):Play()
-        end)
-    end)
-    
-    return page
-end
-
--- Tambahkan Tab
-local fishPage = CreateTab("Fishing", 0)
-local tradePage = CreateTab("Trading", 1)
-local blatantPage = CreateTab("Blatant", 2)
-
--- Tombol Contoh di Tab Fishing
-local autoFishBtn = Instance.new("TextButton")
-autoFishBtn.Size = UDim2.new(1, 0, 0, 40)
-autoFishBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-autoFishBtn.Text = "Enable Auto Fishing"
-autoFishBtn.TextColor3 = Color3.fromRGB(0, 255, 150)
-autoFishBtn.Font = Enum.Font.GothamSemibold
-autoFishBtn.Parent = fishPage
-
-fishPage.Visible = true -- Default Tab
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType
