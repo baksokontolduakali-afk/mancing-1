@@ -1,4 +1,4 @@
--- [[ JOEY HUB - FIXED CONTROLS ]]
+-- [[ JOEY HUB - FULL COMPLETE VERSION ]]
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -10,6 +10,7 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "JoeyHub"
 ScreenGui.Parent = PlayerGui
 ScreenGui.ResetOnSpawn = false
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 -- [[ FRAME UTAMA ]]
 local MainFrame = Instance.new("Frame")
@@ -22,7 +23,7 @@ MainFrame.Parent = ScreenGui
 MainFrame.ZIndex = 2
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
 
--- [[ HEADER & CONTROLS (POSISI DIPERBAIKI) ]]
+-- [[ HEADER & CONTROLS (FIXED POSITION) ]]
 local Header = Instance.new("Frame")
 Header.Size = UDim2.new(1, 0, 0, 35)
 Header.BackgroundTransparency = 1
@@ -37,26 +38,29 @@ ControlButtons.Parent = Header
 
 local UIList = Instance.new("UIListLayout")
 UIList.FillDirection = Enum.FillDirection.Horizontal
-UIList.HorizontalAlignment = Enum.HorizontalAlignment.Right -- Biar rapi ke kanan
+UIList.HorizontalAlignment = Enum.HorizontalAlignment.Right
 UIList.VerticalAlignment = Enum.VerticalAlignment.Center
+UIList.SortOrder = Enum.SortOrder.LayoutOrder -- Mengunci urutan tombol
 UIList.Padding = UDim.new(0, 8)
 UIList.Parent = ControlButtons
 
-local function CreateControl(text, color, callback)
+-- Fungsi Buat Tombol Control
+local function CreateControl(text, color, order, callback)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 28, 0, 28)
     btn.BackgroundColor3 = color
     btn.Text = text
+    btn.LayoutOrder = order
     btn.Font = Enum.Font.GothamBold
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Parent = ControlButtons
     Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
     btn.MouseButton1Click:Connect(callback)
-    return btn
 end
 
--- Floating Button saat minimize
+-- Tombol Open saat minimize
 local OpenBtn = Instance.new("TextButton")
+OpenBtn.Name = "OpenBtn"
 OpenBtn.Size = UDim2.new(0, 55, 0, 55)
 OpenBtn.Position = UDim2.new(0, 15, 0.5, -25)
 OpenBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
@@ -67,20 +71,10 @@ OpenBtn.Visible = false
 OpenBtn.Parent = ScreenGui
 Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(1, 0)
 
--- URUTAN TOMBOL: Minimize dulu baru Close (agar X paling pojok kanan)
-CreateControl("-", Color3.fromRGB(40, 40, 40), function() 
-    MainFrame.Visible = false 
-    OpenBtn.Visible = true 
-end)
-
-CreateControl("X", Color3.fromRGB(180, 50, 50), function() 
-    ScreenGui:Destroy() 
-end)
-
-OpenBtn.MouseButton1Click:Connect(function() 
-    MainFrame.Visible = true 
-    OpenBtn.Visible = false 
-end)
+-- URUTAN: Minimize (1) lalu Close (2) agar X di paling kanan
+CreateControl("-", Color3.fromRGB(40, 40, 40), 1, function() MainFrame.Visible = false OpenBtn.Visible = true end)
+CreateControl("X", Color3.fromRGB(180, 50, 50), 2, function() ScreenGui:Destroy() end)
+OpenBtn.MouseButton1Click:Connect(function() MainFrame.Visible = true OpenBtn.Visible = false end)
 
 -- [[ SIDEBAR ]]
 local Sidebar = Instance.new("Frame")
@@ -120,11 +114,11 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 UserInputService.InputEnded:Connect(function(input) dragging = false end)
 
--- [[ BUILDER FUNCTIONS ]]
+-- [[ TAB & TOGGLE BUILDER ]]
 local function CreatePage(name, order)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0.9, 0, 0, 35)
-    btn.Position = UDim2.new(0.05, 0, 0, 50 + (order * 40))
+    btn.Position = UDim2.new(0.05, 0, 0, 55 + (order * 42))
     btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     btn.Text = name
     btn.TextColor3 = Color3.fromRGB(200, 200, 200)
@@ -136,9 +130,10 @@ local function CreatePage(name, order)
     page.Size = UDim2.new(1, 0, 1, 0)
     page.BackgroundTransparency = 1
     page.Visible = false
-    page.ScrollBarThickness = 0
+    page.ScrollBarThickness = 2
     page.Parent = Container
-    Instance.new("UIListLayout", page).Padding = UDim.new(0, 8)
+    local layout = Instance.new("UIListLayout", page)
+    layout.Padding = UDim.new(0, 8)
 
     btn.MouseButton1Click:Connect(function()
         for _, v in pairs(Container:GetChildren()) do v.Visible = false end
@@ -147,16 +142,32 @@ local function CreatePage(name, order)
     return page
 end
 
--- [[ SETUP TABS & CONTENT ]]
-local fishTab = CreatePage("Fishing", 0)
-fishTab.Visible = true
+local function CreateToggle(name, parent, callback)
+    local toggleBtn = Instance.new("TextButton")
+    toggleBtn.Size = UDim2.new(1, 0, 0, 40)
+    toggleBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    toggleBtn.Text = "   " .. name
+    toggleBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
+    toggleBtn.Font = Enum.Font.Gotham
+    toggleBtn.TextXAlignment = Enum.TextXAlignment.Left
+    toggleBtn.Parent = parent
+    Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(0, 6)
 
-local lbl = Instance.new("TextLabel")
-lbl.Size = UDim2.new(1, 0, 0, 30)
-lbl.BackgroundTransparency = 1
-lbl.Text = "Joey Hub Loaded!"
-lbl.TextColor3 = Color3.fromRGB(0, 255, 150)
-lbl.Font = Enum.Font.GothamBold
-lbl.Parent = fishTab
+    local box = Instance.new("Frame")
+    box.Size = UDim2.new(0, 32, 0, 16)
+    box.Position = UDim2.new(1, -42, 0.5, -8)
+    box.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    box.Parent = toggleBtn
+    Instance.new("UICorner", box).CornerRadius = UDim.new(1, 0)
 
-print("Joey Hub: Tombol sudah diperbaiki posisinya!")
+    local dot = Instance.new("Frame")
+    dot.Size = UDim2.new(0, 12, 0, 12)
+    dot.Position = UDim2.new(0, 2, 0.5, -6)
+    dot.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    dot.Parent = box
+    Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
+
+    local active = false
+    toggleBtn.MouseButton1Click:Connect(function()
+        active = not active
+        local
