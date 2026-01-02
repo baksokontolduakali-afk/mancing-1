@@ -7,8 +7,8 @@ local CloseButton = Instance.new("TextButton")
 local UICorner = Instance.new("UICorner")
 local UICorner_2 = Instance.new("UICorner")
 
--- Properti ScreenGui
-ScreenGui.Parent = game.CoreGui -- Menggunakan CoreGui agar tidak hilang saat mati (reset)
+-- Properti ScreenGui (Pindah ke PlayerGui agar lebih aman)
+ScreenGui.Parent = game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
 ScreenGui.Name = "JoeyHubGui"
 ScreenGui.ResetOnSpawn = false
 
@@ -20,7 +20,6 @@ MainFrame.BackgroundTransparency = 0.1
 MainFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
 MainFrame.Size = UDim2.new(0, 300, 0, 200)
 MainFrame.Active = true
-MainFrame.Draggable = true 
 
 UICorner.CornerRadius = UDim.new(0, 8)
 UICorner.Parent = MainFrame
@@ -28,13 +27,13 @@ UICorner.Parent = MainFrame
 -- Bar Judul
 TitleBar.Name = "TitleBar"
 TitleBar.Parent = MainFrame
-TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 30) -- Sudah diperbaiki
+TitleBar.BackgroundColor3 = Color3.fromRGB(20, 20, 30)
 TitleBar.Size = UDim2.new(1, 0, 0, 35)
 
 UICorner_2.CornerRadius = UDim.new(0, 8)
 UICorner_2.Parent = TitleBar
 
--- Teks Judul (Murni Joey Hub)
+-- Teks Judul
 TitleText.Name = "TitleText"
 TitleText.Parent = TitleBar
 TitleText.BackgroundTransparency = 1
@@ -49,7 +48,6 @@ TitleText.TextXAlignment = Enum.TextXAlignment.Left
 -- Tombol Close (X)
 CloseButton.Name = "CloseButton"
 CloseButton.Parent = TitleBar
-CloseButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 CloseButton.BackgroundTransparency = 1
 CloseButton.Position = UDim2.new(1, -35, 0, 0)
 CloseButton.Size = UDim2.new(0, 35, 0, 35)
@@ -61,4 +59,42 @@ CloseButton.TextSize = 18
 -- Fungsi Tutup
 CloseButton.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
+end)
+
+-- SCRIPT SUPAYA BISA DIGESER (Manual Draggable)
+local UserInputService = game:GetService("UserInputService")
+local dragging
+local dragInput
+local dragStart
+local startPos
+
+local function update(input)
+    local delta = input.Position - dragStart
+    MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+end
+
+MainFrame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+        dragging = true
+        dragStart = input.Position
+        startPos = MainFrame.Position
+        
+        input.Changed:Connect(function()
+            if input.UserInputState == Enum.UserInputState.End then
+                dragging = false
+            end
+        end)
+    end
+end)
+
+MainFrame.InputChanged:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+        dragInput = input
+    end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if input == dragInput and dragging then
+        update(input)
+    end
 end)
