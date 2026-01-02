@@ -1,53 +1,49 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- Fungsi untuk memulai GUI dengan Loading
-local function LaunchJoeyHub()
-    local Window = Rayfield:CreateWindow({
-       Name = "Joey Hub",
-       LoadingTitle = "Joey Hub Executive",
-       LoadingSubtitle = "Menyiapkan Data...",
-       ConfigurationSaving = { Enabled = false },
-       KeySystem = false,
-    })
+-- 1. Inisialisasi Window
+local Window = Rayfield:CreateWindow({
+   Name = "Joey Hub",
+   LoadingTitle = "Joey Hub Executive",
+   LoadingSubtitle = "Menyiapkan Data...",
+   ConfigurationSaving = { Enabled = false },
+   KeySystem = false,
+})
 
-    -- Animasi Loading 1% - 100%
-    for i = 1, 100 do
-        task.wait(0.02) -- Kecepatan loading
-        Window:ModifyLoadingSubtitle("Loading: " .. i .. "%")
-    end
-
-    Window:ModifyLoadingSubtitle("Selesai!")
-    task.wait(0.5)
-
-    -- PROSES MENGHAPUS TEKS/WATERMARK RAYFIELD
-    pcall(function()
-        local coreGui = game:GetService("CoreGui")
-        local ui = coreGui:FindFirstChild("Rayfield") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Rayfield")
-        if ui and ui:FindFirstChild("Main") then
-            if ui.Main:FindFirstChild("Navigation") and ui.Main.Navigation:FindFirstChild("Badge") then
-                ui.Main.Navigation.Badge:Destroy() -- Menghapus logo kecil
-            end
-            if ui.Main:FindFirstChild("Status") then
-                ui.Main.Status:Destroy() -- Menghapus teks versi/watermark di bawah
-            end
-        end
-    end)
-
-    return Window
+-- 2. Animasi Loading 1% - 100%
+for i = 1, 100 do
+    task.wait(0.02)
+    Window:ModifyLoadingSubtitle("Memuat: " .. i .. "%")
 end
 
--- Eksekusi
-local Window = LaunchJoeyHub()
+Window:ModifyLoadingSubtitle("Selesai!")
+task.wait(0.3)
 
--- Warna Tema Pink
+-- 3. Mengganti Tulisan Rayfield di UI menjadi Joey Hub & Set Warna Pink
 Rayfield:SetTheme("Pink")
 
--- Tab Utama
+-- Fungsi ini akan mencari teks "Rayfield" di dalam GUI dan mengubahnya jadi "Joey Hub"
+pcall(function()
+    local coreGui = game:GetService("CoreGui")
+    local ui = coreGui:FindFirstChild("Rayfield") or game:GetService("Players").LocalPlayer.PlayerGui:FindFirstChild("Rayfield")
+    
+    if ui then
+        -- Mencari semua teks berlabel "Rayfield" di bagian bawah/samping
+        for _, v in pairs(ui:GetDescendants()) do
+            if v:IsA("TextLabel") and (v.Text:find("Rayfield") or v.Text:find("rayfield")) then
+                v.Text = v.Text:gsub("Rayfield", "Joey Hub")
+                v.Text = v.Text:gsub("rayfield", "Joey Hub")
+            end
+        end
+    end
+end)
+
+-- 4. Membuat Konten (Hanya Tab & Section sesuai permintaan)
 local Tab = Window:CreateTab("Home", 4483362458)
 local Section = Tab:CreateSection("Joey Hub | Active")
 
+-- Notifikasi Akhir
 Rayfield:Notify({
    Title = "Joey Hub",
-   Content = "Selamat datang!",
+   Content = "Script Berhasil Terpasang!",
    Duration = 3,
 })
