@@ -1,68 +1,64 @@
--- Simple GUI tanpa tab
--- LocalScript (StarterPlayerScripts / Executor)
+-- Referensi Layanan
+local CoreGui = game:GetService("CoreGui")
+local TweenService = game:GetService("TweenService")
 
-local player = game.Players.LocalPlayer
-local gui = Instance.new("ScreenGui")
-gui.Name = "SimplePanelGUI"
-gui.Parent = player:WaitForChild("PlayerGui")
+-- 1. Membuat ScreenGui Utama
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "JoeyTestingMenu"
+ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ResetOnSpawn = false
 
--- Panel utama
-local mainFrame = Instance.new("Frame")
-mainFrame.Parent = gui
-mainFrame.Size = UDim2.new(0, 420, 0, 260)
-mainFrame.Position = UDim2.new(0.5, -210, 0.5, -130)
-mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-mainFrame.BackgroundTransparency = 0.1
-mainFrame.BorderSizePixel = 0
-mainFrame.Active = true
-mainFrame.Draggable = true
+-- 2. Frame Utama (Background)
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 400, 0, 250)
+MainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.BorderSizePixel = 0
+MainFrame.Active = true
+MainFrame.Draggable = true -- Agar menu bisa digeser
+MainFrame.Parent = ScreenGui
 
--- Corner (biar smooth)
-local corner = Instance.new("UICorner", mainFrame)
-corner.CornerRadius = UDim.new(0, 10)
+-- 3. Sidebar (Tempat Tombol Menu)
+local SideBar = Instance.new("Frame")
+SideBar.Name = "SideBar"
+SideBar.Size = UDim2.new(0, 100, 1, 0)
+SideBar.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+SideBar.BorderSizePixel = 0
+SideBar.Parent = MainFrame
 
--- Judul
-local title = Instance.new("TextLabel")
-title.Parent = mainFrame
-title.Size = UDim2.new(1, -20, 0, 40)
-title.Position = UDim2.new(0, 10, 0, 10)
-title.Text = "JoeYTesting"
-title.TextColor3 = Color3.fromRGB(0, 255, 180)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 20
-title.BackgroundTransparency = 1
-title.TextXAlignment = Enum.TextXAlignment.Left
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Parent = SideBar
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Garis pemisah
-local line = Instance.new("Frame")
-line.Parent = mainFrame
-line.Size = UDim2.new(1, -20, 0, 1)
-line.Position = UDim2.new(0, 10, 0, 55)
-line.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-line.BorderSizePixel = 0
+-- Fungsi untuk membuat tombol di sidebar
+local function CreateTab(name)
+	local TabButton = Instance.new("TextButton")
+	TabButton.Size = UDim2.new(1, 0, 0, 40)
+	TabButton.BackgroundTransparency = 1
+	TabButton.Text = name
+	TabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+	TabButton.Font = Enum.Font.SourceSans
+	TabButton.TextSize = 16
+	TabButton.Parent = SideBar
+	return TabButton
+end
 
--- Area konten
-local content = Instance.new("Frame")
-content.Parent = mainFrame
-content.Size = UDim2.new(1, -20, 1, -75)
-content.Position = UDim2.new(0, 10, 0, 65)
-content.BackgroundTransparency = 1
+-- Membuat kategori sesuai gambar
+local FishingBtn = CreateTab("Fishing")
+local AutoBtn = CreateTab("Automatically")
+local TeleportBtn = CreateTab("Teleport")
+local QuestBtn = CreateTab("Quest")
+local TradingBtn = CreateTab("Trading")
+local MenuBtn = CreateTab("Menu")
 
--- Contoh tombol
-local button = Instance.new("TextButton")
-button.Parent = content
-button.Size = UDim2.new(0, 160, 0, 40)
-button.Position = UDim2.new(0, 0, 0, 0)
-button.Text = "Example Button"
-button.Font = Enum.Font.Gotham
-button.TextSize = 14
-button.TextColor3 = Color3.new(1,1,1)
-button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
-button.BorderSizePixel = 0
-
-local btnCorner = Instance.new("UICorner", button)
-btnCorner.CornerRadius = UDim.new(0, 6)
-
-button.MouseButton1Click:Connect(function()
-    print("Button clicked")
-end)
+-- 4. Label Header (JoeyTesting)
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(0, 300, 0, 30)
+Title.Position = UDim2.new(0.25, 0, 0, 10)
+Title.BackgroundTransparency = 1
+Title.Text = "JoeyTesting"
+Title.TextColor3 = Color3.fromRGB(0, 255, 150) -- Warna hijau neon
+Title.Font = Enum.Font.SourceSansBold
+Title.TextSize = 20
+Title.Parent = MainFrame
