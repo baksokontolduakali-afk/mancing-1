@@ -1,115 +1,114 @@
 local TweenService = game:GetService("TweenService")
-local CoreGui = game:GetService("CoreGui")
+local UserInputService = game:GetService("UserInputService")
 
--- 1. Membuat ScreenGui
-local JoeyGui = Instance.new("ScreenGui")
-JoeyGui.Name = "JoeyHubUI"
-JoeyGui.Parent = CoreGui
+-- Create ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "JoeyHubGui"
+ScreenGui.Parent = game.CoreGui
+ScreenGui.ResetOnSpawn = false
 
--- 2. Main Frame
+-- Main Frame
 local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 400, 0, 250)
 MainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
-MainFrame.BackgroundColor3 = Color3.fromRGB(255, 192, 203) -- Pink
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 MainFrame.BorderSizePixel = 0
 MainFrame.ClipsDescendants = true
-MainFrame.Visible = false
-MainFrame.Parent = JoeyGui
+MainFrame.Parent = ScreenGui
 
-local Corner = Instance.new("UICorner")
-Corner.CornerRadius = UDim.new(0, 10)
-Corner.Parent = MainFrame
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(0, 10)
+UICorner.Parent = MainFrame
 
--- 3. Top Bar (Title, Minimize, Close)
+-- Top Bar (Header)
 local TopBar = Instance.new("Frame")
-TopBar.Size = UDim2.new(1, 0, 0, 35)
-TopBar.BackgroundColor3 = Color3.fromRGB(255, 105, 180) -- Hot Pink
+TopBar.Name = "TopBar"
+TopBar.Size = UDim2.new(1, 0, 0, 40)
+TopBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 TopBar.BorderSizePixel = 0
 TopBar.Parent = MainFrame
 
 local Title = Instance.new("TextLabel")
-Title.Text = "Joey Hub"
 Title.Size = UDim2.new(1, -80, 1, 0)
-Title.Position = UDim2.new(0, 10, 0, 0)
-Title.BackgroundTransparency = 1
-Title.TextColor3 = Color3.new(1, 1, 1)
-Title.TextXAlignment = Enum.TextXAlignment.Left
-Title.Font = Enum.Font.GothamBold
+Title.Position = UDim2.new(0, 15, 0, 0)
+Title.Text = "Joey Hub"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 18
+Title.Font = Enum.Font.GothamBold
+Title.BackgroundTransparency = 1
+Title.TextXAlignment = Enum.TextXAlignment.Left
 Title.Parent = TopBar
 
+-- Close Button
 local CloseBtn = Instance.new("TextButton")
-CloseBtn.Text = "X"
+CloseBtn.Name = "CloseBtn"
 CloseBtn.Size = UDim2.new(0, 30, 0, 30)
-CloseBtn.Position = UDim2.new(1, -35, 0, 2.5)
-CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-CloseBtn.TextColor3 = Color3.new(1, 1, 1)
+CloseBtn.Position = UDim2.new(1, -35, 0, 5)
+CloseBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+CloseBtn.Text = "X"
+CloseBtn.TextColor3 = Color3.white
+CloseBtn.Font = Enum.Font.GothamBold
 CloseBtn.Parent = TopBar
 
-local MiniBtn = Instance.new("TextButton")
-MiniBtn.Text = "-"
-MiniBtn.Size = UDim2.new(0, 30, 0, 30)
-MiniBtn.Position = UDim2.new(1, -70, 0, 2.5)
-MiniBtn.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
-MiniBtn.TextColor3 = Color3.new(0, 0, 0)
-MiniBtn.Parent = TopBar
+local CloseCorner = Instance.new("UICorner")
+CloseCorner.CornerRadius = UDim.new(0, 5)
+CloseCorner.Parent = CloseBtn
 
--- 4. Loading Screen
-local LoadingFrame = Instance.new("Frame")
-LoadingFrame.Size = UDim2.new(0, 400, 0, 250)
-LoadingFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
-LoadingFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-LoadingFrame.Parent = JoeyGui
+-- Minimize Button
+local MinBtn = Instance.new("TextButton")
+MinBtn.Name = "MinBtn"
+MinBtn.Size = UDim2.new(0, 30, 0, 30)
+MinBtn.Position = UDim2.new(1, -70, 0, 5)
+MinBtn.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+MinBtn.Text = "-"
+MinBtn.TextColor3 = Color3.white
+MinBtn.Font = Enum.Font.GothamBold
+MinBtn.Parent = TopBar
 
-local LoadCorner = Corner:Clone()
-LoadCorner.Parent = LoadingFrame
+local MinCorner = Instance.new("UICorner")
+MinCorner.CornerRadius = UDim.new(0, 5)
+MinCorner.Parent = MinBtn
 
-local LoadingText = Instance.new("TextLabel")
-LoadingText.Size = UDim2.new(1, 0, 1, 0)
-LoadingText.BackgroundTransparency = 1
-LoadingText.Text = "Joey Hub | 0%"
-LoadingText.TextColor3 = Color3.fromRGB(255, 105, 180)
-LoadingText.Font = Enum.Font.GothamBold
-LoadingText.TextSize = 25
-LoadingText.Parent = LoadingFrame
+-- Content Area (Where your scripts would show output)
+local Content = Instance.new("TextLabel")
+Content.Size = UDim2.new(1, 0, 1, -40)
+Content.Position = UDim2.new(0, 0, 0, 40)
+Content.BackgroundTransparency = 1
+Content.Text = "Fish It Script Active"
+Content.TextColor3 = Color3.fromRGB(150, 150, 150)
+Content.Font = Enum.Font.Gotham
+Content.Parent = MainFrame
 
--- 5. FUNGSI LOGIKA
--- Tombol Close
+--- FUNCTIONS ---
+
+-- Close Function with Tween
 CloseBtn.MouseButton1Click:Connect(function()
-    JoeyGui:Destroy()
+	MainFrame:TweenSize(UDim2.new(0, 0, 0, 0), "Out", "Quad", 0.3, true)
+	task.wait(0.3)
+	ScreenGui:Destroy()
 end)
 
--- Tombol Minimize (Simple Toggle)
+-- Minimize Function
 local minimized = false
-MiniBtn.MouseButton1Click:Connect(function()
-    if not minimized then
-        TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 400, 0, 35)}):Play()
-    else
-        TweenService:Create(MainFrame, TweenInfo.new(0.3), {Size = UDim2.new(0, 400, 0, 250)}):Play()
-    end
-    minimized = not minimized
+MinBtn.MouseButton1Click:Connect(function()
+	if not minimized then
+		MainFrame:TweenSize(UDim2.new(0, 400, 0, 40), "Out", "Quad", 0.3, true)
+	else
+		MainFrame:TweenSize(UDim2.new(0, 400, 0, 250), "Out", "Quad", 0.3, true)
+	end
+	minimized = not minimized
 end)
 
--- Animasi Loading 1% - 100%
-task.spawn(function()
-    for i = 0, 100 do
-        LoadingText.Text = "Joey Hub | " .. i .. "%"
-        task.wait(0.02) -- Kecepatan loading
-    end
-    
-    -- Fade Out Loading & Show Main
-    TweenService:Create(LoadingFrame, TweenInfo.new(0.5), {BackgroundTransparency = 1}):Play()
-    TweenService:Create(LoadingText, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-    task.wait(0.5)
-    LoadingFrame.Visible = false
-    MainFrame.Visible = true
-    
-    -- Pop Up Animation
-    MainFrame.Size = UDim2.new(0, 0, 0, 0)
-    MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-    TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back), {
-        Size = UDim2.new(0, 400, 0, 250),
-        Position = UDim2.new(0.5, -200, 0.5, -125)
-    }):Play()
+-- Dragging System
+local dragging, dragInput, dragStart, startPos
+TopBar.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = true
+		dragStart = input.Position
+		startPos = MainFrame.Position
+	end
 end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and input.UserInputType == Enum.UserInputType.Mouse
