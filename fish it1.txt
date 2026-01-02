@@ -1,97 +1,71 @@
--- JoeyHub UI Script (PINK FIXED)
 
-local player = game.Players.LocalPlayer
 
--- 🔥 HAPUS GUI LAMA JIKA ADA
-if player:WaitForChild("PlayerGui"):FindFirstChild("JoeyHubGui") then
-	player.PlayerGui.JoeyHubGui:Destroy()
-end
+local Window = Rayfield:CreateWindow({
+   Name = "Joey Hub | Version 1.0.9",
+   LoadingTitle = "Joey Hub Loading...",
+   LoadingSubtitle = "by Joey",
+   ConfigurationSaving = {
+      Enabled = true,
+      FolderName = "JoeyHubConfig",
+      FileName = "MainGui"
+   },
+   Discord = {
+      Enabled = false,
+      Invite = "noinvite",
+      RememberJoins = true
+   },
+   KeySystem = false -- Set ke true jika ingin pakai sistem kunci
+})
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "JoeyHubGui"
-gui.Parent = player.PlayerGui
-gui.ResetOnSpawn = false
+-- [[ TAB: FISHING ]]
+local Tab = Window:CreateTab("Fishing", 4483362458) -- Icon ID bisa diganti
 
--- Main Frame
-local main = Instance.new("Frame")
-main.Parent = gui
-main.Size = UDim2.new(0, 420, 0, 260)
-main.Position = UDim2.new(0.5, -210, 0.5, -130)
-main.BackgroundColor3 = Color3.fromRGB(255, 105, 180) -- 💗 HOT PINK
-main.BorderSizePixel = 0
-main.Active = true
-main.Draggable = true
+local Section = Tab:CreateSection("Fishing Support")
 
--- Corner
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 12)
-corner.Parent = main
+Tab:CreateToggle({
+   Name = "Auto Fish",
+   CurrentValue = false,
+   Flag = "Toggle1",
+   Callback = function(Value)
+      -- Masukkan script auto fish di sini
+      print("Auto Fish status: ", Value)
+   end,
+})
 
--- Top Bar
-local topBar = Instance.new("Frame")
-topBar.Parent = main
-topBar.Size = UDim2.new(1, 0, 0, 40)
-topBar.BackgroundColor3 = Color3.fromRGB(255, 20, 147) -- 💗 DEEP PINK
-topBar.BorderSizePixel = 0
+-- [[ TAB: AUTOMATICALLY ]]
+local Tab2 = Window:CreateTab("Automatically", 4483362458)
+local Section2 = Tab2:CreateSection("Fishing Features")
 
-local topCorner = Instance.new("UICorner")
-topCorner.CornerRadius = UDim.new(0, 12)
-topCorner.Parent = topBar
+Tab2:CreateToggle({
+   Name = "Auto Sell",
+   CurrentValue = false,
+   Flag = "Toggle2",
+   Callback = function(Value)
+      -- Masukkan script auto sell di sini
+   end,
+})
 
--- Title
-local title = Instance.new("TextLabel")
-title.Parent = topBar
-title.Size = UDim2.new(1, -80, 1, 0)
-title.Position = UDim2.new(0, 15, 0, 0)
-title.BackgroundTransparency = 1
-title.Text = "JoeyHub"
-title.TextColor3 = Color3.fromRGB(255, 255, 255)
-title.Font = Enum.Font.GothamBold
-title.TextSize = 16
-title.TextXAlignment = Enum.TextXAlignment.Left
+-- [[ TAB: TRADING ]]
+local Tab3 = Window:CreateTab("Trading", 4483362458)
+Tab3:CreateButton({
+   Name = "Open Trading Menu",
+   Callback = function()
+      -- Script buka menu trade
+   end,
+})
 
--- Minimize Button
-local minimize = Instance.new("TextButton")
-minimize.Parent = topBar
-minimize.Size = UDim2.new(0, 30, 0, 25)
-minimize.Position = UDim2.new(1, -80, 0.5, -12)
-minimize.Text = "-"
-minimize.BackgroundColor3 = Color3.fromRGB(255, 120, 200)
-minimize.TextColor3 = Color3.new(1,1,1)
-minimize.Font = Enum.Font.GothamBold
-minimize.TextSize = 18
+-- [[ TAB: BLATANT ]]
+local Tab4 = Window:CreateTab("Blatant Features", 4483362458)
+Tab4:CreateSlider({
+   Name = "Walkspeed",
+   Range = {16, 300},
+   Increment = 1,
+   Suffix = "Speed",
+   CurrentValue = 16,
+   Flag = "Slider1",
+   Callback = function(Value)
+      game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end,
+})
 
--- Close Button
-local close = Instance.new("TextButton")
-close.Parent = topBar
-close.Size = UDim2.new(0, 30, 0, 25)
-close.Position = UDim2.new(1, -40, 0.5, -12)
-close.Text = "X"
-close.BackgroundColor3 = Color3.fromRGB(200, 40, 90)
-close.TextColor3 = Color3.new(1,1,1)
-close.Font = Enum.Font.GothamBold
-close.TextSize = 14
-
--- Content
-local content = Instance.new("TextLabel")
-content.Parent = main
-content.Size = UDim2.new(1, 0, 1, -40)
-content.Position = UDim2.new(0, 0, 0, 40)
-content.BackgroundTransparency = 1
-content.Text = "JoeyHub\n\n• Mobile UI\n• Pink Theme\n• Fixed Colors"
-content.TextColor3 = Color3.fromRGB(255, 240, 245)
-content.Font = Enum.Font.Gotham
-content.TextSize = 14
-content.TextWrapped = true
-
--- Functions
-local minimized = false
-minimize.MouseButton1Click:Connect(function()
-	minimized = not minimized
-	content.Visible = not minimized
-	main.Size = minimized and UDim2.new(0, 420, 0, 40) or UDim2.new(0, 420, 0, 260)
-end)
-
-close.MouseButton1Click:Connect(function()
-	gui:Destroy()
-end)
+Rayfield:LoadConfiguration()
