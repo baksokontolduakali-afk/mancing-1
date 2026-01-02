@@ -1,5 +1,4 @@
 -- Referensi Layanan
-local CoreGui = game:GetService("CoreGui")
 local TweenService = game:GetService("TweenService")
 
 -- 1. Membuat ScreenGui Utama
@@ -13,17 +12,35 @@ local MainFrame = Instance.new("Frame")
 MainFrame.Name = "MainFrame"
 MainFrame.Size = UDim2.new(0, 400, 0, 250)
 MainFrame.Position = UDim2.new(0.5, -200, 0.5, -125)
-MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+MainFrame.BackgroundTransparency = 0.2 -- Sedikit transparan seperti di gambar
 MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
-MainFrame.Draggable = true -- Agar menu bisa digeser
+MainFrame.Draggable = true 
 MainFrame.Parent = ScreenGui
 
--- 3. Sidebar (Tempat Tombol Menu)
+-- 3. Tombol Close (X)
+local CloseButton = Instance.new("TextButton")
+CloseButton.Name = "CloseButton"
+CloseButton.Size = UDim2.new(0, 30, 0, 30)
+CloseButton.Position = UDim2.new(1, -35, 0, 5) -- Pojok kanan atas
+CloseButton.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+CloseButton.Text = "X"
+CloseButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+CloseButton.Font = Enum.Font.SourceSansBold
+CloseButton.TextSize = 20
+CloseButton.Parent = MainFrame
+
+-- Fungsi untuk Menutup Menu
+CloseButton.MouseButton1Click:Connect(function()
+    ScreenGui:Destroy() -- Menghapus GUI sepenuhnya
+end)
+
+-- 4. Sidebar (Sisi Kiri)
 local SideBar = Instance.new("Frame")
 SideBar.Name = "SideBar"
-SideBar.Size = UDim2.new(0, 100, 1, 0)
-SideBar.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+SideBar.Size = UDim2.new(0, 110, 1, 0)
+SideBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 SideBar.BorderSizePixel = 0
 SideBar.Parent = MainFrame
 
@@ -31,34 +48,34 @@ local UIListLayout = Instance.new("UIListLayout")
 UIListLayout.Parent = SideBar
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
--- Fungsi untuk membuat tombol di sidebar
+-- Fungsi untuk membuat tombol tab
 local function CreateTab(name)
-	local TabButton = Instance.new("TextButton")
-	TabButton.Size = UDim2.new(1, 0, 0, 40)
-	TabButton.BackgroundTransparency = 1
-	TabButton.Text = name
-	TabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
-	TabButton.Font = Enum.Font.SourceSans
-	TabButton.TextSize = 16
-	TabButton.Parent = SideBar
-	return TabButton
+    local TabButton = Instance.new("TextButton")
+    TabButton.Size = UDim2.new(1, 0, 0, 35)
+    TabButton.BackgroundTransparency = 1
+    TabButton.Text = name
+    TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TabButton.Font = Enum.Font.SourceSans
+    TabButton.TextSize = 16
+    TabButton.Parent = SideBar
+    return TabButton
 end
 
--- Membuat kategori sesuai gambar
-local FishingBtn = CreateTab("Fishing")
-local AutoBtn = CreateTab("Automatically")
-local TeleportBtn = CreateTab("Teleport")
-local QuestBtn = CreateTab("Quest")
-local TradingBtn = CreateTab("Trading")
-local MenuBtn = CreateTab("Menu")
+-- Menambahkan kategori
+CreateTab("Fishing")
+CreateTab("Automatically")
+CreateTab("Teleport")
+CreateTab("Quest")
+CreateTab("Trading")
+CreateTab("Menu")
 
--- 4. Label Header (JoeyTesting)
+-- 5. Judul (JoeyTesting)
 local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(0, 300, 0, 30)
-Title.Position = UDim2.new(0.25, 0, 0, 10)
+Title.Size = UDim2.new(0, 200, 0, 30)
+Title.Position = UDim2.new(0.35, 0, 0, 5)
 Title.BackgroundTransparency = 1
 Title.Text = "JoeyTesting"
-Title.TextColor3 = Color3.fromRGB(0, 255, 150) -- Warna hijau neon
+Title.TextColor3 = Color3.fromRGB(0, 255, 150)
 Title.Font = Enum.Font.SourceSansBold
-Title.TextSize = 20
+Title.TextSize = 22
 Title.Parent = MainFrame
