@@ -1,173 +1,68 @@
--- [[ JOEY HUB - FULL COMPLETE VERSION ]]
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
+-- Simple GUI tanpa tab
+-- LocalScript (StarterPlayerScripts / Executor)
 
-local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
-if PlayerGui:FindFirstChild("JoeyHub") then PlayerGui.JoeyHub:Destroy() end
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui")
+gui.Name = "SimplePanelGUI"
+gui.Parent = player:WaitForChild("PlayerGui")
 
-local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "JoeyHub"
-ScreenGui.Parent = PlayerGui
-ScreenGui.ResetOnSpawn = false
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+-- Panel utama
+local mainFrame = Instance.new("Frame")
+mainFrame.Parent = gui
+mainFrame.Size = UDim2.new(0, 420, 0, 260)
+mainFrame.Position = UDim2.new(0.5, -210, 0.5, -130)
+mainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+mainFrame.BackgroundTransparency = 0.1
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
 
--- [[ FRAME UTAMA ]]
-local MainFrame = Instance.new("Frame")
-MainFrame.Name = "MainFrame"
-MainFrame.Size = UDim2.new(0, 480, 0, 300)
-MainFrame.Position = UDim2.new(0.5, -240, 0.5, -150)
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
-MainFrame.BorderSizePixel = 0
-MainFrame.Parent = ScreenGui
-MainFrame.ZIndex = 2
-Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+-- Corner (biar smooth)
+local corner = Instance.new("UICorner", mainFrame)
+corner.CornerRadius = UDim.new(0, 10)
 
--- [[ HEADER & CONTROLS (FIXED POSITION) ]]
-local Header = Instance.new("Frame")
-Header.Size = UDim2.new(1, 0, 0, 35)
-Header.BackgroundTransparency = 1
-Header.Parent = MainFrame
-Header.ZIndex = 5
+-- Judul
+local title = Instance.new("TextLabel")
+title.Parent = mainFrame
+title.Size = UDim2.new(1, -20, 0, 40)
+title.Position = UDim2.new(0, 10, 0, 10)
+title.Text = "JoeYTesting"
+title.TextColor3 = Color3.fromRGB(0, 255, 180)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
+title.BackgroundTransparency = 1
+title.TextXAlignment = Enum.TextXAlignment.Left
 
-local ControlButtons = Instance.new("Frame")
-ControlButtons.Size = UDim2.new(0, 80, 1, 0)
-ControlButtons.Position = UDim2.new(1, -85, 0, 0)
-ControlButtons.BackgroundTransparency = 1
-ControlButtons.Parent = Header
+-- Garis pemisah
+local line = Instance.new("Frame")
+line.Parent = mainFrame
+line.Size = UDim2.new(1, -20, 0, 1)
+line.Position = UDim2.new(0, 10, 0, 55)
+line.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+line.BorderSizePixel = 0
 
-local UIList = Instance.new("UIListLayout")
-UIList.FillDirection = Enum.FillDirection.Horizontal
-UIList.HorizontalAlignment = Enum.HorizontalAlignment.Right
-UIList.VerticalAlignment = Enum.VerticalAlignment.Center
-UIList.SortOrder = Enum.SortOrder.LayoutOrder -- Mengunci urutan tombol
-UIList.Padding = UDim.new(0, 8)
-UIList.Parent = ControlButtons
+-- Area konten
+local content = Instance.new("Frame")
+content.Parent = mainFrame
+content.Size = UDim2.new(1, -20, 1, -75)
+content.Position = UDim2.new(0, 10, 0, 65)
+content.BackgroundTransparency = 1
 
--- Fungsi Buat Tombol Control
-local function CreateControl(text, color, order, callback)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0, 28, 0, 28)
-    btn.BackgroundColor3 = color
-    btn.Text = text
-    btn.LayoutOrder = order
-    btn.Font = Enum.Font.GothamBold
-    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btn.Parent = ControlButtons
-    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
-    btn.MouseButton1Click:Connect(callback)
-end
+-- Contoh tombol
+local button = Instance.new("TextButton")
+button.Parent = content
+button.Size = UDim2.new(0, 160, 0, 40)
+button.Position = UDim2.new(0, 0, 0, 0)
+button.Text = "Example Button"
+button.Font = Enum.Font.Gotham
+button.TextSize = 14
+button.TextColor3 = Color3.new(1,1,1)
+button.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+button.BorderSizePixel = 0
 
--- Tombol Open saat minimize
-local OpenBtn = Instance.new("TextButton")
-OpenBtn.Name = "OpenBtn"
-OpenBtn.Size = UDim2.new(0, 55, 0, 55)
-OpenBtn.Position = UDim2.new(0, 15, 0.5, -25)
-OpenBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-OpenBtn.Text = "JOEY"
-OpenBtn.TextColor3 = Color3.fromRGB(0, 255, 150)
-OpenBtn.Font = Enum.Font.GothamBold
-OpenBtn.Visible = false
-OpenBtn.Parent = ScreenGui
-Instance.new("UICorner", OpenBtn).CornerRadius = UDim.new(1, 0)
+local btnCorner = Instance.new("UICorner", button)
+btnCorner.CornerRadius = UDim.new(0, 6)
 
--- URUTAN: Minimize (1) lalu Close (2) agar X di paling kanan
-CreateControl("-", Color3.fromRGB(40, 40, 40), 1, function() MainFrame.Visible = false OpenBtn.Visible = true end)
-CreateControl("X", Color3.fromRGB(180, 50, 50), 2, function() ScreenGui:Destroy() end)
-OpenBtn.MouseButton1Click:Connect(function() MainFrame.Visible = true OpenBtn.Visible = false end)
-
--- [[ SIDEBAR ]]
-local Sidebar = Instance.new("Frame")
-Sidebar.Size = UDim2.new(0, 130, 1, 0)
-Sidebar.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
-Sidebar.Parent = MainFrame
-Sidebar.ZIndex = 3
-Instance.new("UICorner", Sidebar).CornerRadius = UDim.new(0, 10)
-
-local Title = Instance.new("TextLabel")
-Title.Size = UDim2.new(1, 0, 0, 45)
-Title.Text = "JOEY HUB"
-Title.Font = Enum.Font.GothamBold
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 18
-Title.BackgroundTransparency = 1
-Title.Parent = Sidebar
-
-local Container = Instance.new("Frame")
-Container.Position = UDim2.new(0, 140, 0, 40)
-Container.Size = UDim2.new(1, -150, 1, -50)
-Container.BackgroundTransparency = 1
-Container.Parent = MainFrame
-
--- [[ DRAG SYSTEM ]]
-local dragging, dragInput, dragStart, startPos
-MainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true dragStart = input.Position startPos = MainFrame.Position
-    end
+button.MouseButton1Click:Connect(function()
+    print("Button clicked")
 end)
-UserInputService.InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        local delta = input.Position - dragStart
-        MainFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-end)
-UserInputService.InputEnded:Connect(function(input) dragging = false end)
-
--- [[ TAB & TOGGLE BUILDER ]]
-local function CreatePage(name, order)
-    local btn = Instance.new("TextButton")
-    btn.Size = UDim2.new(0.9, 0, 0, 35)
-    btn.Position = UDim2.new(0.05, 0, 0, 55 + (order * 42))
-    btn.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    btn.Text = name
-    btn.TextColor3 = Color3.fromRGB(200, 200, 200)
-    btn.Font = Enum.Font.Gotham
-    btn.Parent = Sidebar
-    Instance.new("UICorner", btn).CornerRadius = UDim.new(0, 6)
-
-    local page = Instance.new("ScrollingFrame")
-    page.Size = UDim2.new(1, 0, 1, 0)
-    page.BackgroundTransparency = 1
-    page.Visible = false
-    page.ScrollBarThickness = 2
-    page.Parent = Container
-    local layout = Instance.new("UIListLayout", page)
-    layout.Padding = UDim.new(0, 8)
-
-    btn.MouseButton1Click:Connect(function()
-        for _, v in pairs(Container:GetChildren()) do v.Visible = false end
-        page.Visible = true
-    end)
-    return page
-end
-
-local function CreateToggle(name, parent, callback)
-    local toggleBtn = Instance.new("TextButton")
-    toggleBtn.Size = UDim2.new(1, 0, 0, 40)
-    toggleBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-    toggleBtn.Text = "   " .. name
-    toggleBtn.TextColor3 = Color3.fromRGB(200, 200, 200)
-    toggleBtn.Font = Enum.Font.Gotham
-    toggleBtn.TextXAlignment = Enum.TextXAlignment.Left
-    toggleBtn.Parent = parent
-    Instance.new("UICorner", toggleBtn).CornerRadius = UDim.new(0, 6)
-
-    local box = Instance.new("Frame")
-    box.Size = UDim2.new(0, 32, 0, 16)
-    box.Position = UDim2.new(1, -42, 0.5, -8)
-    box.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    box.Parent = toggleBtn
-    Instance.new("UICorner", box).CornerRadius = UDim.new(1, 0)
-
-    local dot = Instance.new("Frame")
-    dot.Size = UDim2.new(0, 12, 0, 12)
-    dot.Position = UDim2.new(0, 2, 0.5, -6)
-    dot.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-    dot.Parent = box
-    Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
-
-    local active = false
-    toggleBtn.MouseButton1Click:Connect(function()
-        active = not active
-        local
